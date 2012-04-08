@@ -6,10 +6,8 @@ import shutil, errno
 class CreateSketchLibsCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		self.view.window().show_input_panel("Directory:","/Users/me/Sites/",self.on_done, None, None)
-		#self.view.insert(edit, 0, "Hello, World!")
 	def on_done(self, dir):
 		sublime.status_message("Create project at " + dir)
-		#subprocess.call("./create.sh " + dir, executable="bash", shell=True)
 		self.copyanything(sublime.packages_path() + "/SketchLibs/contents", dir)
 		sublime.status_message("Successfull created a new project in " + dir)
 		self.view.window().open_file(dir+"/javascripts/app/main.js")

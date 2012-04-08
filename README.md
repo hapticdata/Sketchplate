@@ -27,6 +27,6 @@ Bring up your plugins panel `CMD + Shift + P` choose "SketchLibs: Create New Pro
 Because this structure uses AMD, none of these libraries are assumed to be used, they will only be loaded if explicitly required as a dependency.
 
 
-I should note this is the first Sublime Text 2 plugin I've written, and I'm not much for python or bash.
+I should note that this is an experiment and this is the first Sublime Text 2 plugin I've written, and I'm not much for python or bash.
 
 Created by [Kyle Phillips](http://haptic-data.com) on April 8th, 2012

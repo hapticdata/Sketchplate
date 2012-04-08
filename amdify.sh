@@ -1,6 +1,7 @@
 #!/bin/bash
 # This tool will fetch the latest release of non-AMD javascript libraries
 # and wrap them into working AMD modules
+# idea taken from https://github.com/documentcloud/underscore/commit/0d4b1247c45083c695cab4242c084a97aa600221#commitcomment-857941
 
 
 
