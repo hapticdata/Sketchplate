@@ -24,9 +24,10 @@ Bring up your plugins panel `CMD + Shift + P` choose "Sketchplate: Create New Pr
 * [Backbone.js](http://documentcloud.github.com/backbone/) - AMD-wrapped
 * [Three.js](http://mrdoob.github.com/three.js/) - AMD-wrapped (still exposed to `window`)
 * [Stats.js](http://github.com/mrdoob/stats.js/) - AMD-wrapped
+
 Because this structure uses AMD, none of these libraries are assumed to be used, they will only be loaded if explicitly required as a dependency.
 
 
-I should note that this is an experiment and this is the first Sublime Text 2 plugin I've written, and I'm not much for python or bash.
+I should note that this is an experiment and this is the first Sublime Text 2 plugin I've written. I'm not much for python or bash.
 
 Created by [Kyle Phillips](http://haptic-data.com) on April 8th, 2012
