@@ -3,7 +3,8 @@ Sketchplate is a collection of libraries and processes that I use frequently ass
 
 
 ## Installation
-Move this repository into your Sublime Text 2 packages folder, on mac this is `~/Library/Application Support/Sublime Text 2/Packages`, restart Sublime Text 2.
+* Move this repository into your Sublime Text 2 packages folder, on mac this is `~/Library/Application Support/Sublime Text 2/Packages`, restart Sublime Text 2.
+* Set `DEFAULT_DIRECTORY` inside `sublime_create.py` to where you put your work (eventually this will be cleaner)
 
 ## Usage
 Bring up your plugins panel `CMD + Shift + P` choose "Sketchplate: Create New Project" and enter your absolute directory below. Your application's starting point `javascripts/app/main.js` will automatically open in Sublime Text 2.
