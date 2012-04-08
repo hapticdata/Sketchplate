@@ -1,24 +1,24 @@
-# SketchLibs
-SketchLibs is a collection of libraries and processes that I use frequently assembled together to work well with the AMD workflow I prefer. It is packaged as a [Sublime Text 2](http://sublimetext.com) plugin that allows you to instantly create a new project and begin working. My hope is to decrease the amount of time between initial inspiration and coding to an absolute minimum.
+# Sketchplate
+Sketchplate is a collection of libraries and processes that I use frequently assembled together to work well with the AMD workflow I prefer. It is packaged as a [Sublime Text 2](http://sublimetext.com) plugin that allows you to instantly create a new project and begin working. My hope is to decrease the amount of time between initial inspiration and coding to an absolute minimum.
 
 
 ## Installation
 Move this repository into your Sublime Text 2 packages folder, on mac this is `~/Library/Application Support/Sublime Text 2/Packages`, restart Sublime Text 2.
 
 ## Usage
-Bring up your plugins panel `CMD + Shift + P` choose "SketchLibs: Create New Project" and enter your absolute directory below. Your application's starting point `javascripts/app/main.js` will automatically open in Sublime Text 2.
+Bring up your plugins panel `CMD + Shift + P` choose "Sketchplate: Create New Project" and enter your absolute directory below. Your application's starting point `javascripts/app/main.js` will automatically open in Sublime Text 2.
 
 
 ## Additional Features
 * `amdify.sh` curls the latest build files for non-AMD libraries and wraps them in an AMD `define()` statement
-* `create.sh` allows you to create a new SketchLibs project without Sublime Text 2
+* `create.sh` allows you to create a new Sketchplate project without Sublime Text 2
 * directory structure is setup to easily be moved into a [node.js](http://nodejs.org) + [express.js](http://expressjs.com) file structure
 
 
 ## Includes such fine libraries as:
 * [Require.js](http://requirejs.org)
 * [jQuery](http://jquery.com)
-* [dat.GUI](http://code.google.com/p/dat-gui/)
+* [dat.GUI](http://code.google.com/p/dat-gui/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 * [toxiclibs.js](http://haptic-data.com/toxiclibsjs)
 * [underscore.js](http://documentcloud.github.com/underscore/) - AMD-wrapped
 * [Backbone.js](http://documentcloud.github.com/backbone/) - AMD-wrapped
