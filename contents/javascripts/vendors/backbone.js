@@ -1,5 +1,3 @@
-define(function([ 'jquery','underscore' ]){
-//start wrap---
 //     Backbone.js 0.9.2
 
 //     (c) 2010-2012 Jeremy Ashkenas, DocumentCloud Inc.
@@ -118,7 +116,7 @@ define(function([ 'jquery','underscore' ]){
       var event, calls, node, tail, cb, ctx;
 
       // No events, or removing *all* events.
-      if (!(calls = this._callbacks)) return this;
+      if (!(calls = this._callbacks)) return;
       if (!(events || callback || context)) {
         delete this._callbacks;
         return this;
@@ -531,7 +529,7 @@ define(function([ 'jquery','underscore' ]){
     // Check if the model is currently in a valid state. It's only possible to
     // get into an *invalid* state if you're using silent changes.
     isValid: function() {
-      return !this.validate || !this.validate(this.attributes);
+      return !this.validate(this.attributes);
     },
 
     // Run validation against the next complete set of model attributes,
@@ -625,7 +623,7 @@ define(function([ 'jquery','underscore' ]){
       this.length += length;
       index = options.at != null ? options.at : this.models.length;
       splice.apply(this.models, [index, 0].concat(models));
-      if (this.comparator && options.at == null) this.sort({silent: true});
+      if (this.comparator) this.sort({silent: true});
       if (options.silent) return this;
       for (i = 0, length = this.models.length; i < length; i++) {
         if (!cids[(model = this.models[i]).cid]) continue;
@@ -980,7 +978,7 @@ define(function([ 'jquery','underscore' ]){
     // the hash, or the override.
     getFragment: function(fragment, forcePushState) {
       if (fragment == null) {
-        if (this._hasPushState || !this._wantsHashChange || forcePushState) {
+        if (this._hasPushState || forcePushState) {
           fragment = window.location.pathname;
           var search = window.location.search;
           if (search) fragment += search;
@@ -1008,7 +1006,7 @@ define(function([ 'jquery','underscore' ]){
       var docMode           = document.documentMode;
       var oldIE             = (isExplorer.exec(navigator.userAgent.toLowerCase()) && (!docMode || docMode <= 7));
 
-      if (oldIE && this._wantsHashChange) {
+      if (oldIE) {
         this.iframe = $('<iframe src="javascript:0" tabindex="-1" />').hide().appendTo('body')[0].contentWindow;
         this.navigate(fragment);
       }
@@ -1194,7 +1192,7 @@ define(function([ 'jquery','underscore' ]){
     make: function(tagName, attributes, content) {
       var el = document.createElement(tagName);
       if (attributes) $(el).attr(attributes);
-      if (content != null) $(el).html(content);
+      if (content) $(el).html(content);
       return el;
     },
 
@@ -1267,7 +1265,7 @@ define(function([ 'jquery','underscore' ]){
     // an element from the `id`, `className` and `tagName` properties.
     _ensureElement: function() {
       if (!this.el) {
-        var attrs = _.extend({}, getValue(this, 'attributes'));
+        var attrs = getValue(this, 'attributes') || {};
         if (this.id) attrs.id = this.id;
         if (this.className) attrs['class'] = this.className;
         this.setElement(this.make(this.tagName, attrs), false);
@@ -1331,7 +1329,7 @@ define(function([ 'jquery','underscore' ]){
     // Ensure that we have the appropriate request data.
     if (!options.data && model && (method == 'create' || method == 'update')) {
       params.contentType = 'application/json';
-      params.data = JSON.stringify(model);
+      params.data = JSON.stringify(model.toJSON());
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.
@@ -1431,7 +1429,3 @@ define(function([ 'jquery','underscore' ]){
   };
 
 }).call(this);
-//end wrap---
-var exports = Backbone.noConflict();
-return exports;
-});

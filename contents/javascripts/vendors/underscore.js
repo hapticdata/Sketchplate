@@ -1,6 +1,4 @@
-define(function(){
-//start wrap---
-//     Underscore.js 1.3.1
+//     Underscore.js 1.3.3
 //     (c) 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
 //     Underscore is freely distributable under the MIT license.
 //     Portions of Underscore are inspired or borrowed from Prototype,
@@ -64,7 +62,7 @@ define(function(){
   }
 
   // Current version.
-  _.VERSION = '1.3.1';
+  _.VERSION = '1.3.3';
 
   // Collection Functions
   // --------------------
@@ -954,7 +952,7 @@ define(function(){
   // Underscore templating handles arbitrary delimiters, preserves whitespace,
   // and correctly escapes quotes within interpolated code.
   _.template = function(text, data, settings) {
-    settings = _.extend(_.templateSettings, settings);
+    settings = _.defaults(settings || {}, _.templateSettings);
 
     // Compile the template source, taking care to escape characters that
     // cannot be included in a string literal and then unescape them in code
@@ -1059,7 +1057,3 @@ define(function(){
   };
 
 }).call(this);
-//end wrap---
-var exports = _.noConflict();
-return exports;
-});
