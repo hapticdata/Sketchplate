@@ -20,6 +20,8 @@ require.config({
 			//If the CDN location fails, load local copy
 			'vendors/jquery'
 		],
+		'toxi': 'vendors/toxi',
+		'dat': 'vendors/dat',
 		'backbone': 'vendors/backbone',
 		'underscore': 'vendors/underscore',
 		'Three': 'vendors/Three',
