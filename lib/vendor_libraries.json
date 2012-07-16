@@ -1,7 +1,20 @@
 {
+	/**
+	 provide a 'url' and a 'target' if it is a single file,
+	 add it to the shim config in index.html if it isnt AMD-compatible
+	 */
 	"jquery": {
 		"url": "http://code.jquery.com/jquery-1.7.2.js",
 		"target": "javascripts/vendor/jquery.js"
+	},
+	/**
+	 provide a 'git' address to clone, a 'src' path within the repo to copy
+	 and a 'target' to copy the folder to
+	 */
+	"datgui": {
+		"git": "https://code.google.com/p/dat-gui/",
+		"src": "src/dat",
+		"target": "javascripts/vendor/dat"
 	},
 	"require": {
 		"url": "https://raw.github.com/jrburke/requirejs/master/require.js",
@@ -18,11 +31,6 @@
 	"d3": {
 		"url": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
 		"target": "javascripts/vendor/d3.js"
-	},
-	"datgui": {
-		"git": "https://code.google.com/p/dat-gui/",
-		"src": "src/dat",
-		"target": "javascripts/vendor/dat"
 	},
 	"toxi": {
 		"git": "https://github.com/hapticdata/toxiclibsjs.git",
