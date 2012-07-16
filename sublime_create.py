@@ -1,5 +1,7 @@
 import sublime, sublime_plugin, os, sys
 import shutil, errno
+import json
+from pprint import pprint
 
 
 
@@ -8,6 +10,11 @@ class CreateSketchplateCommand(sublime_plugin.TextCommand):
 	DEFAULT_DIRECTORY = "/Users/me/Sites/"
 
 	def run(self, edit):
+		#json_data = open('settings.json')
+		#print json.dumps( json_data, sort_keys=True )
+		#data = json.load( json_data )
+		#json_data.close()
+		#print(data["projectDirectory"])
 		self.view.window().show_input_panel("Directory:", self.DEFAULT_DIRECTORY, self.on_done, None, None)
 	def on_done(self, dir):
 		sublime.status_message("Create project at " + dir)

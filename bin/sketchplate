@@ -7,8 +7,8 @@ var program = require('commander'),
 	util = require('util'),
 	spawn = require('child_process').spawn;
 
-var dstBase = __dirname + '/contents/',
-	libs = require('./libs');
+var dstBase = __dirname + '/../template/',
+	libs = require('../lib/settings.json');
 
 program
   .version('0.0.2')
