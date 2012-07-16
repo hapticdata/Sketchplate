@@ -11,9 +11,10 @@ class CreateSketchplateCommand(sublime_plugin.TextCommand):
 		self.view.window().show_input_panel("Directory:", self.DEFAULT_DIRECTORY, self.on_done, None, None)
 	def on_done(self, dir):
 		sublime.status_message("Create project at " + dir)
-		self.copyanything(sublime.packages_path() + "/Sketchplate/contents", dir)
+		self.copyanything(sublime.packages_path() + "/Sketchplate/template", dir)
 		sublime.status_message("Successfull created a new project in " + dir)
-		self.view.window().open_file(dir+"/javascripts/app/main.js")
+		window = self.view.window()
+		window.open_file(dir+"/javascripts/app/main.js")
 
 	def copyanything(self, src, dst):
 		try:

@@ -1,0 +1,26 @@
+{
+  "name": "sketchplate",
+  "description": "project generator oriented towards computational design sketches with Canvas, SVG, WebGL…",
+  "version": "0.0.2",
+  "author": "Kyle Phillips <kyle@haptic-data.com>",
+  "contributors": [ 
+    { "name": "Kyle Phillips", "email": "kyle@haptic-data.com" }
+  ],
+  "dependencies": {
+    "commander": ">=0.6.1",
+    "wrench": ">=1.3.9",
+    "request": ">=2.9.203"
+  },
+  "devDependencies": {
+  },
+  "keywords": [
+    "sketchplate",
+    "boilerplate",
+    "amd",
+    "web"
+  ],
+  "repository": "git://github.com/hapticdata/sketchplate",
+  "main": "index",
+  "bin": { "express": "./bin/sketchplate" },
+  "engines": { "node": "*" }
+}

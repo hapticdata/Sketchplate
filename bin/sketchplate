@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+var program = require('commander'),
+	request = require('request'),
+	wrench = require('wrench'),
+	fs = require('fs'),
+	util = require('util'),
+	spawn = require('child_process').spawn;
+
+var dstBase = __dirname + '/contents/',
+	libs = require('./libs');
+
+program
+  .version('0.0.2')
+  .option('-j, --jquery', 'Add jquery')
+  .option('-r, --require', 'Add require.js')
+  .option('-d, --d3', 'Add d3.js')
+  .option('-s, --stats', 'Add Stats.js')
+  .option('-t, --three', 'Add Three.js')
+  .option('-b, --backbone', 'Add Backbone.js')
+  .option('-u, --underscore', 'Add Underscore.js')
+  .option('-X, --datgui', 'Add dat-gui')
+  .option('-t, --toxi', 'Add toxiclibs.js')
+  .option('-a, --all', 'Add All')
+  .option('-o, --output [location]', 'Add to [location]','location')
+  .parse(process.argv);
+
+
+
+if(program.all){
+	for( var prop in libs ){
+		program[prop.toLowerCase()] = true;
+	}
+}
+
+function updateLib( params, lib ) {
+	lib = lib.toLowerCase();
+	if( program[ lib ] ){
+		console.log( lib );
+		//download the file and write it
+		if( params.url ){
+			request( params.url, function ( err, response, body ){
+				if( err ) throw err;
+				fs.writeFile( dstBase + params.target, body, function ( err ){
+					if( err ) throw err;
+				});
+			});
+		} else if( params.git ){
+			console.log('git process');
+			var clone = spawn('git', [ 'clone', params.git, lib ]);
+
+			clone.stdout.on('data', function ( data ) {
+				console.log(data );
+			});
+
+			clone.on('exit', function ( code ) {
+				console.log("clone exited with code: "+code );
+				if( code === 0 ){
+					wrench.copyDirRecursive(lib +'/'+ params.src, dstBase + params.target, function ( err ) {
+						if( err ) throw err;
+						wrench.rmdirRecursive( lib, function ( err ) {
+							if( err ) throw err;
+						});
+					});
+				}
+			});
+		}
+	}
+}
+
+for( var lib in libs ){
+	if( program[ lib.toLowerCase() ]){
+		updateLib(libs[lib], lib.toLowerCase() );
+	}
+}
