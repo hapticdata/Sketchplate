@@ -2,7 +2,7 @@ define([
 	'jquery'
 ], function( $ ){
 
-	return function sketch(){
+	return function app(){
 
 	};
 });
