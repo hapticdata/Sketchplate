@@ -4,44 +4,6 @@
 		<title>index - Sketchplate</title>
 		<link rel="stylesheet" href="stylesheets/style.css">
 		<script data-main="javascripts/main" src="javascripts/vendor/require.js"></script>
-		<script>
-			require.config({
-				shim: {
-					'underscore': {
-						exports: '_'
-					},
-					'backbone': {
-						deps: ['underscore'],
-						exports: 'Backbone'
-					},
-					'd3': {
-						exports: 'd3'
-					},
-					'Three': {
-						exports: 'THREE'
-					},
-					'Stats': {
-						exports: 'Stats'
-					}
-				},
-				paths: {
-					'd3': 'vendor/d3.v2',
-					'jquery': [
-						'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min',
-						//If the CDN location fails, load local copy
-						'vendor/jquery'
-					],
-					'toxi': 'vendor/toxi',
-					'dat': 'vendor/dat',
-					'backbone': 'vendor/backbone',
-					'underscore': 'vendor/underscore',
-					'Three': 'vendor/Three',
-					'Stats': 'vendor/Stats',
-					'domReady': 'vendor/domReady',
-					'text' : 'vendor/text'
-				}
-			});
-		</script>
 	</head>
 	<body>
 	</body>
