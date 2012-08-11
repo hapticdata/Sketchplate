@@ -1,4 +1,10 @@
 {
+	"defaultDestination": "~/Sites",
+	"editorArgs": [
+		"sh",
+		"/Users/me/Sites/libs/cloud9/bin/cloud9.sh",
+		"-w"
+	],
 	"templateDirectory": "/../template",
 	"javascriptsDirectory": "/javascripts",
 	"vendorDirectory": "/vendor",

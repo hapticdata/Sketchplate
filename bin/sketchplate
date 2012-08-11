@@ -6,6 +6,7 @@ var program = require('commander'),
 program
 	.version('0.0.2')
 	.option('-u, --update', 'Update libraries')
+	.option('-o, --open [location', 'Open [location] in editor', '')
 	.option('-c, --create [location]', 'Add to [location]','')
 	.parse(process.argv);
 
@@ -14,8 +15,18 @@ if( !sketchplate.hasLibraries() || program.update ){
 		sketchplate.fetchLibs();
 }
 
-console.log( 'program.create: '+ program.create );
 if( program.create !== undefined  && program.create !== ''){
-	sketchplate.create( program.create );
+	sketchplate.create( program.create, function (err, location){
+		if( err ){
+			throw Error(err);
+		}
+		/*sketchplate.showInEditor( location, function (){
+			process.exit(0);
+		});*/
+	});
+}
+
+if( program.open && program.open.length > 0 ){
+	sketchplate.showInEditor( program.open );
 }
 
