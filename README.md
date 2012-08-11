@@ -1,18 +1,25 @@
 # Sketchplate
-![Sublime Text 2 Plugin](http://haptic-data.com/sketchplate/sublime_scnsht1.png)
 
-Sketchplate is a *scaffolding* system for quickly generating projects with a collection of libraries and processes that I use frequently for web-based computational design. These libraries are assembled together to work with the [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) workflow I prefer. It is packaged as an [NPM](http://npmjs.org) package for [Node.js](http://nodejs.org) and includes a basic plugin for easy use through [Sublime Text 2](http://sublimetext.com). Using Sketchplate allows you to instantly create a new project and begin working. **The goal of this project is to make the time between receiving inspiration and beginning development an absolute minimum.**
+Sketchplate is a system for quickly generating projects with a collection of libraries and processes that I use frequently for web-based computational design. It provides tools to maintain a template folder, retrieve and update your favorite libs and quickly copy your template into a new folder you specify. These libraries are assembled together to work with the [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) workflow I prefer. It will be packaged as an [NPM](http://npmjs.org) package for [Node.js](http://nodejs.org). Using Sketchplate allows you to instantly create a new project and begin working. **The goal of this project is to make the time between receiving inspiration and beginning development an absolute minimum.**
 
 
 ## Installation
-* Move this repository into your Sublime Text 2 packages folder, on mac this is `~/Library/Application Support/Sublime Text 2/Packages`, restart Sublime Text 2.
-* Set `DEFAULT_DIRECTORY` inside `sublime_create.py` to where you put your work (eventually this will be cleaner)
+`$git clone git@github.com:hapticdata/Sketchplate.git`
 
 ## Usage
-Bring up your plugins panel `CMD + Shift + P` choose "Sketchplate: Create New Project" and enter your absolute directory below. Your application's starting point `javascripts/app/main.js` will automatically open in Sublime Text 2.
+`$./sketchplate --new ~/Sites/my_project`
+
+  Options:
+
+    -u, --update             	Update libraries
+    -o, --open [location]     	Open [location] in editor
+    -n, --new [location]  		New project at [location]
 
 
-## Includes such fine libraries as:
+Customize the [settings.json](https://github.com/hapticdata/Sketchplate/blob/dev-node/settings.json) file with your favorite libraries, edit the [template/](https://github.com/hapticdata/Sketchplate/tree/dev-node/template) folder however you like.
+
+
+## The default libraries in the template are:
 * [Require.js](http://requirejs.org) - with [domReady](https://github.com/requirejs/domReady) and [text](https://github.com/requirejs/text) plugins bundled
 * [jQuery](http://jquery.com)
 * [dat-gui](http://code.google.com/p/dat-gui/)
