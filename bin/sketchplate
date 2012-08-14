@@ -1,28 +1,36 @@
 #!/usr/bin/env node
 
+
+/**
+ usage:
+	$	sketchplate --new ~/Sites/myProject --gitinit
+	creates a new project, initializes it as a repo
+*/
+
 var program = require('commander'),
 	sketchplate = require('../lib/sketchplate');
 
 program
 	.version('0.0.2')
+	.option('-g, --gitinit', 'Initialize repo after creation')
 	.option('-u, --update', 'Update libraries')
 	.option('-o, --open [location]', 'Open [location] in editor', '')
 	.option('-c, --new [location]', 'New project at [location]','')
 	.parse(process.argv);
 
-
-if( !sketchplate.hasLibraries() || program.update ){
-		sketchplate.fetchLibs();
+if ( program.update ){
+	sketchplate.fetchLibs();
 }
-
 if( program['new'] !== undefined  && program['new'] !== ''){
 	sketchplate.create( program['new'], function (err, location){
 		if( err ){
 			throw Error(err);
 		}
-		/*sketchplate.showInEditor( location, function (){
-			process.exit(0);
-		});*/
+		if ( program.gitinit )
+			sketchplate.gitInit( location );
+		sketchplate.openInEditor( location, function (){
+			//process.exit(0);
+		});
 	});
 }
 

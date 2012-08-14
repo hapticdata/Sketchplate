@@ -1,15 +1,15 @@
 {
-	"defaultDestination": "~/Sites",
 	"editorArgs": [
-		"sh",
-		"/Users/me/Sites/libs/cloud9/bin/cloud9.sh",
-		"-w"
+		"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
 	],
-	"templateDirectory": "/../template",
+	"templateDirectory": "../template-amd",
 	"javascriptsDirectory": "/javascripts",
-	"vendorDirectory": "/vendor",
 
 	"libraries": {
+			"modernizr": {
+				"url": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
+				"target": "vendor/modernizr.js"
+			},
 			"jquery": {
 				"url": "http://code.jquery.com/jquery-1.7.2.js",
 				"target": "vendor/jquery.js"
