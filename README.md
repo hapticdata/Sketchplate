@@ -11,9 +11,11 @@ Sketchplate is a system for quickly generating projects with a collection of lib
 
   Options:
 
-    -u, --update             	Update libraries
-    -o, --open [location]     	Open [location] in editor
-    -n, --new [location]  		New project at [location]
+    -n, --new [location]   New project at [location]
+    -g, --gitinit          Initialize repo after creation
+    -f, --fetch            Fetch new copies of all libraries
+    -o, --open [location]  Open [location] in editor
+    -s, --skipopen         Skip opening project in editor
 
 
 Customize the [settings.json](https://github.com/hapticdata/Sketchplate/blob/dev-node/settings.json) file with your favorite libraries, edit the [template/](https://github.com/hapticdata/Sketchplate/tree/dev-node/template) folder however you like.
@@ -29,6 +31,7 @@ Customize the [settings.json](https://github.com/hapticdata/Sketchplate/blob/dev
 * [Three.js](http://mrdoob.github.com/three.js/)
 * [Stats.js](http://github.com/mrdoob/stats.js/)
 * [d3](http://github.com/mbostock/d3)
+* [modernizr](http://modernizr.com)
 
 **All of these libraries are available in your project immediately, they are placed in a `javascripts/vendor` folder with a matching [require.js shim config](http://requirejs.org/docs/api.html#config-shim)**. Only resources that you reference in your project will ever be loaded or included in a built project. The output directory structure is setup to easily be moved into a [node.js](http://nodejs.org) + [express.js](http://expressjs.com) file structure
 
