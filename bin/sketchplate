@@ -10,6 +10,7 @@
 */
 
 var program = require('commander'),
+	defaultSettings = require('../settings.json'),
 	sketchplate = require('../lib/sketchplate');
 
 program
@@ -22,24 +23,27 @@ program
 	.parse(process.argv);
 
 if ( program.fetch ){
-	sketchplate.fetchAllLibs();
+	sketchplate.fetchAllLibsFor( defaultSettings );
 }
+
 if( program['new'] !== undefined  && program['new'] !== ''){
-	sketchplate.create( program['new'], function (err, location){
+	//create a sketchplate project
+	var project = sketchplate.create( program['new'], defaultSettings );
+	project.copyTemplate(function (err){
 		if( err ){
 			throw Error(err);
 		}
 		if ( program.gitinit )
-			sketchplate.initRepo( location );
-			if ( !program.skipopen ){
-				sketchplate.openInEditor( location, function (){
-					//process.exit(0);
-				});
-			}
+			project.initRepo();
+		if ( !program.skipopen ){
+			project.openInEditor(function (){
+				//process.exit(0);
+			});
+		}
 	});
 }
 
 if( program.open && program.open.length > 0 ){
-	sketchplate.openInEditor( program.open );
+	sketchplate.create(program.open, defaultSettings).openInEditor();
 }
 

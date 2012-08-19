@@ -2,16 +2,16 @@
 	"editorArgs": [
 		"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
 	],
-	"templateDirectory": "../template-amd",
-	"javascriptsDirectory": "/javascripts",
+	"templateDirectory": "template-amd",
+	"javascriptsDirectory": "javascripts",
 
-	"libraries": {
+	"javascripts": {
 			"modernizr": {
 				"url": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
 				"target": "vendor/modernizr.js"
 			},
 			"jquery": {
-				"url": "http://code.jquery.com/jquery-1.7.2.js",
+				"url": "http://code.jquery.com/jquery.js",
 				"target": "vendor/jquery.js"
 			},
 			"datgui": {

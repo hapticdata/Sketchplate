@@ -22,7 +22,7 @@ requirejs.config({
 	},
 	paths: {
 		'modernizr': 'vendor/modernizr',
-		'd3': 'vendor/d3.v2',
+		'd3': 'vendor/d3',
 		'jquery': [
 			'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min',
 			//If the CDN location fails, load local copy
