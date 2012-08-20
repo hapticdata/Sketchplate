@@ -1,0 +1,83 @@
+<!DOCTYPE html>  <html> <head>   <title>library.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="Project.html">                 Project.js               </a>                                           <a class="source" href="colors.html">                 colors.js               </a>                                           <a class="source" href="fetch.html">                 fetch.js               </a>                                           <a class="source" href="library.html">                 library.js               </a>                                           <a class="source" href="sketchplate.html">                 sketchplate.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               library.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">),</span>
+  <span class="nx">Fetch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./fetch&#39;</span><span class="p">).</span><span class="nx">Fetch</span><span class="p">;</span>
+
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">buildLibrary</span><span class="p">(</span> <span class="nx">settings</span><span class="p">,</span> <span class="nx">key</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">libs</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for</span><span class="p">(</span> <span class="kd">var</span> <span class="nx">id</span> <span class="k">in</span> <span class="nx">settings</span><span class="p">[</span><span class="nx">key</span><span class="p">]){</span>
+    <span class="kd">var</span> <span class="nx">libInfo</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span><span class="p">(</span> <span class="kd">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">settings</span><span class="p">[</span><span class="nx">key</span><span class="p">][</span><span class="nx">id</span><span class="p">]</span> <span class="p">){</span>
+      <span class="nx">libInfo</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">settings</span><span class="p">[</span><span class="nx">key</span><span class="p">][</span><span class="nx">id</span><span class="p">][</span><span class="nx">prop</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="nx">libInfo</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span>
+    <span class="nx">libInfo</span><span class="p">.</span><span class="nx">target</span> <span class="o">=</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/../&#39;</span><span class="o">+</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">templateDirectory</span> <span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">javascriptsDirectory</span> <span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span> <span class="nx">libInfo</span><span class="p">.</span><span class="nx">target</span><span class="p">;</span>
+    <span class="nx">libs</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="k">new</span> <span class="nx">Library</span><span class="p">(</span> <span class="nx">libInfo</span> <span class="p">)</span> <span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">libs</span><span class="p">;</span>
+<span class="p">};</span>
+
+
+
+
+<span class="kd">var</span> <span class="nx">Library</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">params</span> <span class="p">){</span>
+  <span class="k">for</span><span class="p">(</span> <span class="kd">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">params</span> <span class="p">){</span>
+    <span class="k">this</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="nx">prop</span><span class="p">];</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">Library</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="o">:</span> <span class="nx">Library</span><span class="p">,</span>
+  <span class="nx">exists</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(){</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">fs</span><span class="p">.</span><span class="nx">statSync</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">target</span> <span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span> <span class="nx">e</span> <span class="p">){</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">},</span>
+  <span class="nx">fetch</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">fn</span> <span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">ftch</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Fetch</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">fn</span> <span class="p">)</span><span class="nx">ftch</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="nx">ftch</span><span class="p">.</span><span class="nx">retrieveLib</span><span class="p">(</span> <span class="k">this</span> <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="cm">/*function makeLibraries ( templateDirectory ){</span>
+
+
+
+<span class="cm">var makeLibrary = function ( templateDirectory ){</span>
+<span class="cm">  return Backbone.Model.extend({</span>
+<span class="cm">    defaults: {</span>
+<span class="cm">      templateDirectory: templateDirectory</span>
+<span class="cm">    },</span>
+<span class="cm">    fetch: function ( fn ){</span>
+<span class="cm">      var ftch = new Fetch();</span>
+<span class="cm">      ftch.on(&#39;exit&#39;, fn );</span>
+<span class="cm">      ftch.retrieveLib( templateDirectory, this.attributes, this.id);</span>
+<span class="cm">      return this;</span>
+<span class="cm">    },</span>
+<span class="cm">    exists: function ( ){</span>
+<span class="cm">      return fs.existsSync( this.get(&#39;templateDirectory&#39;) + this.get(&#39;target&#39;) );</span>
+<span class="cm">    }</span>
+<span class="cm">  });</span>
+<span class="cm">};</span>
+
+<span class="cm">var Libraries = Backbone.Collection.extend({</span>
+<span class="cm">  model: makeLibrary( templateDirectory ),</span>
+<span class="cm">  initialize: function (){</span>
+<span class="cm">    if ( !this.options.templateDirectory) throw new Error(&quot;Missing templateDirectory in collection&quot;);</span>
+<span class="cm">    this.model = makeLibrary( this.options.templateDirectory );</span>
+<span class="cm">  },</span>
+
+<span class="cm">  exists: function ( index ){</span>
+<span class="cm">    var lib = this.at( index );</span>
+<span class="cm">    return fs.existsSync( this.templateDirectory + lib.get(&#39;target&#39;) );</span>
+<span class="cm">  }</span>
+<span class="cm">});</span>
+
+<span class="cm">};</span>
+<span class="cm">exports.makeLibraries = makeLibraries;*/</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

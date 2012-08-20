@@ -28,13 +28,10 @@ if ( program.fetch ){
 
 if( program['new'] !== undefined  && program['new'] !== ''){
 	//create a sketchplate project
-	var project = sketchplate.create( program['new'], defaultSettings );
-	project.copyTemplate(function (err){
-		if( err ){
-			throw Error(err);
-		}
-		if ( program.gitinit )
-			project.initRepo();
+	var plate = sketchplate.create( defaultSettings );
+	plate.copyTemplate( program['new'], function (err, project){
+		if( err )throw Error(err);
+		if ( program.gitinit ) project.initRepo();
 		if ( !program.skipopen ){
 			project.openInEditor(function (){
 				//process.exit(0);
@@ -44,6 +41,6 @@ if( program['new'] !== undefined  && program['new'] !== ''){
 }
 
 if( program.open && program.open.length > 0 ){
-	sketchplate.create(program.open, defaultSettings).openInEditor();
+	sketchplate.openProject(program.open, defaultSettings).openInEditor();
 }
 
