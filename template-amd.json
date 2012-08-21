@@ -1,11 +1,5 @@
 {
-	"editorArgs": [
-		"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
-	],
-	"templateDirectory": "template-amd",
-	"javascriptsDirectory": "javascripts",
-
-	"javascripts": {
+	"resources": {
 			"async": {
 				"tar": "https://github.com/caolan/async/tarball/master",
 				"sources": [
@@ -13,22 +7,23 @@
 					{ "src": "src/css", "target": "stylesheets/async.css"}
 				]
 			},
+
 			"modernizr": {
 				"url": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
-				"target": "vendor/modernizr.js"
+				"target": "javascripts/vendor/modernizr.js"
 			},
 			"jquery": {
 				"url": "http://code.jquery.com/jquery.js",
-				"target": "vendor/jquery.js"
+				"target": "javascripts/vendor/jquery.js"
 			},
 			"datgui": {
 				"git": "https://code.google.com/p/dat-gui/",
 				"src": "src/dat",
-				"target": "vendor/dat"
+				"target": "javascripts/vendor/dat"
 			},
 			"require": {
 				"url": "https://raw.github.com/jrburke/requirejs/master/require.js",
-				"target": "vendor/require.js"
+				"target": "javascripts/vendor/require.js"
 			},
 			"domReady": {
 				"url": "https://raw.github.com/requirejs/domReady/master/domReady.js",
