@@ -11,7 +11,16 @@
 
 var program = require('commander'),
 	defaultSettings = require('../settings.json'),
-	sketchplate = require('../lib/sketchplate');
+	template = require('../templates/'+ defaultSettings.template + '.json'),
+	sketchplate = require('../lib/sketchplate'),
+	settings;
+
+settings = {
+	editorArgs: defaultSettings.editorArgs,
+	templateDirectory: __dirname+'/../templates/'+defaultSettings.template+'',
+	resources: template.resources
+};
+
 
 program
 	.version('0.0.2')
@@ -23,12 +32,12 @@ program
 	.parse(process.argv);
 
 if ( program.fetch ){
-	sketchplate.fetchAllLibsFor( defaultSettings );
+	sketchplate.fetchAllLibsFor( settings );
 }
 
 if( program['new'] !== undefined  && program['new'] !== ''){
 	//create a sketchplate project
-	var plate = sketchplate.create( defaultSettings );
+	var plate = sketchplate.create( settings );
 	plate.copyTemplate( program['new'], function (err, project){
 		if( err )throw Error(err);
 		if ( program.gitinit ) project.initRepo();
@@ -41,6 +50,6 @@ if( program['new'] !== undefined  && program['new'] !== ''){
 }
 
 if( program.open && program.open.length > 0 ){
-	sketchplate.openProject(program.open, defaultSettings).openInEditor();
+	sketchplate.openProject(program.open, settings).openInEditor();
 }
 
