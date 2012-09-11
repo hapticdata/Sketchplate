@@ -1,5 +1,9 @@
 {
 	"resources": {
+			"async": {
+				"url": "https://raw.github.com/caolan/async/master/lib/async.js",
+				"target": "javascripts/vendor/async.js"
+			},
 			"modernizr": {
 				"url": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
 				"target": "javascripts/vendor/modernizr.js"
