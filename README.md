@@ -18,10 +18,11 @@ Sketchplate is a system for quickly generating projects with a collection of lib
     -s, --skipopen         Skip opening project in editor
 
 
-Customize the [settings.json](https://github.com/hapticdata/Sketchplate/blob/dev-node/settings.json) file with your favorite libraries, edit the [template/](https://github.com/hapticdata/Sketchplate/tree/dev-node/template) folder however you like.
+Customize the [settings.json](https://github.com/hapticdata/Sketchplate/blob/dev-node/settings.json) file for your editor and default template.  Edit the [templates/](https://github.com/hapticdata/Sketchplate/tree/dev-node/template) folder however you like to customize your boilerplate. Each template has a simple [json description](https://github.com/hapticdata/Sketchplate/blob/master/templates/amd-sketch.json) that allows it to fetch resources.
 
 
-## The default libraries in the template are:
+##The default template is [amd-sketch](https://github.com/hapticdata/Sketchplate/blob/master/templates/)
+### The default libraries in the template are:
 * [Require.js](http://requirejs.org) - with [domReady](https://github.com/requirejs/domReady) and [text](https://github.com/requirejs/text) plugins bundled
 * [jQuery](http://jquery.com)
 * [dat-gui](http://code.google.com/p/dat-gui/)
