@@ -1,6 +1,4 @@
 {
-	"editorArgs": [
-		"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"
-	],
-	"template": "amd-services"
+	"editorArgs": ["/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl"],
+	"template": "amd-sketch"
 }
