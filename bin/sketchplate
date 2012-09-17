@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-
+/*global __dirname, process*/
 /**
  usage:
 	$	sketchplate --new ~/Sites/myProject --gitinit
@@ -10,8 +10,11 @@
 */
 
 var program = require('commander'),
-	defaultSettings = require('../settings.json'),
-	sketchplate = require('../lib/sketchplate');
+	settings = require('../settings.json'),
+	template = require('../templates/'+ settings.template + '.json'),
+	sketchplate = require('../lib/sketchplate'),
+	settings;
+
 
 program
 	.version('0.0.2')
@@ -19,16 +22,29 @@ program
 	.option('-g, --gitinit', 'Initialize repo after creation')
 	.option('-f, --fetch', 'Fetch new copies of all libraries')
 	.option('-o, --open [location]', 'Open [location] in editor', '')
+	.option('-t, --template [template]', 'Create with [template] template', '')
 	.option('-s, --skipopen', 'Skip opening project in editor')
 	.parse(process.argv);
 
+
+if( program.template !== '' ){
+	settings.template = program.template;
+}
+
+settings.templateDirectory = settings.templateDirectory || __dirname + '/../templates/'+settings.template+'/';
+
+
 if ( program.fetch ){
-	sketchplate.fetchAllLibsFor( defaultSettings );
+	sketchplate.fetchAllLibsFor( settings );
 }
 
 if( program['new'] !== undefined  && program['new'] !== ''){
+	if( program['template'] !== undefined && program['template'] !== ''){
+		console.log('set template: '+ program['template'] );
+		settings.template = program['template'];
+	}
 	//create a sketchplate project
-	var plate = sketchplate.create( defaultSettings );
+	var plate = sketchplate.create( settings );
 	plate.copyTemplate( program['new'], function (err, project){
 		if( err )throw Error(err);
 		if ( program.gitinit ) project.initRepo();
@@ -41,6 +57,6 @@ if( program['new'] !== undefined  && program['new'] !== ''){
 }
 
 if( program.open && program.open.length > 0 ){
-	sketchplate.openProject(program.open, defaultSettings).openInEditor();
+	sketchplate.openProject(program.open, settings).openInEditor();
 }
 

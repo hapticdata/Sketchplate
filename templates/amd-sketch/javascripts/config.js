@@ -1,26 +1,16 @@
+/*global requirejs*/
 requirejs.config({
 	shim: {
-		'modernizr': {
-			exports: 'Modernizr'
-		},
-		'underscore': {
-			exports: '_'
-		},
-		'backbone': {
-			deps: ['jquery','underscore'],
-			exports: 'Backbone'
-		},
-		'd3': {
-			exports: 'd3'
-		},
-		'Three': {
-			exports: 'THREE'
-		},
-		'Stats': {
-			exports: 'Stats'
-		}
+		'async': { exports: 'async' },
+		'modernizr': { exports: 'Modernizr' },
+		'underscore': { exports: '_' },
+		'backbone': { deps: ['jquery','underscore'], exports: 'Backbone' },
+		'd3': { exports: 'd3' },
+		'Three': { exports: 'THREE' },
+		'Stats': { exports: 'Stats' }
 	},
 	paths: {
+		'async': 'vendor/async',
 		'modernizr': 'vendor/modernizr',
 		'd3': 'vendor/d3',
 		'jquery': [
