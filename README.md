@@ -1,4 +1,5 @@
 # Sketchplate
+##*glorified `cp -r` for your boilerplate needs*
 
 Sketchplate is a system for quickly generating projects with a collection of libraries and processes that I use frequently for web-based computational design. It provides tools to maintain a template folder, retrieve and update your favorite libs and quickly copy your template into a new folder you specify. These libraries are assembled together to work with the [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) workflow I prefer. It will be packaged as an [NPM](http://npmjs.org) package for [Node.js](http://nodejs.org). Using Sketchplate allows you to instantly create a new project and begin working. **The goal of this project is to make the time between receiving inspiration and beginning development an absolute minimum.**
 
@@ -6,19 +7,24 @@ Sketchplate is a system for quickly generating projects with a collection of lib
 ## Installation
 `$git clone git@github.com:hapticdata/Sketchplate.git`
 
-## Usage
-`$./sketchplate --new ~/Sites/my_project`
+	Usage: sketchplate [options] [command]
 
-  Options:
+	Commands:
+		new [options]
+		create a new project with sketchplate
+		fetch [options]
+		fetch copies of any missing resources for template
+		config [options]
+		set sketchplate configuration
 
-    -n, --new [location]   New project at [location]
-    -g, --gitinit          Initialize repo after creation
-    -f, --fetch            Fetch new copies of all libraries
-    -o, --open [location]  Open [location] in editor
-    -s, --skipopen         Skip opening project in editor
+	Options:
+		-h, --help             output usage information
+		-V, --version          output the version number
+		-v, --verbose          Verbose
+		-o, --open [location]  Open [location] in editor
 
 
-Customize the [settings.json](https://github.com/hapticdata/Sketchplate/blob/dev-node/settings.json) file for your editor and default template.  Edit the [templates/](https://github.com/hapticdata/Sketchplate/tree/dev-node/template) folder however you like to customize your boilerplate. Each template has a simple [json description](https://github.com/hapticdata/Sketchplate/blob/master/templates/amd-sketch.json) that allows it to fetch resources.
+Customize the [config.json](https://github.com/hapticdata/Sketchplate/blob/master/config.json) file for your editor and default template.  Edit the [templates/](https://github.com/hapticdata/Sketchplate/tree/master/template) folder however you like to customize your boilerplate. Each template has a simple [json description](https://github.com/hapticdata/Sketchplate/blob/master/templates/amd-sketch.json) that allows it to fetch resources.
 
 
 ##The default template is [amd-sketch](https://github.com/hapticdata/Sketchplate/blob/master/templates/)

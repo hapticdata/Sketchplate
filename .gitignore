@@ -1,4 +1,7 @@
 *.pyc
 *.DS_STORE
 node_modules
-javascripts/vendor/*
+*/javascripts/vendor/*
+**/**/**/javascripts/vendor/*
+**/**/javascripts/vendor/*
+**/javascripts/vendor/*
