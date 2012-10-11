@@ -1,5 +1,9 @@
 {
-	"resources": {
+	"name": "AMD-Sketch",
+	"version": "0.1.0",
+	"author": "Kyle Phillips <kyle@haptic-data.com>",
+	"description": "Front-end web-template with an AMD boilerplate and a collection of libraries for computational design.",
+	"fetch": {
 			"async": {
 				"url": "https://raw.github.com/caolan/async/master/lib/async.js",
 				"target": "javascripts/vendor/async.js"
@@ -31,10 +35,7 @@
 			},
 			"d3": {
 				"url": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
-				"target": "javascripts/vendor/d3.js",
-				"shim": {
-					"exports": "d3"
-				}
+				"target": "javascripts/vendor/d3.js"
 			},
 			"toxi": {
 				"git": "https://github.com/hapticdata/toxiclibsjs.git",
@@ -45,8 +46,8 @@
 				"url": "https://raw.github.com/mrdoob/stats.js/master/src/Stats.js",
 				"target": "javascripts/vendor/Stats.js"
 			},
-			"Three": {
-				"url": "https://raw.github.com/mrdoob/three.js/master/build/Three.js",
+			"three": {
+				"url": "https://raw.github.com/mrdoob/three.js/master/build/three.js",
 				"target": "javascripts/vendor/three.js"
 			},
 			"Backbone": {

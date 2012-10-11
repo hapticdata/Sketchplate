@@ -1,7 +1,7 @@
 {
   "name": "sketchplate",
   "description": "Sketchplate maintains an easily reproducable AMD template for the quick creation of new projects.",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "author": "Kyle Phillips <kyle@haptic-data.com>",
   "contributors": [
     {
@@ -12,9 +12,14 @@
   "dependencies": {
     "commander": ">=0.6.1",
     "wrench": ">=1.3.9",
-    "request": ">=2.9.203"
+    "request": ">=2.9.203",
+    "mkdirp": "~0.3.4",
+    "async": "~0.1.22"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tar-async": "~1.2.0",
+    "adm-zip": "~0.1.5"
+  },
   "keywords": [
     "sketchplate",
     "boilerplate",
