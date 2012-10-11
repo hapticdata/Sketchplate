@@ -17,9 +17,10 @@
 				"target": "javascripts/vendor/jquery.js"
 			},
 			"datgui": {
-				"git": "https://code.google.com/p/dat-gui/",
-				"src": "src/dat",
-				"target": "javascripts/vendor/dat"
+				"clone": "https://code.google.com/p/dat-gui/",
+				"target": {
+					"src/dat": "javascripts/vendor/dat"
+				}
 			},
 			"require": {
 				"url": "https://raw.github.com/jrburke/requirejs/master/require.js",
@@ -38,9 +39,10 @@
 				"target": "javascripts/vendor/d3.js"
 			},
 			"toxi": {
-				"git": "https://github.com/hapticdata/toxiclibsjs.git",
-				"src": "lib/toxi",
-				"target": "javascripts/vendor/toxi"
+				"clone": "https://github.com/hapticdata/toxiclibsjs.git",
+				"target": {
+					"lib/toxi": "javascripts/vendor/toxi"
+				}
 			},
 			"Stats": {
 				"url": "https://raw.github.com/mrdoob/stats.js/master/src/Stats.js",

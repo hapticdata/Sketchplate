@@ -1,6 +1,10 @@
 #Changes
 
-#v0.0.4
+##v0.0.5
+-	support for fetching zip archives
+-	support for multiple targets with a fetched resource
+
+##v0.0.4
 -	started change log :)
 -	updated readme
 -	resolved issues where path to templates folder was incorrect

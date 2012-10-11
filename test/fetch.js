@@ -8,8 +8,7 @@ describe('fetch', function(){
 		fetch({
 				"url": "https://raw.github.com/caolan/async/master/lib/async.js",
 				"target": tmp + "vendor/async.js"
-			})
-			.on('exit',function( err ){
+			},function( err ){
 				if( err ) throw err;
 				done();
 			});
@@ -18,11 +17,12 @@ describe('fetch', function(){
 	it('should clone dat-gui with git', function( done ){
 		this.timeout( 120000 );
 		fetch({
-				"git": "https://code.google.com/p/dat-gui/",
-				"src": "src/dat",
-				"target": tmp + "vendor/dat"
-			})
-			.on('exit', function( err ){
+				"clone": "https://code.google.com/p/dat-gui/",
+				"target": {
+					"src/dat": tmp + "vendor/dat",
+					"build": tmp + "build"
+				}
+			}, function( err ){
 				if( err ) throw err;
 				done();
 			});
@@ -32,11 +32,23 @@ describe('fetch', function(){
 		this.timeout( 120000 );
 		fetch({
 			"zip": "https://github.com/twitter/bootstrap/zipball/master",
-			"target": tmp + "bootstrap/"
-		})
-		.on('exit', function( err ){
+			"target": {
+				"js/": tmp + "javascripts/vendor/bootstrap/",
+				"less/": tmp + "less/bootstrap/"
+			}
+		}, function( err ){
 			if( err ) throw err;
 			done();
+		});
+	});
+
+	it('should report that an invalid resource was provided', function( done ){
+		fetch({ "test": "" }, function( err ){
+			if( err ){
+				done();
+			} else {
+				throw Error("Fetch failed to throw an error with an invalid resource");
+			}
 		});
 	});
 });
