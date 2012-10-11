@@ -1,6 +1,7 @@
 # Sketchplate
+##*glorified `cp -r` for your boilerplate needs*
 
-**The goal of Sketchplate is to make the time between receiving inspiration and beginning development an absolute minimum.** Sketchplate is a system for quickly generating projects with a collection of libraries and processes that you use frequently. It provides tools to maintain various templates, retrieve and update your favorite libraries, quickly copy your template into a specified folder and launch it in your favorite editor. It will be packaged on [NPM](http://npmjs.org) for [Node.js](http://nodejs.org). Using Sketchplate allows you to instantly create a new project and begin working.
+Sketchplate is a system for quickly generating projects with a collection of libraries and processes that I use frequently for web-based computational design. It provides tools to maintain a template folder, retrieve and update your favorite libs and quickly copy your template into a new folder you specify. These libraries are assembled together to work with the [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) workflow I prefer. It will be packaged as an [NPM](http://npmjs.org) package for [Node.js](http://nodejs.org). Using Sketchplate allows you to instantly create a new project and begin working. **The goal of this project is to make the time between receiving inspiration and beginning development an absolute minimum.**
 
 
 ## Installation
@@ -25,23 +26,8 @@
 
 Customize the [config.json](https://github.com/hapticdata/Sketchplate/blob/master/config.json) file for your editor and default template.  Edit the [templates/](https://github.com/hapticdata/Sketchplate/tree/master/template) folder however you like to customize your boilerplate. Each template has a simple [json description](https://github.com/hapticdata/Sketchplate/blob/master/templates/amd-sketch.json) that allows it to fetch resources.
 
-##config.json
 
-*	editorArgs {Array}, array of commands to launch editor into project, 
-	project location will be appended as last command
-*	template {String}, name of template to default to
-*	templateDirectory {String}, location of Sketchplate's templates, relative to bin/
-
-###Editor Arg examples:
-* Sublime Text 2: `["subl"]`
-*		This can be used on any platform that has Sublime Text 2 added to your $PATH
-		by default Sublime Text 2 for OSX is set up through the /Applications directory 
-* TextMate: `[ "mate", "-w" ]`
-* Cloud9 (local install): `["c9", "-w" ]`
-* BBEdit (command line tools must be installed): `["bbedit"]`
-
-##Default template [amd-sketch](https://github.com/hapticdata/Sketchplate/blob/master/templates/)
-The default template is oriented towards web-based computational design. I consider this analogous to a new sketch in [Processing](http://processing.org). These libraries are assembled together to work with the [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) workflow I prefer. 
+##The default template is [amd-sketch](https://github.com/hapticdata/Sketchplate/blob/master/templates/)
 ### The default libraries in the template are:
 * [Require.js](http://requirejs.org) - with [domReady](https://github.com/requirejs/domReady) and [text](https://github.com/requirejs/text) plugins bundled
 * [jQuery](http://jquery.com)

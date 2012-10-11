@@ -1,9 +1,5 @@
 {
-	"name": "AMD-Services",
-	"version": "0.0.1",
-	"author": "Kyle Phillips <kyle@haptic-data.com>",
-	"description": "Front-end web-template with an AMD boilerplate and a collection of web-service APIs.",
-	"fetch": {
+	"resources": {
 			"dropbox": {
 				"url": "https://raw.github.com/bcherry/dropbox-js/master/dropbox.js",
 				"target": "javascripts/services/dropbox.js"
@@ -35,7 +31,10 @@
 			},
 			"d3": {
 				"url": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
-				"target": "javascripts/vendor/d3.js"
+				"target": "javascripts/vendor/d3.js",
+				"shim": {
+					"exports": "d3"
+				}
 			},
 			"toxi": {
 				"git": "https://github.com/hapticdata/toxiclibsjs.git",
@@ -46,8 +45,8 @@
 				"url": "https://raw.github.com/mrdoob/stats.js/master/src/Stats.js",
 				"target": "javascripts/vendor/Stats.js"
 			},
-			"three": {
-				"url": "https://raw.github.com/mrdoob/three.js/master/build/three.js",
+			"Three": {
+				"url": "https://raw.github.com/mrdoob/three.js/master/build/Three.js",
 				"target": "javascripts/vendor/three.js"
 			},
 			"Backbone": {
