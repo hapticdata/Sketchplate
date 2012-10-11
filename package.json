@@ -27,7 +27,7 @@
     "web"
   ],
   "repository": "git://github.com/hapticdata/sketchplate",
-  "main": "index",
+  "main": "lib/sketchplate",
   "bin": {
     "sketchplate": "./bin/sketchplate"
   },
