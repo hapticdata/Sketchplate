@@ -28,10 +28,11 @@ var program = require('commander'),
 	path = require('path'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
+	configLocation = path.normalize(__dirname+'/../config.js'),
 	config;
 
 (function initConfig(){
-	var txt = fs.readFileSync( path.normalize(__dirname+'/../config.js') );
+	var txt = fs.readFileSync( configLocation );
 	config = eval( String(txt) );
 	config.templateDirectory = path.normalize( __dirname +'/'+ config.templateDirectory );
 }());
@@ -74,7 +75,16 @@ program
 			if ( !options.skipeditor ){
 				project.openInEditor(function ( err ){
 					if( err ){
-						console.log("There was an error opening your editor. Have you set it in config.js?");
+						program.confirm([
+							"Your project was created;\n",
+							"but there was an error opening your editor. ",
+							"Would you like to edit your config.js? "].join(''), function( yes ){
+								if( yes ){
+									require('../lib/hooks').openInFileBrowser( configLocation, function( err ){
+										process.exit();
+									});
+								}
+							});
 					}
 				});
 			}
@@ -123,6 +133,8 @@ program
 			if( err ) throw err;
 		});
 	});
+
+
 
 program
 	.option('-v, --verbose', 'Verbose', undefined)
