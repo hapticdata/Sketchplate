@@ -28,10 +28,13 @@ var program = require('commander'),
 	path = require('path'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
-	config = require('../config.json');
+	config;
 
-
-config.templateDirectory = path.normalize( __dirname +'/'+ config.templateDirectory );
+(function initConfig(){
+	var txt = fs.readFileSync( path.normalize(__dirname+'/../config.js') );
+	config = eval( String(txt) );
+	config.templateDirectory = path.normalize( __dirname +'/'+ config.templateDirectory );
+}());
 
 
 program.version('0.0.4');
@@ -62,10 +65,19 @@ program
 		//create a sketchplate project
 		var plate = sketchplate.create( config );
 		plate.copyTemplate( destination, function (err, project){
-			if( err )throw err;
+			if( err ){
+				console.log( err.message );
+				return;
+			}
 			if ( options.gitinit ) project.initRepo();
 			if( options.npminstall ) project.npmInstall();
-			if ( !options.skipeditor )project.openInEditor(function (){});
+			if ( !options.skipeditor ){
+				project.openInEditor(function ( err ){
+					if( err ){
+						console.log("There was an error opening your editor. Have you set it in config.js?");
+					}
+				});
+			}
 			if( options.browse )project.openInFileBrowser(function(){});
 		});
 	});

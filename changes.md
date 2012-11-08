@@ -3,6 +3,9 @@
 ##v0.0.5
 -	support for fetching zip archives
 -	support for multiple targets with a fetched resource
+-	properly checking for multiple targets
+-	collecting and reporting errors for failed git, zip or url fetches
+-	converted config.json to config.js to allow for comments
 
 ##v0.0.4
 -	started change log :)
