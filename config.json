@@ -1,0 +1,23 @@
+{
+	"editor": "Sublime Text 2 on OSX",
+	"editors": {
+		"Sublime Text 2 on OSX": [
+			"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl",
+			"%path"
+		],
+		"Sublime Text 2 in $PATH": [
+			"subl",
+			"%path"
+		],
+		"Textmate": [
+			"mate",
+			"%path"
+		],
+		"BBEdit": [
+			"bbedit",
+			"%path"
+		]
+	},
+	"template": "amd-sketch",
+	"templatesPath": "/Users/me/Sites/libs/Sketchplate/templates"
+}

@@ -4,51 +4,105 @@ var fetch = require('../lib/fetch');
 
 describe('fetch', function(){
 	var tmp = 'test_downloads/';
-	it('should download async.js from a url', function( done ){
-		fetch({
-				"url": "https://raw.github.com/caolan/async/master/lib/async.js",
-				"target": tmp + "vendor/async.js"
-			},function( err ){
-				if( err ) throw err;
-				done();
-			});
-	});
 
-	it('should clone dat-gui with git', function( done ){
-		this.timeout( 120000 );
-		fetch({
+	describe('batch', function(){
+		var dir = tmp + 'batch/';
+		it('should download all files, including a zip, clone, and file', function( done ){
+			this.timeout(100000);
+			fetch([{
+				"zip": "https://github.com/hapticdata/toxiclibsjs/zipball/master",
+				"target": {
+					"lib/": dir+"toxiclibsjs/javascripts/",
+					"examples/": dir+"toxiclibsjs/examples/"
+				}
+			},{
 				"clone": "https://code.google.com/p/dat-gui/",
 				"target": {
-					"src/dat": tmp + "vendor/dat",
-					"build": tmp + "build"
+					"src/dat": dir+"dat/",
+					"build": dir+"dat/build"
 				}
-			}, function( err ){
-				if( err ) throw err;
-				done();
+			},{
+				"file": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
+				"target": dir+"modernizr.js"
+			},{
+				"file": "http://code.jquery.com/jquery.js",
+				"target": dir+"jquery.js"
+			},{
+				"file": "https://raw.github.com/caolan/async/master/lib/async.js",
+				"target": dir+"async.js"
+			}], function( err ){
+				done(err);
 			});
-	});
-
-	it('should download bootstrap as a zipball', function( done ){
-		this.timeout( 120000 );
-		fetch({
-			"zip": "https://github.com/twitter/bootstrap/zipball/master",
-			"target": {
-				"js/": tmp + "javascripts/vendor/bootstrap/",
-				"less/": tmp + "less/bootstrap/"
-			}
-		}, function( err ){
-			if( err ) throw err;
-			done();
 		});
 	});
 
-	it('should report that an invalid resource was provided', function( done ){
-		fetch({ "test": "" }, function( err ){
-			if( err ){
-				done();
-			} else {
-				throw Error("Fetch failed to throw an error with an invalid resource");
-			}
+	describe("#fromFile()", function(){
+		it('should download async.js from a file', function( done ){
+			this.timeout(10000);
+			fetch({
+				"file": "https://raw.github.com/caolan/async/master/lib/async.js",
+				"target": tmp + "from-file/async.js"
+			},function( err ){
+				done( err );
+			});
+		});
+	});
+
+	describe("#fromGit()", function(){
+		it('should clone dat-gui with git', function( done ){
+			this.timeout( 100000 );
+			fetch({
+				"clone": "https://code.google.com/p/dat-gui/",
+				"target": {
+					"src/dat": tmp + "from-git/dat",
+					"build": tmp + "from-git/build"
+				}
+			}, function( err ){
+				done( err );
+			});
+		});
+	});
+
+	describe("#fromZip()", function(){
+		it('should download bootstrap as a zipball', function( done ){
+			this.timeout( 100000 );
+			fetch({
+				"zip": "https://github.com/twitter/bootstrap/zipball/master",
+				"excludes": [ "js/tests/", "less/tests/" ],
+				"target": {
+					"js/": tmp + "from-zip/bootstrap/javascripts",
+					"less/": tmp + "from-zip/bootstrap/less/"
+				}
+			}, function( err ){
+				done( err );
+			});
+		});
+	});
+
+	describe("error handling", function(){
+		it('should report that an invalid resource was provided', function( done ){
+			this.timeout(10000);
+			fetch({ "test": "" }, function( err ){
+				if( err ){
+					//this is what we want
+					err = null;
+					
+				}
+				done( err );
+			});
+		});
+		it('should respond with a retrieval error', function( done ){
+			this.timeout(10000);
+			fetch({
+				file: "http://github.com/dkaljdkd",
+				target: tmp+"error/"
+			}, function( err ){
+				if( err ){
+					//this is what we want! so now we can eradicate it
+					err = null;
+				}
+				done( err );
+			});
 		});
 	});
 });

@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+var program = require('commander'),
+	async = require('async'),
+	path = require('path'),
+	fs = require('fs'),
+	sketchplate = require('../lib/sketchplate'),
+	hooks = require('../lib/hooks'),
+	config = require('../config.json');
+
+function writeNewConfig( fn ) {
+	body = JSON.stringify( config, null, '\t');
+	fs.writeFile(__dirname + '/../config.json', body, function( err ){
+		if( fn ){
+			fn( err );
+		}
+	});
+}
+
+
+program
+	.command('editor')
+	.description('setup your editor')
+	.option('-i, --interactive','Set up your editor in interactive mode')
+	.action(function( options ){
+		if( options.interactive ){
+			var list = [];
+			for( var prop in config.editors ){
+				list.push( prop );
+			}
+			program.choose( list, function( choice ){
+				config.editor = list[choice];
+				writeNewConfig(function( err ){
+					if( err ) throw err;
+					process.exit();
+				});
+
+			});
+		}
+	});
+
+program.parse( process.argv );

@@ -1,10 +1,17 @@
 # Sketchplate
+##pre-project tooling for getting started quick
 
-**The goal of Sketchplate is to make the time between receiving inspiration and beginning development an absolute minimum.** Sketchplate is a system for quickly generating projects with a collection of libraries and processes that you use frequently. It provides tools to maintain various templates, retrieve and update your favorite libraries, quickly copy your template into a specified folder and launch it in your favorite editor. It will be packaged on [NPM](http://npmjs.org) for [Node.js](http://nodejs.org). Using Sketchplate allows you to instantly create a new project and begin working.
+There are currently 3 main components to sketchplate:
+
+1.	[Templates](#templates)
+1.	[Fetching](#fetching)
+1.	[Hooks](#hooks)
+
+Sketchplate is a system for quickly generating projects with collections of libraries and processes that you use frequently. It provides tools to maintain various templates, retrieve and update your favorite libraries, quickly copy your template into a specified folder and launch it in your favorite editor. It will be packaged on [NPM](http://npmjs.org) for [Node.js](http://nodejs.org).
 
 
 ## Installation
-`$git clone git@github.com:hapticdata/Sketchplate.git`
+`$ git clone git@github.com:hapticdata/Sketchplate.git`
 
 	Usage: sketchplate [options] [command]
 
@@ -21,6 +28,51 @@
 		-V, --version          output the version number
 		-v, --verbose          Verbose
 		-o, --open [location]  Open [location] in editor
+
+
+##Templates
+Sketchplate encourages creating your own project templates and comes bundled with one called [amd-sketch](#amd-sketch). 
+
+##Fetching
+To assist in maintaining templates, a [template.json](./templates/amd-sketch/template.json) is used to describe resources, the retrieval and updating of those resources is automated and **doesn't use any package manager** _([Volo](http://github.com/jrburke/volojs), [Bower](http://github.com/twitter/bower))_. To use you simply describe where it is, and where you want its contents to go.
+_currently supports **file**,**zip**,**clone**:_
+
+###Download a file, copy it to the target:
+
+	{
+		"file": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
+		"target": "js/vendor/modernizr.js"
+	}
+
+###_git clone_ a repository and copy its `src/dat` folder into `js/vendor/dat`:
+
+	{
+		"clone": "https://code.google.com/p/dat-gui/",
+		"target": {
+			"src/dat": "js/vendor/dat"
+		}
+	}
+
+###Download a zip, extract it, copy its targets:
+
+	{
+		"zip": "https://github.com/twitter/bootstrap/zipball/master",
+		"target": {
+			"js/": "js/vendor/bootstrap",
+			"less/": "less/bootstap"
+		}
+	}
+
+
+
+##Hooks
+Once a new project has been created there are several things you may want to do immediately.
+
+1.	Open your editor to begin working
+1.	Browse the newly created project
+1.	Initialize an empty git repository
+1.	run `npm install` to install node dependencies (if the template has a `package.json`)
+
 
 
 Customize the [config.json](https://github.com/hapticdata/Sketchplate/blob/master/config.json) file for your editor and default template.  Edit the [templates/](https://github.com/hapticdata/Sketchplate/tree/master/template) folder however you like to customize your boilerplate. Each template has a simple [json description](https://github.com/hapticdata/Sketchplate/blob/master/templates/amd-sketch.json) that allows it to fetch resources.

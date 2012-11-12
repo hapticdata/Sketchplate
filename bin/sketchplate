@@ -23,24 +23,47 @@
 //			-v, --verbose          Verbose
 //			-o, --open [location]  Open [location] in editor
 
-/*global __dirname, process*/
 var program = require('commander'),
+	async = require('async'),
 	path = require('path'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
-	configLocation = path.normalize(__dirname+'/../config.js'),
+	hooks = require('../lib/hooks'),
+	configLocation = '../config.json', //path.normalize(__dirname+'/../config.js'),
 	config;
 
 (function initConfig(){
-	var txt = fs.readFileSync( configLocation );
-	config = eval( String(txt) );
-	config.templateDirectory = path.normalize( __dirname +'/'+ config.templateDirectory );
+	//var txt = fs.readFileSync( configLocation );
+	//config = eval( String(txt) );
+	config = require( configLocation );
+	//config.templatesPath = path.normalize( __dirname +'/'+ config.templatesPath );
 }());
 
 
-program.version('0.0.4');
-
 //handle the `new` command
+program
+	.version(require('../package').version)
+	.usage('<command> [options]');
+
+program.on('--help', function(){
+	var l = console.log;
+	l('  Commands:');
+	l('');
+	l('    new <location> [options]');
+	l('    create a new project at <location> with hooks for [options]');
+	l();
+	l('    fetch [options...]');
+	l('    perform resource fetches on your templates');
+	l();
+	l('    template <command> [options]');
+	l('    perform commands on your sketchplate templates');
+	l();
+	l('    hooks <command> [options]');
+	l('    perform  hooks on existing projects');
+	l();
+	process.exit();
+});
+
 program
 	.command('new')
 	.description('create a new project with sketchplate')
@@ -76,15 +99,17 @@ program
 				project.openInEditor(function ( err ){
 					if( err ){
 						program.confirm([
-							"Your project was created;\n",
-							"but there was an error opening your editor. ",
-							"Would you like to edit your config.js? "].join(''), function( yes ){
-								if( yes ){
-									require('../lib/hooks').openInFileBrowser( configLocation, function( err ){
-										process.exit();
-									});
-								}
-							});
+							"Your project was created; ",
+							"but there was an error opening your editor.\n",
+							"Would you like to edit your config.js? ",
+							"(you can do this any time with \"sketchplate config\") "
+						].join(''), function( yes ){
+							if( yes ){
+								hooks.openInFileBrowser( configLocation, function( err ){
+									process.exit();
+								});
+							}
+						});
 					}
 				});
 			}
@@ -92,91 +117,156 @@ program
 		});
 	});
 
-program
+/*program
 	.command('fetch')
-	.description('fetch copies of any missing resources for template')
+	.description('fetch copies of any resources for a template')
 	.option('-a, --all', 'Fetch new copies of all resources for template')
+	.option('-i, --interactive', 'Fetch resources individually in interactive mode')
 	.option('-t, --template [template]', 'Fetch resources for [template]', undefined)
 	.action(function( options ){
-		if(options.template)config.template = options.template;
 		var plate = sketchplate.create( config );
-		if( options.all ){
-			plate.fetchAllLibs(function(){
-				//if( err ) throw err;
-			});
+		var report = function( err ){
+			if( err ){
+				console.log( err.message );
+			} else {
+				console.log("Fetched resources completed");
+			}
+			process.exit();
+		};
+		//if the argument was an options object
+		if( arguments[0].commands ){
+			if(options.template){
+				config.template = options.template;
+			}
+			if( options.all ){
+				options.interactive = false;
+				plate.fetchAll( report );
+			} else if( options.interactive ){
+				var list = [];
+				plate.resources.forEach(function( val ){
+					list.push( val.id );
+				});
+				program.choose( list, function( index ){
+					var resource = plate.resources[index];
+					sketchplate.fetch( resource, report );
+				});
+			} else {
+				//fetch only missing
+				plate.fetchMissing( report );
+			}
 		} else {
-			//fetch only missing
-			plate.fetchMissingLibs(function(){
-				//if( err ) throw err;
+			//if the arguments were individual resources to fetch
+			var names = Array.prototype.slice.call( arguments, 0, arguments.length-1 );
+			plate.fetch( names, function( err ){
+				if( err ){
+					console.log( 'sketchplate err: ',err );
+				} else {
+					console.log("Fetched resources completed");
+				}
 			});
 		}
 	});
-
+*/
+/*
 program
-	.command('config')
-	.description('set sketchplate configuration')
-	.option('-t, --template [template]', 'Set default template [template]', undefined)
-	.option('-d, --directory [directory]', 'Set the directory to find templates', undefined)
-	.option('-e, --editor [editor]', 'Set the arguments for your editor', undefined)
+	.command('template')
+	.description('create, edit and browse templates')
+	.option('-a, --add [add]', 'add a new template [add]', undefined)
+	.option('-e, --edit [edit]', 'Edit the template [edit]', undefined)
+	.option('-b, --browse [browse]', 'Open the templates directory', undefined)
 	.action(function( options ){
-		console.log('config args:', arguments);
-		return;
-		var body;
-		if( options.template ) config.template = options.template;
-		if( options.editor ) config.editorArgs = options.editor;
-		if( options.directory ) config.templateDirectory = options.directory;
-		if( !Array.isArray( config.editorArgs ) ){
-			config.editorArgs = [config.editorArgs];
+		if( options.create && options.edit ){
+			options.edit = false;
 		}
-		body = JSON.stringify( config, null, '\t');
-		fs.writeFile(__dirname + '/../config.json', body, function( err ){
-			if( err ) throw err;
-		});
+		if( options.add ){
+			console.log("Creating a new template…");
+			var msg = "Title: ";
+			if( String(options.add) !== "true" ){
+				msg += "("+options.add+") ";
+			}
+			program.prompt(msg, function( title ){
+				if( title === "" ){
+					title = options.add;
+				}
+				program.prompt("Description: ", function( description ){
+					sketchplate.createTemplate( config, {
+						title: title,
+						description: description
+					}, function( err, directory ){
+						hooks.openInEditor( config.editorArgs, directory, function( err ){
+							process.exit();
+						});
+					});
+				});
+			});
+		}
+		if( options.browse ){
+			hooks.openInFileBrowser( config.templatesPath, function( err ){
+
+			});
+		}
+		if( options.edit ){
+			var tmplDir = config.templatesPath+'/'+options.edit;
+			if( !fs.existsSync(tmplDir) ){
+				console.log("The template "+options.edit+" does not exist");
+				return;
+			}
+			hooks.openInEditor( config.editorArgs, tmplDir, function( err ){
+				process.exit();
+			});
+		}
 	});
+*/
 
 
 
+/*
 program
 	.option('-v, --verbose', 'Verbose', undefined)
 	.option('-o, --open [location]', 'Open [location] in editor', undefined);
+*/
 
 
 program.parse(process.argv);
 
+// args void of cmd
+var args = process.argv.slice(3);
 
-/*
-
-if( program.template !== '' ){
-	settings.template = program.template;
+// command
+var cmd = program.args[0];
+// display help
+if (!cmd) {
+  process.stdout.write(program.helpInformation());
+  program.emit('--help');
+  process.exit();
 }
 
-settings.templateDirectory = settings.templateDirectory || __dirname + '/../templates/'+settings.template+'/';
-
-
-if ( program.fetch ){
-	sketchplate.fetchAllLibsFor( settings );
-}
-
-if( program['new'] !== undefined  && program['new'] !== ''){
-	if( program['template'] !== undefined && program['template'] !== ''){
-		console.log('set template: '+ program['template'] );
-		settings.template = program['template'];
+var commands = {
+	fetch: function(){
+		cmd = 'template';
+		args.unshift('fetch');
+		spwn( cmd );
+	},
+	template: function(){
+		spwn( cmd );
+	},
+	config: function(){
+		spwn( cmd );
 	}
-	//create a sketchplate project
-	var plate = sketchplate.create( settings );
-	plate.copyTemplate( program['new'], function (err, project){
-		if( err )throw Error(err);
-		if ( program.gitinit ) project.initRepo();
-		if ( !program.skipopen ){
-			project.openInEditor(function (){
-				//process.exit(0);
-			});
-		}
-	});
+};
+
+if( commands[cmd] ){
+	commands[cmd]();
 }
 
-if( program.open && program.open.length > 0 ){
-	sketchplate.openProject(program.open, settings).openInEditor();
-}
-*/
+function spwn( cmd ){
+	// executable
+var bin = 'sketchplate-' + cmd;
 
+// local
+var local = path.join(__dirname, bin);
+if (fs.existsSync(local)) bin = local;
+
+// spawn
+var proc = require('child_process').spawn(bin, args, { stdio: 'inherit' });
+}

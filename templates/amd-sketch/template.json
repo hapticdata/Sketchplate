@@ -5,15 +5,15 @@
 	"description": "Front-end web-template with an AMD boilerplate and a collection of libraries for computational design.",
 	"fetch": {
 			"async": {
-				"url": "https://raw.github.com/caolan/async/master/lib/async.js",
+				"file": "https://raw.github.com/caolan/async/master/lib/async.js",
 				"target": "javascripts/vendor/async.js"
 			},
 			"modernizr": {
-				"url": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
+				"file": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
 				"target": "javascripts/vendor/modernizr.js"
 			},
 			"jquery": {
-				"url": "http://code.jquery.com/jquery.js",
+				"file": "http://code.jquery.com/jquery.js",
 				"target": "javascripts/vendor/jquery.js"
 			},
 			"datgui": {
@@ -23,19 +23,19 @@
 				}
 			},
 			"require": {
-				"url": "https://raw.github.com/jrburke/requirejs/master/require.js",
+				"file": "https://raw.github.com/jrburke/requirejs/master/require.js",
 				"target": "javascripts/vendor/require.js"
 			},
 			"domReady": {
-				"url": "https://raw.github.com/requirejs/domReady/master/domReady.js",
+				"file": "https://raw.github.com/requirejs/domReady/master/domReady.js",
 				"target": "javascripts/vendor/domReady.js"
 			},
 			"text": {
-				"url": "https://raw.github.com/requirejs/text/master/text.js",
+				"file": "https://raw.github.com/requirejs/text/master/text.js",
 				"target": "javascripts/vendor/text.js"
 			},
 			"d3": {
-				"url": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
+				"file": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
 				"target": "javascripts/vendor/d3.js"
 			},
 			"toxi": {
@@ -45,19 +45,19 @@
 				}
 			},
 			"Stats": {
-				"url": "https://raw.github.com/mrdoob/stats.js/master/src/Stats.js",
+				"file": "https://raw.github.com/mrdoob/stats.js/master/src/Stats.js",
 				"target": "javascripts/vendor/Stats.js"
 			},
 			"three": {
-				"url": "https://raw.github.com/mrdoob/three.js/master/build/three.js",
+				"file": "https://raw.github.com/mrdoob/three.js/master/build/three.js",
 				"target": "javascripts/vendor/three.js"
 			},
 			"Backbone": {
-				"url": "https://raw.github.com/documentcloud/backbone/master/backbone.js",
+				"file": "https://raw.github.com/documentcloud/backbone/master/backbone.js",
 				"target": "javascripts/vendor/backbone.js"
 			},
 			"underscore": {
-				"url": "https://raw.github.com/documentcloud/underscore/master/underscore.js",
+				"file": "https://raw.github.com/documentcloud/underscore/master/underscore.js",
 				"target": "javascripts/vendor/underscore.js"
 			}
 		}

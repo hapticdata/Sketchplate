@@ -1,0 +1,157 @@
+#!/usr/bin/env node
+
+var program = require('commander'),
+	async = require('async'),
+	path = require('path'),
+	fs = require('fs'),
+	sketchplate = require('../lib/sketchplate'),
+	hooks = require('../lib/hooks'),
+	config = require('../config.json'),
+	plate;
+
+
+
+function writeNewConfig() {
+	body = JSON.stringify( config, null, '\t');
+	fs.writeFile(__dirname + '/../config.json', body, function( err ){
+		if( err ) throw err;
+	});
+}
+
+program
+	.command('add [name]')
+	.description('add a new template')
+	.action(function( name, options ){
+		//if a name wasnt provided, ask for it
+		if( name === undefined ){
+			program.prompt("Name: ", function( _name ){
+				name = _name;
+				setDescription();
+			});
+		} else {
+			setDescription();
+		}
+
+		function setDescription(){
+			program.prompt("Description: ", function( description ){
+				sketchplate.createTemplate( config, {
+					name: name,
+					description: description
+				}, function( err, directory ){
+					hooks.openInEditor( config.editorArgs, directory, function( err ){
+						process.exit();
+					});
+				});
+			});
+		}
+	});
+
+program
+	.command('edit [name]')
+	.description('edit an existing template')
+	.option('-b, --browse', 'Open the templates directory', undefined)
+	.action(function( name, options ){
+		var tmplDir = config.templatesPath;
+		if( name !== undefined ){
+			tmplDir += '/'+name;
+			if( !fs.existsSync(tmplDir) ){
+				console.log("The template "+name+" does not exist");
+				return;
+			}
+			hooks.openInEditor( config.editorArgs, tmplDir, function( err ){
+				process.exit();
+			});
+		}
+		if( options.browse ){
+			hooks.openInFileBrowser( tmplDir );
+		}
+	});
+
+program
+	.command('fetch [names…]')
+	.description('fetch resources for a template')
+	.option('-a, --all', 'Fetch new copies of all resources for template')
+	.option('-i, --interactive', 'Fetch resources individually in interactive mode')
+	.option('-t, --template [template]', 'Fetch resources for [template]', undefined)
+	.action(function( options ){
+		options = Array.prototype.pop.call( arguments );
+		//if the argument was an options object
+		if(options.template){
+			config.template = options.template;
+		}
+		var plate = sketchplate.create( config );
+		var report = function( err ){
+			if( err ){
+				console.log( err.message );
+			} else {
+				console.log("Fetched resources completed");
+			}
+			process.exit();
+		};
+		//if all resources should be fetched
+		if( options.all ){
+			plate.fetchAll( report );
+			return;
+		}
+		//otherwise, if it should be the interactive version
+		if( options.interactive ){
+			var list = [];
+			plate.resources.forEach(function( val ){
+				list.push( val.id );
+			});
+			program.choose( list, function( index ){
+				var resource = plate.resources[index];
+				sketchplate.fetch( resource, report );
+			});
+			return;
+		}
+
+		if( arguments.length > 1 ){
+			//if the arguments were individual resources to fetch
+			var names = Array.prototype.slice.call( arguments, 0, arguments.length-1 );
+			plate.fetch( names, function( err ){
+				if( err ){
+					console.log( 'sketchplate err: ',err );
+				} else {
+					console.log("Fetched resources completed");
+				}
+			});
+			return;
+		}
+		//fetch only missing
+		plate.fetchMissing( report );
+	});
+	
+
+
+program
+	.command('path <path>')
+	.description('change the directory of your templates, currently `'+config.templatesPath+'`')
+	.action(function( pth ){
+		config.templatesPath = path.resolve( pth );
+		writeNewConfig();
+	});
+
+program
+	.command('remove <name>')
+	.description('remove an existing template')
+	.action(function( name ){
+		sketchplate.removeTemplate( config, name, function( err ){
+			if( err ){
+				console.log( err.message );
+			} else {
+				console.log('Template ',name,' has been deleted');
+			}
+		});
+	});
+
+program
+	.command('set <name>')
+	.description('set the default template, currently `'+config.template+'`')
+	.action(function( name ){
+		config.template = name;
+		writeNewConfig();
+	});
+
+
+program.parse( process.argv );

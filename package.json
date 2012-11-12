@@ -14,11 +14,10 @@
     "wrench": ">=1.3.9",
     "request": ">=2.9.203",
     "mkdirp": "~0.3.4",
-    "async": "~0.1.22"
+    "async": "~0.1.22",
+    "adm-zip": "~0.1.5"
   },
   "devDependencies": {
-    "tar-async": "~1.2.0",
-    "adm-zip": "~0.1.5"
   },
   "keywords": [
     "sketchplate",
