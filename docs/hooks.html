@@ -1,0 +1,113 @@
+<!DOCTYPE html>  <html> <head>   <title>hooks.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="colors.html">                 colors.js               </a>                                           <a class="source" href="fetch.html">                 fetch.js               </a>                                           <a class="source" href="hooks.html">                 hooks.js               </a>                                           <a class="source" href="library.html">                 library.js               </a>                                           <a class="source" href="sketchplate.html">                 sketchplate.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               hooks.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h1>Hooks</h1>
+
+<p>provides automated functionality to perform on already existing projects</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./colors&#39;</span><span class="p">),</span>
+  <span class="nx">os</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;os&#39;</span><span class="p">),</span>
+  <span class="nx">spawn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;child_process&#39;</span><span class="p">).</span><span class="nx">spawn</span><span class="p">;</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">initRepo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">location</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">git</span> <span class="o">=</span> <span class="nx">spawn</span><span class="p">(</span> <span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;init&#39;</span><span class="p">,</span> <span class="nx">location</span><span class="p">]</span> <span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">code</span> <span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">fn</span> <span class="p">)</span> <span class="nx">fn</span><span class="p">(</span> <span class="nx">code</span> <span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">git</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">setEncoding</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">);</span>
+  <span class="nx">git</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">data</span> <span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">.</span><span class="nx">red</span><span class="o">+</span><span class="nx">data</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\n/</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">+</span><span class="nx">colors</span><span class="p">.</span><span class="nx">reset</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">npmInstall</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">location</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">npmInstall</span> <span class="o">=</span> <span class="nx">spawn</span><span class="p">(</span> <span class="s1">&#39;npm&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;install&#39;</span><span class="p">],</span> <span class="p">{</span> <span class="nx">cwd</span><span class="o">:</span> <span class="nx">location</span> <span class="p">}</span> <span class="p">)</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">code</span> <span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">fn</span> <span class="p">)</span> <span class="nx">fn</span><span class="p">(</span> <span class="nx">code</span> <span class="p">);</span>
+    <span class="p">});</span>
+  <span class="nx">npmInstall</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">setEncoding</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">);</span>
+  <span class="nx">npmInstall</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">data</span> <span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">data</span> <span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">openInEditor</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">editorArgs</span><span class="p">,</span> <span class="nx">location</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">err</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="nx">editorArgs</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">cmd</span> <span class="o">=</span> <span class="nx">params</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">pathIndex</span> <span class="o">=</span> <span class="nx">params</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;%path&quot;</span><span class="p">);</span>
+  <span class="k">if</span><span class="p">(</span> <span class="nx">pathIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">){</span>
+    <span class="nx">params</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span> <span class="nx">pathIndex</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">location</span> <span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">params</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">location</span> <span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">spawn</span><span class="p">(</span> <span class="nx">cmd</span><span class="p">,</span> <span class="nx">params</span> <span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">code</span> <span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">code</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">){</span>
+      <span class="nx">err</span> <span class="o">=</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">colors</span><span class="p">.</span><span class="nx">red</span><span class="o">+</span><span class="s1">&#39;Editor exited with code &#39;</span><span class="o">+</span> <span class="nx">code</span><span class="o">+</span><span class="nx">colors</span><span class="p">.</span><span class="nx">reset</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="nx">fn</span> <span class="p">)</span> <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">openInFileBrowser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">location</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">commands</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;darwin&#39;</span><span class="o">:</span> <span class="s1">&#39;open&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;win32&#39;</span><span class="o">:</span> <span class="s1">&#39;explorer&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;linux&#39;</span><span class="o">:</span> <span class="s1">&#39;nautilus&#39;</span>
+  <span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">cmd</span> <span class="o">=</span> <span class="nx">commands</span><span class="p">[</span> <span class="nx">os</span><span class="p">.</span><span class="nx">platform</span><span class="p">()</span> <span class="p">];</span>
+  <span class="nx">spawn</span><span class="p">(</span> <span class="nx">cmd</span><span class="p">,</span> <span class="p">[</span><span class="nx">location</span><span class="p">]</span> <span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">code</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">err</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">code</span> <span class="o">!==</span> <span class="mi">0</span> <span class="p">){</span>
+      <span class="nx">err</span> <span class="o">=</span> <span class="nb">Error</span><span class="p">(</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">red</span> <span class="o">+</span> <span class="s1">&#39;Error opening folder in file browser, exited with code &#39;</span><span class="o">+</span> <span class="nx">code</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">fn</span> <span class="p">){</span>
+      <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h3>Project constructor <em><code>hooks.Project</code></em></h3>
+
+<p>provides functionality on created-projects
+after the template has been copied</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">function</span> <span class="nx">Project</span> <span class="p">(</span> <span class="nx">location</span><span class="p">,</span> <span class="nx">editorArgs</span> <span class="p">){</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">location</span> <span class="o">=</span> <span class="nx">location</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">editorArgs</span> <span class="o">=</span> <span class="nx">editorArgs</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">Project</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="o">:</span> <span class="nx">Project</span><span class="p">,</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h4>project.initRepo(function (){})</h4>
+
+<p>initializes a git repository at the specified location</p>
+
+<ul>
+<li><strong>{Function}</strong> <em>[fn]</em> callback, receieves error object in params</li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">initRepo</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">fn</span> <span class="p">){</span>
+    <span class="nx">exports</span><span class="p">.</span><span class="nx">initRepo</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">location</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h4>project.npmInstall(function (){})</h4>
+
+<p>run an npm install on the project</p>
+
+<ul>
+<li><strong>{Function}</strong>  <em>[fn]</em> callback, receives error object in params</li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">npmInstall</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">fn</span> <span class="p">){</span>
+    <span class="nx">exports</span><span class="p">.</span><span class="nx">npmInstall</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">location</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <h4>project.openInEditor(function (){})</h4>
+
+<p>opens location in text editor using <em>editorArgs</em></p>
+
+<ul>
+<li><strong>{Function}</strong> <em>[fn]</em> optional callback, receives error as callback param</li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">openInEditor</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">fn</span> <span class="p">){</span>
+    <span class="nx">exports</span><span class="p">.</span><span class="nx">openInEditor</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">editorArgs</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">location</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h4>project.openInFileBrowser(function(){})</h4>
+
+<p>opens location in file browsers: Finder <em>(OSX)</em>, Explorer <em>(Win)</em> or Nautilus <em>(Linux)</em></p>
+
+<ul>
+<li><strong>{Function}</strong> <em>[fn]</em> optional callback</li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">openInFileBrowser</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">fn</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">exports</span><span class="p">.</span><span class="nx">openInFileBrowser</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">location</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">Project</span> <span class="o">=</span> <span class="nx">Project</span><span class="p">;</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

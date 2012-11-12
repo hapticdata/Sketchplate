@@ -1,69 +1,258 @@
-<!DOCTYPE html>  <html> <head>   <title>fetch.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="Project.html">                 Project.js               </a>                                           <a class="source" href="colors.html">                 colors.js               </a>                                           <a class="source" href="fetch.html">                 fetch.js               </a>                                           <a class="source" href="library.html">                 library.js               </a>                                           <a class="source" href="sketchplate.html">                 sketchplate.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               fetch.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">),</span>
+<!DOCTYPE html>  <html> <head>   <title>fetch.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="colors.html">                 colors.js               </a>                                           <a class="source" href="fetch.html">                 fetch.js               </a>                                           <a class="source" href="hooks.html">                 hooks.js               </a>                                           <a class="source" href="library.html">                 library.js               </a>                                           <a class="source" href="sketchplate.html">                 sketchplate.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               fetch.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h1>Fetch</h1>
+
+<p>Fetch can be used to automate the downloading of resources into your project
+it accepts the following types of operations:</p>
+
+<ol>
+<li><strong>file</strong> - download a file and copy it to the target</li>
+<li><strong>clone</strong> - clone a git repository and copy all or parts of its
+contents to specified targets</li>
+<li><strong>zip</strong> - download a zip file, extract it and copy all or parts of its
+contents to specified targets</li>
+</ol>
+
+<p><strong><em>Basic use:</em></strong></p>
+
+<p><em>single fetch:</em></p>
+
+<pre><code>fetch({
+    file: "http://code.jquery.com/jquery.js",
+    target: "javascripts/vendor/jquery.js"
+}, function callback( errors ){
+    //if any errors it will be an array
+});
+</code></pre>
+
+<p><em>batch fetch:</em></p>
+
+<pre><code>fetch([
+    file: "http://code.jquery.com/jquery.js",
+    target: "jquery.js"
+},{
+    "clone": "https://code.google.com/p/dat-gui/",
+    "target": {
+        "src/dat": "dat/",
+        "build": "datgui/build"
+    }
+},{
+    "zip": "https://github.com/twitter/bootstrap/zipball/master",
+    "target": {
+        "js/": "bootstap/js",
+        "less/": "bootstrap/less"
+    }
+}], function callback( errors ){
+    //if any errors it will be an array
+});
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">),</span>
   <span class="nx">wrench</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;wrench&#39;</span><span class="p">),</span>
-  <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">),</span>
-  <span class="nx">events</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">),</span>
+  <span class="nx">AdmZip</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;adm-zip&#39;</span><span class="p">),</span>
+  <span class="nx">mkdirp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mkdirp&#39;</span><span class="p">),</span>
+  <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">),</span>
   <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">),</span>
-  <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">),</span>
-  <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">),</span>
-  <span class="nx">spawn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;child_process&#39;</span><span class="p">).</span><span class="nx">spawn</span><span class="p">,</span>
-  <span class="nx">instance</span><span class="p">;</span>
-
-
-
-<span class="kd">var</span> <span class="nx">Fetch</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(){</span>
-
-<span class="p">};</span>
-
-<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span> <span class="nx">Fetch</span><span class="p">,</span> <span class="nx">events</span><span class="p">.</span><span class="nx">EventEmitter</span> <span class="p">);</span>
-
-
-<span class="nx">Fetch</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">prepareDirectory</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">venDir</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>make the vendor directory if it doesnt exist</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nx">path</span><span class="p">.</span><span class="nx">existsSync</span><span class="p">(</span><span class="nx">venDir</span><span class="p">)</span> <span class="p">){</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;making vendor folder&quot;</span><span class="p">);</span>
-    <span class="nx">fs</span><span class="p">.</span><span class="nx">mkdirSync</span><span class="p">(</span><span class="nx">venDir</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="nx">Fetch</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">retrieveLib</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">library</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">libName</span> <span class="o">=</span> <span class="nx">library</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>download the file and write it</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">if</span><span class="p">(</span> <span class="nx">library</span><span class="p">.</span><span class="nx">url</span> <span class="p">){</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;get:url&#39;</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="nx">library</span><span class="p">);</span>
-    <span class="nx">request</span><span class="p">(</span> <span class="nx">library</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span> <span class="p">){</span>
-      <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
-      <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span> <span class="nx">library</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span> <span class="nx">body</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">library</span> <span class="p">);</span>
+  <span class="nx">os</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;os&#39;</span><span class="p">),</span>
+  <span class="nx">spawn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;child_process&#39;</span><span class="p">).</span><span class="nx">spawn</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h3>fetch() module</h3>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">function</span> <span class="nx">fetch</span><span class="p">(</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">callback</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">resource</span><span class="p">)</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>create an obj of fetch requests for individual resources,
+so we can load them in parallel</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">fetches</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">resource</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span> <span class="nx">res</span> <span class="p">){</span>
+      <span class="nx">fetches</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span> <span class="nx">next</span> <span class="p">){</span>
+        <span class="nx">fetch</span><span class="p">(</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">);</span>
       <span class="p">});</span>
     <span class="p">});</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="nx">library</span><span class="p">.</span><span class="nx">git</span> <span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">repoSourceFolder</span> <span class="o">=</span> <span class="nx">libName</span> <span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span> <span class="nx">library</span><span class="p">.</span><span class="nx">src</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>The library is a git repo</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">clone</span> <span class="o">=</span> <span class="nx">spawn</span><span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="p">[</span> <span class="s1">&#39;clone&#39;</span><span class="p">,</span> <span class="nx">library</span><span class="p">.</span><span class="nx">git</span><span class="p">,</span> <span class="nx">libName</span> <span class="p">]);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;get:git&#39;</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="nx">library</span><span class="p">);</span>
-    <span class="nx">clone</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">data</span> <span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>console.log(data );</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="p">});</span>
+    <span class="nx">async</span><span class="p">.</span><span class="nx">parallel</span><span class="p">(</span> <span class="nx">fetches</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">results</span> <span class="p">){</span>
+      <span class="nx">callback</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>if its a single resource, fetch it</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span><span class="p">(</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">file</span> <span class="p">)</span> <span class="nx">fromFile</span><span class="p">(</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">exit</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">clone</span> <span class="p">)</span> <span class="nx">fromGit</span><span class="p">(</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">exit</span> <span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">zip</span> <span class="p">)</span> <span class="nx">fromZip</span><span class="p">(</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">exit</span> <span class="p">);</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">exit</span><span class="p">(</span><span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Invalid resource, did not find method of retrieval in object&quot;</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="nx">exit</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+    <span class="nx">callback</span><span class="p">(</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">resource</span> <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-    <span class="nx">clone</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">code</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="nx">code</span> <span class="o">===</span> <span class="mi">0</span> <span class="p">){</span>
-        <span class="nx">wrench</span><span class="p">.</span><span class="nx">copyDirRecursive</span><span class="p">(</span><span class="nx">repoSourceFolder</span><span class="p">,</span> <span class="nx">library</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
-          <span class="nx">wrench</span><span class="p">.</span><span class="nx">rmdirRecursive</span><span class="p">(</span> <span class="nx">libName</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">library</span> <span class="p">);</span>
+<span class="kd">function</span> <span class="nx">getTmp</span><span class="p">(){</span> <span class="k">return</span> <span class="nx">os</span><span class="p">.</span><span class="nx">tmpDir</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;sketchplate/&#39;</span><span class="p">;</span> <span class="p">}</span>
+<span class="kd">function</span> <span class="nx">getTargetPath</span><span class="p">(</span> <span class="nx">src</span> <span class="p">){</span> <span class="k">return</span> <span class="nx">src</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">src</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">));</span> <span class="p">}</span>
+<span class="kd">function</span> <span class="nx">getFilename</span><span class="p">(</span> <span class="nx">src</span> <span class="p">){</span> <span class="k">return</span> <span class="nx">src</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">src</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nx">src</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span> <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>process the targets supplied</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">function</span> <span class="nx">processTargets</span><span class="p">(</span> <span class="nx">contentsFolder</span><span class="p">,</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">callback</span> <span class="p">){</span>
+  <span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span>
+    <span class="kd">function</span> <span class="nx">process</span><span class="p">(</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">targets</span> <span class="o">=</span> <span class="p">[];</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>console.log('resource.target: '+ resource.target);
+console.log( 'typeof: '+ (typeof resource.target ) );</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">if</span><span class="p">(</span> <span class="k">typeof</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">target</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>copy entire thing</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">targets</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span> <span class="nx">source</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">destination</span><span class="o">:</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">target</span> <span class="p">});</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span> <span class="kd">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">target</span> <span class="p">){</span>
+          <span class="nx">targets</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span> <span class="nx">source</span><span class="o">:</span> <span class="nx">prop</span><span class="p">,</span> <span class="nx">destination</span><span class="o">:</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">target</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>console.log(' targets: ', targets );</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nx">next</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">targets</span> <span class="p">);</span>
+    <span class="p">},</span>
+    <span class="kd">function</span> <span class="nx">copy</span><span class="p">(</span> <span class="nx">targets</span><span class="p">,</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="nx">async</span><span class="p">.</span><span class="nx">whilst</span><span class="p">(</span>
+        <span class="kd">function</span> <span class="nx">test</span><span class="p">(){</span> <span class="k">return</span> <span class="nx">targets</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="p">},</span>
+        <span class="kd">function</span> <span class="nx">copyTarget</span><span class="p">(</span> <span class="nx">whilstNext</span> <span class="p">){</span>
+          <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">targets</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+          <span class="kd">var</span> <span class="nx">dir</span> <span class="o">=</span> <span class="nx">getTargetPath</span><span class="p">(</span> <span class="nx">target</span><span class="p">.</span><span class="nx">destination</span> <span class="p">);</span>
+          <span class="nx">mkdirp</span><span class="p">(</span> <span class="nx">dir</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+              <span class="nx">next</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+              <span class="nx">wrench</span><span class="p">.</span><span class="nx">copyDirRecursive</span><span class="p">(</span> <span class="nx">contentsFolder</span> <span class="o">+</span> <span class="nx">target</span><span class="p">.</span><span class="nx">source</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">destination</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+                <span class="nx">whilstNext</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+              <span class="p">});</span>
+            <span class="p">}</span>
           <span class="p">});</span>
+        <span class="p">},</span>
+        <span class="nx">next</span>
+      <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">],</span> <span class="nx">callback</span> <span class="p">);</span>
+<span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>retrieve a resource from a text file</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">function</span> <span class="nx">fromFile</span><span class="p">(</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">callback</span> <span class="p">){</span>
+  <span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span>
+    <span class="kd">function</span> <span class="nx">download</span><span class="p">(</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">file</span> <span class="p">){</span>
+        <span class="nx">request</span><span class="p">(</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">file</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span> <span class="p">){</span>
+          <span class="k">if</span><span class="p">(</span> <span class="nx">response</span> <span class="o">&amp;&amp;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">===</span> <span class="mi">404</span> <span class="p">){</span>
+            <span class="nx">err</span> <span class="o">=</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Error 404 retrieving &quot;</span><span class="o">+</span><span class="nx">resource</span><span class="p">.</span><span class="nx">file</span><span class="p">);</span>
+          <span class="p">}</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="nx">next</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+          <span class="k">else</span> <span class="nx">next</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">body</span> <span class="p">);</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="kd">function</span> <span class="nx">makepath</span><span class="p">(</span> <span class="nx">body</span><span class="p">,</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">targetPath</span> <span class="o">=</span> <span class="nx">getTargetPath</span><span class="p">(</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">target</span> <span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">existsSync</span><span class="p">(</span><span class="nx">targetPath</span><span class="p">)</span> <span class="p">){</span>
+        <span class="nx">next</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">body</span> <span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">mkdirp</span><span class="p">(</span> <span class="nx">targetPath</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+          <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+          <span class="nx">next</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">body</span> <span class="p">);</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="kd">function</span> <span class="nx">write</span><span class="p">(</span> <span class="nx">body</span><span class="p">,</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span> <span class="nx">body</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="nx">next</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+        <span class="nx">next</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">resource</span> <span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">],</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+      <span class="nx">err</span> <span class="o">=</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Error fetching file: &quot;</span><span class="o">+</span><span class="nx">resource</span><span class="p">.</span><span class="nx">file</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">callback</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>The resource is a git repo</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">reposCloned</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p>retrieve a git repository and process its contents for targets</p>
+
+<ul>
+<li>{Object} [resource]</li>
+<li>{String} [resource.clone] the repository address to clone</li>
+<li>{String || Object} [resource.target] if string entire contents will be copied
+otherwise should be an object of "source":"target" relationships</li>
+<li>{Function} [callback] receive callback when completed</li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">function</span> <span class="nx">fromGit</span><span class="p">(</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">callback</span> <span class="p">){</span>
+  <span class="nx">reposCloned</span><span class="o">++</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">tmpStorage</span> <span class="o">=</span> <span class="nx">getTmp</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;repo&#39;</span><span class="o">+</span><span class="nx">reposCloned</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">repoSourceFolder</span> <span class="o">=</span> <span class="nx">tmpStorage</span> <span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">clean</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">next</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">wrench</span><span class="p">.</span><span class="nx">rmdirRecursive</span><span class="p">(</span> <span class="nx">tmpStorage</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+      <span class="nx">next</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span>
+    <span class="kd">function</span> <span class="nx">prepare</span><span class="p">(</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">existsSync</span><span class="p">(</span> <span class="nx">tmpStorage</span> <span class="p">)</span> <span class="p">){</span>
+        <span class="nx">clean</span><span class="p">(</span> <span class="nx">next</span> <span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">next</span><span class="p">(</span> <span class="kc">null</span> <span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="kd">function</span> <span class="nx">mk</span><span class="p">(</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="nx">mkdirp</span><span class="p">(</span> <span class="nx">tmpStorage</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+        <span class="nx">next</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">},</span>
+    <span class="kd">function</span> <span class="nx">cloneRepo</span><span class="p">(</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">clone</span> <span class="o">=</span> <span class="nx">spawn</span><span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="p">[</span> <span class="s1">&#39;clone&#39;</span><span class="p">,</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">clone</span><span class="p">,</span> <span class="nx">tmpStorage</span> <span class="p">]);</span>
+      <span class="nx">clone</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="cm">/*data*/</span> <span class="p">)</span> <span class="p">{});</span>
+      <span class="nx">clone</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">code</span> <span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span> <span class="nx">code</span> <span class="o">===</span> <span class="mi">0</span> <span class="p">){</span>
+          <span class="nx">next</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">next</span><span class="p">(</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Error fetching git repo: &quot;</span><span class="o">+</span><span class="nx">resource</span><span class="p">.</span><span class="nx">clone</span><span class="o">+</span><span class="s2">&quot;, exited with code: &quot;</span><span class="o">+</span><span class="nx">code</span><span class="p">)</span> <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">},</span>
+    <span class="kd">function</span> <span class="nx">processRepo</span><span class="p">(</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="nx">processTargets</span><span class="p">(</span> <span class="nx">repoSourceFolder</span><span class="p">,</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">next</span> <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">],</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+    <span class="nx">clean</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">callback</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+
+<span class="kd">function</span> <span class="nx">fromZip</span><span class="p">(</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">callback</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">uid</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">dZipStream</span><span class="p">,</span>
+    <span class="nx">fileLocation</span> <span class="o">=</span> <span class="nx">getTmp</span><span class="p">()</span> <span class="o">+</span> <span class="nx">uid</span> <span class="o">+</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span>
+    <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">getTmp</span><span class="p">()</span> <span class="o">+</span> <span class="nx">uid</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">;</span>
+  
+
+  <span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span>
+    <span class="kd">function</span> <span class="nx">createWrite</span><span class="p">(</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="nx">dZipStream</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="nx">fileLocation</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">next</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="k">new</span> <span class="nx">AdmZip</span><span class="p">(</span><span class="nx">fileLocation</span><span class="p">)</span> <span class="p">);</span>
+      <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p>pipe it over</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nx">request</span><span class="p">(</span><span class="nx">resource</span><span class="p">.</span><span class="nx">zip</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="cm">/*, response, body*/</span> <span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+          <span class="nx">next</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}).</span><span class="nx">pipe</span><span class="p">(</span> <span class="nx">dZipStream</span> <span class="p">);</span>
+    <span class="p">},</span>
+    <span class="kd">function</span> <span class="nx">inspectEntries</span><span class="p">(</span> <span class="nx">zip</span><span class="p">,</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">uniqueFolders</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="kd">var</span> <span class="nx">nestedInFolder</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">entries</span> <span class="o">=</span> <span class="nx">zip</span><span class="p">.</span><span class="nx">getEntries</span><span class="p">();</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <p>how many root-folders are there?</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nx">entries</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span> <span class="nx">entry</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <p>if its a directory and not already in the array</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="k">if</span><span class="p">(</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">isDirectory</span> <span class="o">&amp;&amp;</span> <span class="nx">uniqueFolders</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">entryName</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p>make sure it isnt a folder inside a folder</p>             </td>             <td class="code">               <div class="highlight"><pre>          <span class="kd">var</span> <span class="nx">isInnerFolder</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+          <span class="nx">uniqueFolders</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span> <span class="nx">folder</span> <span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">entryName</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="nx">folder</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <p>its inside a folder we already know about</p>             </td>             <td class="code">               <div class="highlight"><pre>              <span class="nx">isInnerFolder</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+          <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>if this is a new top-level folder, add it</p>             </td>             <td class="code">               <div class="highlight"><pre>          <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nx">isInnerFolder</span> <span class="p">){</span>
+            <span class="nx">uniqueFolders</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">entryName</span> <span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">uniqueFolders</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p>if theres only one folder, and everything is in it we need to know</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">entries</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span> <span class="nx">entry</span> <span class="p">){</span>
+          <span class="k">if</span><span class="p">(</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">entryName</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="nx">uniqueFolders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">nestedInFolder</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+          <span class="p">}</span>
         <span class="p">});</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;Error retrieving git repo, exited with code: &#39;</span><span class="o">+</span><span class="nx">code</span><span class="p">);</span>
+        <span class="nx">nestedInFolder</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
       <span class="p">}</span>
-    <span class="p">});</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-<span class="p">};</span>
+      <span class="nx">zip</span><span class="p">.</span><span class="nx">extractAllTo</span><span class="p">(</span> <span class="nx">tmp</span> <span class="p">);</span>
+      <span class="nx">next</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">nestedInFolder</span> <span class="o">?</span> <span class="nx">tmp</span> <span class="o">+</span> <span class="nx">uniqueFolders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">:</span> <span class="nx">tmp</span> <span class="p">);</span>
+    <span class="p">},</span>
+    <span class="kd">function</span> <span class="nx">processExtracted</span><span class="p">(</span> <span class="nx">contentsFolder</span><span class="p">,</span> <span class="nx">next</span> <span class="p">){</span>
+      <span class="nx">processTargets</span><span class="p">(</span> <span class="nx">contentsFolder</span><span class="p">,</span> <span class="nx">resource</span><span class="p">,</span> <span class="nx">next</span> <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">],</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;getaddrinfo ENOENT&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">){</span>
+        <span class="nx">callback</span><span class="p">(</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Error fetching zip: &quot;</span><span class="o">+</span><span class="nx">resource</span><span class="p">.</span><span class="nx">zip</span><span class="p">)</span> <span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">callback</span><span class="p">(</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Error with fetched zip archive: &quot;</span><span class="o">+</span> <span class="nx">resource</span><span class="p">.</span><span class="nx">zip</span><span class="p">)</span> <span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">callback</span><span class="p">(</span> <span class="kc">null</span> <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
 
-<span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Fetch</span><span class="p">();</span>
-
-<span class="nx">exports</span><span class="p">.</span><span class="nx">Fetch</span> <span class="o">=</span> <span class="nx">Fetch</span><span class="p">;</span>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">libs</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">javascriptDir</span><span class="p">,</span> <span class="nx">libs</span> <span class="p">){</span>
-  <span class="k">for</span><span class="p">(</span> <span class="kd">var</span> <span class="nx">lib</span> <span class="k">in</span> <span class="nx">libs</span> <span class="p">){</span>
-    <span class="nx">instance</span><span class="p">.</span><span class="nx">updateLib</span><span class="p">(</span> <span class="nx">javascriptDir</span><span class="p">,</span> <span class="nx">libs</span><span class="p">[</span><span class="nx">lib</span><span class="p">],</span> <span class="nx">lib</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">());</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="nx">instance</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">fetch</span><span class="p">;</span>
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

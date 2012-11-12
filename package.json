@@ -1,7 +1,7 @@
 {
   "name": "sketchplate",
   "description": "Sketchplate maintains an easily reproducable AMD template for the quick creation of new projects.",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "author": "Kyle Phillips <kyle@haptic-data.com>",
   "contributors": [
     {
@@ -22,6 +22,9 @@
   "keywords": [
     "sketchplate",
     "boilerplate",
+    "template",
+    "front-end",
+    "development",
     "amd",
     "web"
   ],

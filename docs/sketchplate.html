@@ -1,14 +1,16 @@
-<!DOCTYPE html>  <html> <head>   <title>sketchplate.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="Project.html">                 Project.js               </a>                                           <a class="source" href="colors.html">                 colors.js               </a>                                           <a class="source" href="fetch.html">                 fetch.js               </a>                                           <a class="source" href="library.html">                 library.js               </a>                                           <a class="source" href="sketchplate.html">                 sketchplate.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               sketchplate.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/*global console, exports, __dirname*/</span>
-<span class="cm">/**</span>
-<span class="cm">  TODO add default app.build.js</span>
+<!DOCTYPE html>  <html> <head>   <title>sketchplate.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="colors.html">                 colors.js               </a>                                           <a class="source" href="fetch.html">                 fetch.js               </a>                                           <a class="source" href="hooks.html">                 hooks.js               </a>                                           <a class="source" href="library.html">                 library.js               </a>                                           <a class="source" href="sketchplate.html">                 sketchplate.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               sketchplate.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h1>Sketchplate v0.1.0</h1>
 
-<span class="cm">  TODO update individual libraries</span>
-<span class="cm">  $sketchplate --update three datgui stats</span>
-<span class="cm">  should update those libraries only</span>
-<span class="cm">*/</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p><strong><em>Basic use:</em></strong></p>
+<p>by <a href="http://haptic-data.com">Kyle Phillips</a>
+(MIT License)</p>
+
+<p><strong><em>Basic use:</em></strong></p>
 
 <pre><code>sketchplate = require('sketchplate');
-settings = require('../settings.json');
+settings = {
+    editorArgs: ["subl", "%path"],
+    template: "amd-sketch",
+    templatesPath: "../templates"
+};
 </code></pre>
 
 <p><strong>Create a new Sketchplate instance:</strong></p>
@@ -30,119 +32,224 @@ settings = require('../settings.json');
 <pre><code>plate.fetchAllLibs(function (err){
     if(err)throw err;
 });
+</code></pre>
+
+<p><strong>Fetch libs by name <em>(in <code>template.json</code>)</em>:</strong></p>
+
+<pre><code>resources = ['jquery','modernizr','bootstrap'];
+plate.fetch(resources, function( errors ){
+    //if any errors it will be an array
+});
+</code></pre>
+
+<p><strong>Direct access to fetch <em>(not tied to any template)</em>:</strong></p>
+
+<pre><code>sketchplate.fetch({
+    file: "http://code.jquery.com/jquery.js",
+    target: "javascripts/vendor/jquery.js"
+}, function callback( errors ){
+    //if any errors it will be an array
+});
 </code></pre>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">wrench</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;wrench&#39;</span><span class="p">),</span>
+  <span class="nx">mkdirp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mkdirp&#39;</span><span class="p">),</span>
   <span class="nx">colors</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./colors&#39;</span><span class="p">),</span>
-  <span class="nx">Project</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./Project&#39;</span><span class="p">),</span>
-  <span class="nx">buildLibrary</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./library&#39;</span><span class="p">);</span>
+  <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">),</span>
+  <span class="nx">Project</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./hooks&#39;</span><span class="p">).</span><span class="nx">Project</span><span class="p">,</span>
+  <span class="nx">buildLibrary</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./library&#39;</span><span class="p">),</span>
+  <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h3>Sketchplate constructor</h3>
 
-
-<span class="cm">/**</span>
-<span class="cm"> * creates a handler for handling a retrieved lib</span>
-<span class="cm"> * @api private</span>
-<span class="cm"> */</span>
-<span class="kd">var</span> <span class="nx">reportLibFetched</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">lib</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
-  <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span>
-      <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">red</span><span class="o">+</span><span class="s1">&#39;[fetched] &#39;</span><span class="o">+</span><span class="nx">colors</span><span class="p">.</span><span class="nx">reset</span><span class="p">,</span> <span class="nx">lib</span><span class="p">.</span><span class="nx">id</span> <span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
-  <span class="p">};</span>
-<span class="p">};</span>
-
-<span class="cm">/* @api private */</span>
-<span class="kd">var</span> <span class="nx">fetchAll</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">libs</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
-  <span class="nx">libs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">lib</span><span class="p">){</span>
-    <span class="nx">lib</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span> <span class="nx">reportLibFetched</span><span class="p">(</span><span class="nx">lib</span><span class="p">,</span><span class="nx">fn</span><span class="p">)</span> <span class="p">);</span>
-  <span class="p">});</span>
-<span class="p">};</span>
-<span class="cm">/* @api private */</span>
-<span class="kd">var</span> <span class="nx">fetchMissing</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">libs</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">missingLibs</span> <span class="o">=</span> <span class="p">[];</span>
-  <span class="kd">var</span> <span class="nx">checkLib</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">lib</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nx">lib</span><span class="p">.</span><span class="nx">exists</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">lib</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">};</span>
-  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">libs</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="nx">checkLib</span><span class="p">(</span> <span class="nx">libs</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">);</span>
+<p>exported as sketchplate.Sketchplate</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">Sketchplate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">settings</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">base</span> <span class="o">=</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">templatesPath</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">templateDirectory</span> <span class="o">=</span> <span class="nx">base</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">settings</span><span class="p">.</span><span class="nx">template</span> <span class="o">+</span> <span class="s1">&#39;/template&#39;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">json</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">body</span><span class="p">;</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="nx">body</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">base</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">settings</span><span class="p">.</span><span class="nx">template</span><span class="o">+</span><span class="s1">&#39;/template.json&#39;</span><span class="p">);</span>
+    <span class="nx">json</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span> <span class="nx">body</span> <span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">resources</span> <span class="o">=</span> <span class="nx">buildLibrary</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateDirectory</span><span class="p">,</span> <span class="nx">json</span><span class="p">,</span> <span class="s1">&#39;fetch&#39;</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">editorArgs</span> <span class="o">=</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">editorArgs</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span><span class="p">(</span> <span class="nx">e</span> <span class="p">){</span>
+    <span class="k">throw</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">colors</span><span class="p">.</span><span class="nx">red</span><span class="o">+</span><span class="s1">&#39;Unable to locate template.json for template &quot;&#39;</span> <span class="o">+</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">template</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">+</span><span class="nx">colors</span><span class="p">.</span><span class="nx">reset</span> <span class="p">);</span>
   <span class="p">}</span>
-  <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">lib</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="nx">reportLibFetched</span><span class="p">(</span><span class="nx">lib</span><span class="p">);</span>
-    <span class="nx">lib</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
-      <span class="nx">next</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-      <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span> <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">lib</span><span class="p">),</span> <span class="mi">1</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span><span class="nx">missingLibs</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
-    <span class="p">});</span>
-  <span class="p">});</span>
-
-  <span class="k">if</span><span class="p">(</span> <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span> <span class="p">)</span> <span class="nx">fn</span><span class="p">(</span> <span class="kc">null</span> <span class="p">);</span>
-<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h3>Sketchplate</h3>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">Sketchplate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">settings</span> <span class="p">){</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">templateDirectory</span> <span class="o">=</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/../&#39;</span> <span class="o">+</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">templateDirectory</span><span class="p">;</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">javascriptsDirectory</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateDirectory</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">javascriptsDirectory</span><span class="p">;</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">javascripts</span> <span class="o">=</span> <span class="nx">buildLibrary</span><span class="p">(</span><span class="nx">settings</span><span class="p">,</span> <span class="s1">&#39;javascripts&#39;</span><span class="p">);</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">editorArgs</span> <span class="o">=</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">editorArgs</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="nx">Sketchplate</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>copies the template to a new directory,
+<span class="nx">Sketchplate</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>copies the template to a new directory,
 will retrieve any missing libraries first, then provides a <a href="./Project.html">Project</a></p>
 
 <ul>
 <li><strong>{String}</strong> destination, the location to copy files</li>
 <li><strong>{Function}</strong> fn, callback function will receive <code>(error, [project](./Project.html))</code></li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">copyTemplate</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">destination</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>get any missing libraries first</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">fetchMissingLibs</span><span class="p">(</span><span class="kd">function</span> <span class="p">(){</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>copy over template</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nx">wrench</span><span class="p">.</span><span class="nx">copyDirRecursive</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">templateDirectory</span><span class="p">,</span> <span class="nx">destination</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;err: &#39;</span><span class="p">,</span><span class="nx">err</span> <span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">copyTemplate</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">destination</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>get any missing libraries first</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">fetchMissingLibs</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>copy over template</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nx">wrench</span><span class="p">.</span><span class="nx">copyDirRecursive</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">templateDirectory</span><span class="p">,</span> <span class="nx">destination</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nx">err</span> <span class="p">){</span>
           <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">.</span><span class="nx">red</span><span class="o">+</span><span class="s1">&#39;Project created at &#39;</span><span class="o">+</span><span class="nx">colors</span><span class="p">.</span><span class="nx">reset</span><span class="o">+</span><span class="nx">destination</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">if</span><span class="p">(</span> <span class="nx">fn</span> <span class="p">)</span> <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">(</span> <span class="nx">destination</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">editorArgs</span><span class="p">)</span> <span class="p">);</span>
       <span class="p">});</span>
     <span class="p">});</span>
     <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-  <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>searches for all missing libraries and copies them</p>
+  <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>downloads specified resource(s) and copies them into the template</p>
 
 <ul>
-<li><strong>{Function}</strong> <em>[fn]</em> optional callback receives param fn( error ) in callback</li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">fetchMissingLibs</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
-    <span class="nx">fetchMissing</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">javascripts</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+<li><strong>{Function}</strong> <em>[fn]</em> callback once resources are retrieved</li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">fetch</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">resources</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">errors</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">resources</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>its the name of resources i.e. ['jquery', 'async']
+find their objects from <code>template.json</code></p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="nx">resources</span><span class="p">;</span>
+      <span class="nx">resources</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      <span class="nx">names</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span> <span class="nx">name</span> <span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getResource</span><span class="p">(</span> <span class="nx">name</span> <span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span> <span class="nx">res</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">){</span>
+          <span class="nx">resources</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">res</span> <span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Error finding resource &quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot; in the template&quot;</span><span class="p">)</span> <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>fetch the resurces and collect errors</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">exports</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span> <span class="nx">resources</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+        <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">errors</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span> <span class="p">){</span>
+        <span class="nx">errors</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">fn</span><span class="p">(</span> <span class="nx">errors</span> <span class="p">);</span>
+    <span class="p">});</span>
     <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-  <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>downloads all libraries and copies them into the template</p>
+  <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>downloads all libraries and copies them into the template</p>
 
 <ul>
 <li><strong>{Function}</strong> <em>[fn]</em> callback once all libraries are retrieved</li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">fetchAllLibs</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
-    <span class="nx">fetchAll</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">javascripts</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">fetchAll</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
+    <span class="nx">fetchAll</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">resources</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
     <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>searches for all missing libraries and copies them</p>
+
+<ul>
+<li><strong>{Function}</strong> <em>[fn]</em> optional callback receives param fn( error ) in callback</li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">fetchMissing</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
+    <span class="nx">fetchMissing</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">resources</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p>get a resource by name</p>
+
+<ul>
+<li><strong>{String}</strong> name, name of resource to get</li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">getResource</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">name</span> <span class="p">){</span>
+    <span class="k">for</span><span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">resources</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">resources</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">res</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">===</span> <span class="nx">name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="p">){</span>
+        <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
   <span class="p">}</span>
-<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>constructs a new Sketchplate instance</p>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p>constructs a new Sketchplate instance</p>
 
 <ul>
 <li><strong>{String}</strong> destination, the destination folder</li>
 <li><strong>{Object}</strong> settings, settings object, such as <code>settings.json</code></li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">create</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">destination</span><span class="p">,</span> <span class="nx">settings</span> <span class="p">){</span>
-  <span class="nx">settings</span> <span class="o">=</span> <span class="nx">settings</span> <span class="o">||</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../settings.json&#39;</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="nx">destination</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="k">throw</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Invalid destination passed&quot;</span><span class="p">);</span>
-  <span class="k">return</span> <span class="k">new</span> <span class="nx">Sketchplate</span><span class="p">(</span> <span class="nx">destination</span><span class="p">,</span> <span class="nx">settings</span> <span class="p">);</span>
-<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>fetch all libs in the settings that aren't in the folder</p>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">create</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">settings</span> <span class="p">){</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Sketchplate</span><span class="p">(</span> <span class="nx">settings</span> <span class="p">);</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <p>creates a new blank template</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">createTemplate</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">settings</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">tmpJSON</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;\t&quot;name&quot;: &quot;&#39;</span><span class="o">+</span><span class="nx">opts</span><span class="p">.</span><span class="nx">title</span><span class="o">+</span><span class="s1">&#39;&quot;,&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;\t&quot;version&quot;: &quot;0.0.0&quot;,&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;\t&quot;author&quot;: &quot;&quot;,&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;\t&quot;description&quot;: &quot;&#39;</span><span class="o">+</span><span class="nx">opts</span><span class="p">.</span><span class="nx">description</span><span class="o">+</span><span class="s1">&#39;&quot;,&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;\t&quot;fetch&quot;: {}&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;}&#39;</span>
+  <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">tmplDir</span> <span class="o">=</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">templateDirectory</span> <span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+  <span class="nx">mkdirp</span><span class="p">(</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">templateDirectory</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">title</span> <span class="o">+</span> <span class="s1">&#39;/template&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+      <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span> <span class="nx">tmplDir</span> <span class="o">+</span> <span class="s1">&#39;/template.json&#39;</span><span class="p">,</span> <span class="nx">tmpJSON</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+      <span class="nx">fn</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">tmplDir</span> <span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <p>full-access to <code>fetch</code></p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">fetch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./fetch&#39;</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p>fetch all libs in the settings that aren't in the folder</p>
 
 <ul>
 <li><strong>{Object}</strong> settings, settings object such as <code>settings.json</code></li>
 <li><strong>{Function}</strong> fn, optional callback receives <code>(error)</code></li>
 </ul>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">fetchMissingLibsFor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">settings</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">javascripts</span> <span class="o">=</span> <span class="nx">buildLibrary</span><span class="p">(</span> <span class="nx">settings</span><span class="p">,</span> <span class="s1">&#39;javascripts&#39;</span> <span class="p">);</span>
-  <span class="nx">fetchMissing</span><span class="p">(</span> <span class="nx">javascripts</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
-<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p>fetch and update all libs in the settings</p>
+  <span class="kd">var</span> <span class="nx">resources</span> <span class="o">=</span> <span class="nx">buildLibrary</span><span class="p">(</span> <span class="nx">settings</span><span class="p">,</span> <span class="s1">&#39;resources&#39;</span> <span class="p">);</span>
+  <span class="nx">fetchMissing</span><span class="p">(</span> <span class="nx">resources</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <p>fetch and update all libs in the settings</p>
 
 <ul>
 <li><strong>{Object}</strong> settings, settings object such as <code>settings.json</code></li>
 <li><strong>{Function}</strong> fn, optional callback receives <code>(error)</code></li>
 </ul>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">fetchAllLibsFor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">settings</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">javascripts</span> <span class="o">=</span> <span class="nx">buildLibrary</span><span class="p">(</span> <span class="nx">settings</span><span class="p">,</span><span class="s1">&#39;javascripts&#39;</span> <span class="p">);</span>
-  <span class="nx">fetchAll</span><span class="p">(</span> <span class="nx">javascripts</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
-<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p>open an existing project</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">openProject</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">location</span><span class="p">,</span> <span class="nx">settings</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">resources</span> <span class="o">=</span> <span class="nx">buildLibrary</span><span class="p">(</span> <span class="nx">settings</span><span class="p">,</span><span class="s1">&#39;resources&#39;</span> <span class="p">);</span>
+  <span class="nx">fetchAll</span><span class="p">(</span> <span class="nx">resources</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">);</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>open an existing project</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">openProject</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">location</span><span class="p">,</span> <span class="nx">settings</span> <span class="p">){</span>
   <span class="k">return</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">(</span> <span class="nx">location</span><span class="p">,</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">editorArgs</span> <span class="p">);</span>
 <span class="p">};</span>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">Sketchplate</span> <span class="o">=</span> <span class="nx">Sketchplate</span><span class="p">;</span>
+
+
+<span class="cm">/**</span>
+<span class="cm"> * creates a handler for reporting the status of a fetch</span>
+<span class="cm"> * @api private</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">reportLibFetched</span><span class="p">(</span> <span class="nx">lib</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
+  <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span> <span class="nx">fn</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;+\t&#39;</span><span class="o">+</span><span class="nx">colors</span><span class="p">.</span><span class="nx">red</span><span class="o">+</span><span class="s1">&#39;fetched &#39;</span><span class="o">+</span><span class="nx">colors</span><span class="p">.</span><span class="nx">reset</span><span class="p">,</span> <span class="nx">lib</span><span class="p">.</span><span class="nx">id</span> <span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
+      <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/* @api private */</span>
+<span class="kd">function</span> <span class="nx">fetchAll</span><span class="p">(</span> <span class="nx">libs</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
+  <span class="nx">libs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">lib</span><span class="p">){</span>
+    <span class="nx">lib</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span> <span class="nx">reportLibFetched</span><span class="p">(</span><span class="nx">lib</span><span class="p">,</span><span class="nx">fn</span><span class="p">)</span> <span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+<span class="cm">/* @api private */</span>
+<span class="kd">function</span> <span class="nx">fetchMissing</span><span class="p">(</span> <span class="nx">libs</span><span class="p">,</span> <span class="nx">fn</span> <span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">errors</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">missingLibs</span> <span class="o">=</span> <span class="p">[];</span></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p>create an Error that lists the collection of errors from fetching</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">createError</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Fetch reported the following errors: &quot;</span><span class="p">];</span>
+    <span class="nx">errors</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+      <span class="nx">msg</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;-  &quot;</span><span class="o">+</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nb">Error</span><span class="p">(</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">)</span> <span class="p">);</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <p>find missing libs</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">libs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span> <span class="nx">lib</span> <span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nx">lib</span><span class="p">.</span><span class="nx">exists</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">lib</span> <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <p>for every missing library fetch it,
+if an error occurs collect the errors and report at the end</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">lib</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="nx">reportLibFetched</span><span class="p">(</span><span class="nx">lib</span><span class="p">);</span>
+    <span class="nx">lib</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">){</span></pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <p>if there was an error, collect it until the end
+otherwise log a successful fetch</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span> <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span> <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span> <span class="nx">next</span><span class="p">();</span> <span class="p">}</span>
+      <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span> <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">lib</span><span class="p">),</span> <span class="mi">1</span> <span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">missingLibs</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="nx">err</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span> <span class="nx">errors</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">){</span>
+          <span class="nx">err</span> <span class="o">=</span> <span class="nx">createError</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="nx">fn</span><span class="p">(</span> <span class="nx">err</span> <span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <p>if there never was a missing lib</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">if</span><span class="p">(</span> <span class="nx">missingLibs</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span> <span class="p">)</span> <span class="nx">fn</span><span class="p">(</span> <span class="kc">null</span> <span class="p">);</span>
+<span class="p">}</span>
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

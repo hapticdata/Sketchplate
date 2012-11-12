@@ -34,9 +34,22 @@ program
 					if( err ) throw err;
 					process.exit();
 				});
-
 			});
 		}
 	});
 
+program
+	.command('templates <path>')
+	.description('change the directory of your templates, currently `'+config.templatesPath+'`')
+	.action(function( pth ){
+		config.templatesPath = path.resolve( pth );
+		writeNewConfig();
+	});
+
+program.option('-e, --edit', 'Edit the config.json in your editor');
+
 program.parse( process.argv );
+
+if( program.edit ){
+	hooks.openInEditor( config.editors[ config.editor ], '../config.json' );
+}

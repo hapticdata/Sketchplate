@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+
+var program = require('commander'),
+	async = require('async'),
+	path = require('path'),
+	fs = require('fs'),
+	sketchplate = require('../lib/sketchplate'),
+	hooks = require('../lib/hooks'),
+	config = require('../config.json');
+
+//handle the new
+program
+	.usage('[options] <location>')
+	.option('-t, --template [template]', 'Create with [template] template', '')
+	.option('-g, --gitinit', 'Initialize repo after creation', '')
+	.option('-n, --npminstall', 'Run npm install on the new project', '')
+	.option('-s, --skipeditor', 'Skip opening project in editor', '')
+	.option('-b, --browse', 'Open project in file browser', '');
+
+program.parse( process.argv );
+
+var location = program.args.shift();
+newCmd( location, program );
+
+function newCmd( destination, options ){
+	if( typeof destination !== 'string' ){
+		//if its really the options object
+		if( destination.template !== undefined ){
+			options = destination;
+		} else {
+			options = {};
+		}
+		destination = '.';
+	}
+	//destination = program.args.shift() || '.';
+	if( options.template ){
+		config.template = options.template;
+	}
+	//create a sketchplate project
+	var plate = sketchplate.create( config );
+	plate.copyTemplate( destination, function (err, project){
+		if( err ){
+			console.log( err.message );
+			return;
+		}
+		if ( options.gitinit ) project.initRepo();
+		if( options.npminstall ) project.npmInstall();
+		if ( !options.skipeditor ){
+			project.openInEditor(function ( err ){
+				if( err ){
+					program.confirm([
+						"Your project was created; ",
+						"but there was an error opening your editor.\n",
+						"Would you like to edit your config.js? ",
+						"(you can do this any time with \"sketchplate config\") "
+					].join(''), function( yes ){
+						if( yes ){
+							hooks.openInFileBrowser( configLocation, function( err ){
+								process.exit();
+							});
+						}
+					});
+				}
+			});
+		}
+		if( options.browse )project.openInFileBrowser(function(){});
+	});
+}
