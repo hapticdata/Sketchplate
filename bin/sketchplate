@@ -29,6 +29,7 @@ var program = require('commander'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
+	spawn = require('win-spawn'),
 	configLocation = '../config.json', //path.normalize(__dirname+'/../config.js'),
 	config;
 
@@ -106,5 +107,5 @@ function spwn( cmd ){
 	var local = path.join(__dirname, bin);
 	if (fs.existsSync(local)) bin = local;
 	// spawn
-	var proc = require('child_process').spawn(bin, args, { stdio: 'inherit' });
+	var proc = spawn(bin, args, { stdio: 'inherit', customFds: [0,1,2] });
 }

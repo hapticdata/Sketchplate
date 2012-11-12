@@ -17,8 +17,11 @@
 		"BBEdit": [
 			"bbedit",
 			"%path"
+		],
+		"vim": [
+			"vim",
+			"%path"
 		]
 	},
-	"template": "amd-project",
-	"templatesPath": "/Users/me/Sites/libs/Sketchplate/templates"
-}
+	"template": "amd-sketch",
+	"templatesPath": "../templates"
