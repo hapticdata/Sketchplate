@@ -2,26 +2,6 @@
 
 //#Sketchplate
 //##by [Kyle Phillips](http://hapticdata.com)
-//
-//		Usage: sketchplate [options] [command]
-//
-//		Commands:
-//
-//			new [options]
-//			create a new project with sketchplate
-//
-//			fetch [options]
-//			fetch copies of any missing resources for template
-//
-//			config [options]
-//			set sketchplate configuration
-//
-//		Options:
-//
-//			-h, --help             output usage information
-//			-V, --version          output the version number
-//			-v, --verbose          Verbose
-//			-o, --open [location]  Open [location] in editor
 
 var program = require('commander'),
 	async = require('async'),
@@ -30,15 +10,11 @@ var program = require('commander'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
 	spawn = require('win-spawn'),
-	configLocation = '../config.json', //path.normalize(__dirname+'/../config.js'),
+	configLocation = '../config.json',
 	config;
 
-(function initConfig(){
-	//var txt = fs.readFileSync( configLocation );
-	//config = eval( String(txt) );
-	config = require( configLocation );
-	config.templatesPath = path.normalize( __dirname +'/'+ config.templatesPath );
-}());
+config = require( configLocation );
+config.templatesPath = path.normalize( __dirname +'/'+ config.templatesPath );
 
 
 //handle the `new` command
