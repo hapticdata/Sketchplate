@@ -20,7 +20,7 @@ function writeNewConfig( fn ) {
 
 program
 	.command('editor')
-	.description('setup your editor')
+	.description('setup your editor, currently `'+config.editor+'`')
 	.option('-i, --interactive','Set up your editor in interactive mode')
 	.action(function( options ){
 		if( options.interactive ){

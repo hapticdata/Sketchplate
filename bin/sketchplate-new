@@ -8,6 +8,9 @@ var program = require('commander'),
 	hooks = require('../lib/hooks'),
 	config = require('../config.json');
 
+
+config.templatesPath = path.normalize( __dirname +'/'+ config.templatesPath );
+
 //handle the new
 program
 	.usage('[options] <location>')

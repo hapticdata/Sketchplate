@@ -1,8 +1,7 @@
 #Changes
 
-##v0.0.5
--	`sketchplate config templateDirectory [directory]` for setting a different folder to contain templates
--	`sketchplate config template [template]` for setting a different default template
+##v0.1.0
+-	multipe dual-level commands now complete, v0.1.0 api ready
 -	`config.templateDirectory` is now `config.templatesPath`
 -	"url" fetches are now referred to as "file" fetches
 -	asks user to edit config when editor does not appear to be setup correctly

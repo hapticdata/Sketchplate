@@ -37,7 +37,7 @@ var program = require('commander'),
 	//var txt = fs.readFileSync( configLocation );
 	//config = eval( String(txt) );
 	config = require( configLocation );
-	//config.templatesPath = path.normalize( __dirname +'/'+ config.templatesPath );
+	config.templatesPath = path.normalize( __dirname +'/'+ config.templatesPath );
 }());
 
 
