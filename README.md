@@ -26,7 +26,7 @@ Options:
 
 Commands:
 
--	[new](#new) [options] <location> - create a new project at <location> with hooks for [options]
+-	[new](#new) [options] <location> - create a new project at \<location\> with hooks for [options]
 -	[template](#template) [options] [command] - perform commands on your sketchplate templates
 -	[fetch](#fetch) [options] [names…] - perform resource fetches on your templates
 -	[config](#config) [options] [command] - edit your sketchplate configuration
@@ -39,12 +39,12 @@ Specify the location for the new project and any combinations of [hooks](#hooks)
 
 	Options:
 
-    -h, --help                 output usage information
-    -t, --template [template]  Create with [template] template
-    -g, --gitinit              Initialize repo after creation
-    -n, --npminstall           Run npm install on the new project
-    -s, --skipeditor           Skip opening project in editor
-    -b, --browse               Open project in file browser
+	-h, --help                 output usage information
+	-t, --template [template]  Create with [template] template
+	-g, --gitinit              Initialize repo after creation
+	-n, --npminstall           Run npm install on the new project
+	-s, --skipeditor           Skip opening project in editor
+	-b, --browse               Open project in file browser
 
 
 ##template
@@ -55,25 +55,25 @@ Sketchplate encourages creating your own project templates and comes bundled wit
 
 	Commands:
 
-    add [name]
-    add a new template
-    
-    edit [options] [name]
-    edit an existing template
-    
-    fetch [options] [names…]
-    fetch resources for a template
-    
-    remove <name>
-    remove an existing template
-    
-    set <name>
-    set the default template, currently `amd-project`
+	add [name]
+	add a new template
+	
+	edit [options] [name]
+	edit an existing template
+	
+	fetch [options] [names…]
+	fetch resources for a template
+	
+	remove <name>
+	remove an existing template
+	
+	set <name>
+	set the default template, currently `amd-sketch`
 
 	Options:
 
-    -h, --help  output usage information
-    -l, --list  List all sketchplate templates
+	-h, --help  output usage information
+	-l, --list  List all sketchplate templates
 
 ##fetch
 
@@ -83,14 +83,14 @@ To assist in maintaining templates, a [template.json](./templates/amd-sketch/tem
 
 	Options:
 
-    -h, --help                 output usage information
-    -a, --all                  Fetch new copies of all resources for template
-    -i, --interactive          Fetch resources individually in interactive mode
-    -l, --list                 List the template's fetch resources
-    -t, --template [template]  Fetch resources for [template]
+	-h, --help                 output usage information
+	-a, --all                  Fetch new copies of all resources for template
+	-i, --interactive          Fetch resources individually in interactive mode
+	-l, --list                 List the template's fetch resources
+	-t, --template [template]  Fetch resources for [template]
 
 
-To use you simply describe where it is, and where you want its contents to go.
+To use, you simply describe where it is, and where you want its contents to go.
 _currently supports **file**,**zip**,**clone**:_
 
 ###Download a file, copy it to the target:
@@ -125,16 +125,37 @@ _currently supports **file**,**zip**,**clone**:_
 
 	Commands:
 
-    editor [options] 
-    setup your editor
-    
-    templates <path>
-    change the directory of your templates, currently `../templates`
+	editor [options] 
+	setup your editor
+	
+	templates <path>
+	change the directory of your templates, currently `../templates`
 
 	Options:
 
-    -h, --help  output usage information
-    -e, --edit  Edit the config.json in your editor
+	-h, --help  output usage information
+	-e, --edit  Edit the config.json in your editor
+
+
+###Editors
+Set your editor to one of the following with:
+
+	sketchplate config editor
+
+1. Sublime Text 2 (osx)
+1. Textmate (osx) ([install shell support](http://blog.macromates.com/2011/mate-and-rmate/))
+1. BBEdit (osx) (select install command-line support on welcome screen)
+1. WebStorm (osx)
+1. Vim (osx)
+1. Sublime Text 2 $PATH (subl) - launch ST2 on a computer where `subl` has been added to $PATH
+
+**Add many other editors easily.** Say you have [coda-cli](http://justinhileman.info/coda-cli/) (or [Command-Line-Coda](https://github.com/egonSchiele/Command-Line-Coda)) installed and want to use Coda as your editor:
+
+1.	launch your config.json in your editor with `sketchplate config`
+1.	add `"coda": ["coda", "%path"]` to the `"editors"`
+1.	change `"editor"` to `"coda"`
+
+You can also edit any of the editors to use additional flags. The token `%path` will be replaced with the project path.
 
 
 ##Hooks
@@ -143,11 +164,8 @@ Once a new project has been created there are several things you may want to do 
 1.	Open your editor to begin working (on by default `-s` to skip the editor)
 1.	`-b` Browse the newly created project
 1.	`-g` Initialize an empty git repository
-1.	`-n` run `npm install` to install node dependencies (if the template has a `package.json`)
+1.	`-n` run `npm install` to install node dependencies _(if the template has a `package.json`)_
 
-
-
-Customize the [config.json](https://github.com/hapticdata/Sketchplate/blob/master/config.json) file for your editor and default template.  Edit the [templates/](https://github.com/hapticdata/Sketchplate/tree/master/template) folder however you like to customize your boilerplate. Each template has a simple [json description](https://github.com/hapticdata/Sketchplate/blob/master/templates/amd-sketch.json) that allows it to fetch resources.
 
 
 ##Default template [amd-sketch](https://github.com/hapticdata/Sketchplate/blob/master/templates/)

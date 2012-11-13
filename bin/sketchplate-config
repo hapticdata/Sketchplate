@@ -16,19 +16,17 @@ program
 	.description('setup your editor, currently `'+config.editor.red+'`')
 	.option('-i, --interactive','Set up your editor in interactive mode')
 	.action(function( options ){
-		if( options.interactive ){
-			var list = [];
-			for( var prop in config.editors ){
-				list.push( prop );
-			}
-			program.choose( list, function( choice ){
-				config.editor = list[choice];
-				config.writeUserConfig(function( err ){
-					if( err ) throw err;
-					process.exit();
-				});
-			});
+		var list = [];
+		for( var prop in config.editors ){
+			list.push( prop );
 		}
+		program.choose( list, function( choice ){
+			config.editor = list[choice];
+			config.writeUserConfig(function( err ){
+				if( err ) throw err;
+				process.exit();
+			});
+		});
 	});
 
 program

@@ -4,61 +4,57 @@
 	"author": "Kyle Phillips <kyle@haptic-data.com>",
 	"description": "Front-end web-template with an AMD boilerplate and a collection of libraries for computational design.",
 	"fetch": {
-			"async": {
-				"file": "https://raw.github.com/caolan/async/master/lib/async.js",
-				"target": "javascripts/vendor/async.js"
-			},
-			"modernizr": {
-				"file": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
-				"target": "javascripts/vendor/modernizr.js"
-			},
-			"jquery": {
-				"file": "http://code.jquery.com/jquery.js",
-				"target": "javascripts/vendor/jquery.js"
-			},
-			"datgui": {
-				"clone": "https://code.google.com/p/dat-gui/",
-				"target": {
-					"src/dat": "javascripts/vendor/dat"
-				}
-			},
-			"require": {
-				"file": "https://raw.github.com/jrburke/requirejs/master/require.js",
-				"target": "javascripts/vendor/require.js"
-			},
-			"domReady": {
-				"file": "https://raw.github.com/requirejs/domReady/master/domReady.js",
-				"target": "javascripts/vendor/domReady.js"
-			},
-			"text": {
-				"file": "https://raw.github.com/requirejs/text/master/text.js",
-				"target": "javascripts/vendor/text.js"
-			},
-			"d3": {
-				"file": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
-				"target": "javascripts/vendor/d3.js"
-			},
-			"toxi": {
-				"clone": "https://github.com/hapticdata/toxiclibsjs.git",
-				"target": {
-					"lib/toxi": "javascripts/vendor/toxi"
-				}
-			},
-			"Stats": {
-				"file": "https://raw.github.com/mrdoob/stats.js/master/src/Stats.js",
-				"target": "javascripts/vendor/Stats.js"
-			},
-			"three": {
-				"file": "https://raw.github.com/mrdoob/three.js/master/build/three.js",
-				"target": "javascripts/vendor/three.js"
-			},
-			"Backbone": {
-				"file": "https://raw.github.com/documentcloud/backbone/master/backbone.js",
-				"target": "javascripts/vendor/backbone.js"
-			},
-			"underscore": {
-				"file": "https://raw.github.com/documentcloud/underscore/master/underscore.js",
-				"target": "javascripts/vendor/underscore.js"
+		"modernizr": {
+			"file": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
+			"target": "javascripts/vendor/modernizr.js"
+		},
+		"jquery": {
+			"file": "http://code.jquery.com/jquery.js",
+			"target": "javascripts/vendor/jquery.js"
+		},
+		"datgui": {
+			"clone": "https://code.google.com/p/dat-gui/",
+			"target": {
+				"src/dat": "javascripts/vendor/dat"
 			}
+		},
+		"require": {
+			"file": "https://raw.github.com/jrburke/requirejs/master/require.js",
+			"target": "javascripts/vendor/require.js"
+		},
+		"domReady": {
+			"file": "https://raw.github.com/requirejs/domReady/master/domReady.js",
+			"target": "javascripts/vendor/domReady.js"
+		},
+		"text": {
+			"file": "https://raw.github.com/requirejs/text/master/text.js",
+			"target": "javascripts/vendor/text.js"
+		},
+		"d3": {
+			"file": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
+			"target": "javascripts/vendor/d3.js"
+		},
+		"toxi": {
+			"clone": "https://github.com/hapticdata/toxiclibsjs.git",
+			"target": {
+				"lib/toxi": "javascripts/vendor/toxi"
+			}
+		},
+		"Stats": {
+			"file": "https://raw.github.com/mrdoob/stats.js/master/src/Stats.js",
+			"target": "javascripts/vendor/Stats.js"
+		},
+		"three": {
+			"file": "https://raw.github.com/mrdoob/three.js/master/build/three.js",
+			"target": "javascripts/vendor/three.js"
+		},
+		"Backbone": {
+			"file": "https://raw.github.com/documentcloud/backbone/master/backbone.js",
+			"target": "javascripts/vendor/backbone.js"
+		},
+		"underscore": {
+			"file": "https://raw.github.com/documentcloud/underscore/master/underscore.js",
+			"target": "javascripts/vendor/underscore.js"
 		}
+	}
 }
