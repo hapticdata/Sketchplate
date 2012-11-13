@@ -21,8 +21,8 @@ There are currently 3 main components to sketchplate:
 
 Options:
 
-	    -h, --help     output usage information
-	    -V, --version  output the version number
+		-h, --help     output usage information
+		-V, --version  output the version number
 
 Commands:
 
@@ -154,16 +154,16 @@ Customize the [config.json](https://github.com/hapticdata/Sketchplate/blob/maste
 The default template is of minimal structure and is oriented towards web-based computational design sketches. These libraries are assembled together to work with the [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) workflow I prefer. 
 ### The default libraries in the template are:
 * [Require.js](http://requirejs.org) - with [domReady](https://github.com/requirejs/domReady) and [text](https://github.com/requirejs/text) plugins bundled
-* [jQuery](http://jquery.com)
+* [jquery](http://jquery.com)
 * [dat-gui](http://code.google.com/p/dat-gui/)
 * [toxiclibsjs](http://haptic-data.com/toxiclibsjs)
 * [underscore.js](http://documentcloud.github.com/underscore/)
-* [Backbone.js](http://documentcloud.github.com/backbone/)
-* [Three.js](http://mrdoob.github.com/three.js/)
+* [backbone.js](http://documentcloud.github.com/backbone/)
+* [three.js](http://mrdoob.github.com/three.js/)
 * [Stats.js](http://github.com/mrdoob/stats.js/)
 * [d3](http://github.com/mbostock/d3)
 * [modernizr](http://modernizr.com)
 
-All of these libraries will be fetched the first time automatically, they are placed in a `javascripts/vendor` folder with a matching [require.js shim config](http://requirejs.org/docs/api.html#config-shim). Only resources that you reference in your project will ever be loaded or included in a built project. The output directory structure is setup to easily be moved into a [node.js](http://nodejs.org) + [express.js](http://expressjs.com) file structure
+All of these libraries will be fetched the first time automatically, they are placed in a `javascripts/vendor` folder with a matching [configuration file](https://github.com/hapticdata/Sketchplate/blob/master/templates/amd-sketch/template/javascripts/config.js) ([ more about require.js shim config](http://requirejs.org/docs/api.html#config-shim) ). Only resources that you reference in your project will ever be loaded or included in a built project. The output directory structure is setup to easily be moved into a [node.js](http://nodejs.org) + [express.js](http://expressjs.com) file structure
 
 Created by [Kyle Phillips](http://haptic-data.com) on April 8th, 2012

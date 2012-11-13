@@ -11,19 +11,21 @@ var program = require('commander'),
 	hooks = require('../lib/hooks'),
 	spawn = require('win-spawn'),
 	configLocation = '../config.json',
+	version = require('../package').version,
 	config;
 
 config = require( configLocation );
-config.templatesPath = path.normalize( __dirname +'/'+ config.templatesPath );
+config.templatesPath = config.templatesPath;//path.normalize( __dirname +'/'+ config.templatesPath );
 
 
 //handle the `new` command
 program
-	.version(require('../package').version)
+	.version(version)
 	.usage('<command> [options]');
 
 program.on('--help', function(){
 	var l = console.log;
+	l('Sketchplate v', version );
 	l('  Commands:');
 	l('');
 	l('    new [options] <location>');
