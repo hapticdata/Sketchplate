@@ -1,11 +1,11 @@
 {
-	"editor": "Sublime Text 2 on OSX",
+	"editor": "Sublime Text 2 OS X",
 	"editors": {
-		"Sublime Text 2 on OSX": [
+		"Sublime Text 2 OS X": [
 			"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl",
 			"%path"
 		],
-		"Sublime Text 2 in $PATH": [
+		"Sublime Text 2 $PATH (subl)": [
 			"subl",
 			"%path"
 		],
@@ -20,5 +20,5 @@
 		]
 	},
 	"template": "amd-sketch",
-	"templatesPath": "../templates"
+	"templatesPath": "~/.sketchplate/templates"
 }

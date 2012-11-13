@@ -1,26 +1,19 @@
 #!/usr/bin/env node
-
+require('colors');
 var program = require('commander'),
 	async = require('async'),
 	path = require('path'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
-	config = require('../config.json');
+	config = require('../lib/config').getUserConfig();
 
-function writeNewConfig( fn ) {
-	body = JSON.stringify( config, null, '\t');
-	fs.writeFile(__dirname + '/../config.json', body, function( err ){
-		if( fn ){
-			fn( err );
-		}
-	});
-}
+
 
 
 program
 	.command('editor')
-	.description('setup your editor, currently `'+config.editor+'`')
+	.description('setup your editor, currently `'+config.editor.red+'`')
 	.option('-i, --interactive','Set up your editor in interactive mode')
 	.action(function( options ){
 		if( options.interactive ){
@@ -30,7 +23,7 @@ program
 			}
 			program.choose( list, function( choice ){
 				config.editor = list[choice];
-				writeNewConfig(function( err ){
+				config.writeUserConfig(function( err ){
 					if( err ) throw err;
 					process.exit();
 				});
@@ -40,16 +33,33 @@ program
 
 program
 	.command('templates <path>')
-	.description('change the directory of your templates, currently `'+config.templatesPath+'`')
+	.description('change the directory of your templates, currently `'+config.templatesPath.red+'`')
 	.action(function( pth ){
 		config.templatesPath = path.resolve( pth );
-		writeNewConfig();
+		config.writeUserConfig(function( err ){
+			if( err ) throw err;
+			process.exit();
+		});
 	});
 
-program.option('-e, --edit', 'Edit the config.json in your editor');
+program
+	.command('restore')
+	.description('restore your config.json to the default settings')
+	.action(function(){
+		require('../lib/config').restoreUserConfig(function( err ){
+			if ( err ){
+				throw err;
+			}
+			console.log("Config restored to defaults");
+		});
+	});
+
+program.option('-e, --edit', 'Edit config.json in your editor');
 
 program.parse( process.argv );
 
-if( program.edit ){
-	hooks.openInEditor( config.editors[ config.editor ], '../config.json' );
+if( program.edit || program.args.length === 0 ){
+	hooks.openInEditor( config.editors[ config.editor ], require('../lib/config').userConfig, function( err ){
+
+	});
 }

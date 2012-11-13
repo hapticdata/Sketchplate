@@ -6,7 +6,7 @@ var program = require('commander'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
-	config = require('../config.json');
+	config = require('../lib/config').getUserConfig();
 
 
 config.templatesPath = path.normalize( ((config.templatesPath.charAt(0)=='.') ? __dirname + '/' : '') + config.templatesPath );

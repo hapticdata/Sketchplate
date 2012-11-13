@@ -1,7 +1,7 @@
 {
   "name": "sketchplate",
   "description": "Sketchplate is pre-project tooling for starting projects quickly.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Kyle Phillips <kyle@haptic-data.com>",
   "contributors": [
     {
@@ -16,7 +16,8 @@
     "mkdirp": "~0.3.4",
     "async": "~0.1.22",
     "adm-zip": "~0.1.5",
-    "win-spawn": "0.0.0"
+    "win-spawn": "0.0.0",
+    "colors": "~0.6.0-1"
   },
   "devDependencies": {},
   "keywords": [

@@ -1,22 +1,17 @@
 #!/usr/bin/env node
 
+require('colors');
+
 var program = require('commander'),
 	async = require('async'),
 	path = require('path'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
-	config = require('../config.json'),
+	config = require('../lib/config').getUserConfig(),
 	plate;
 
 
-
-function writeNewConfig() {
-	body = JSON.stringify( config, null, '\t');
-	fs.writeFile(__dirname + '/../config.json', body, function( err ){
-		if( err ) throw err;
-	});
-}
 
 program.option('-l, --list', 'List all sketchplate templates');
 
@@ -159,10 +154,11 @@ program
 
 program
 	.command('set <name>')
-	.description('set the default template, currently `'+config.template+'`')
+	.usage('<name>')
+	.description('set the default template, currently `'+config.template.yellow+'`')
 	.action(function( name ){
 		config.template = name;
-		writeNewConfig();
+		config.writeUserConfig();
 	});
 
 

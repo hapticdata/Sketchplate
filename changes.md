@@ -1,5 +1,14 @@
 #Changes
 
+##v0.1.2
+-	`~/.sketchplate` folder for holding config and templates on a user-level
+-	`sketchplate config restore` for restoring user config to defaults
+-	`sketchplate config` and option `-e` fixed for editing config.json
+-	added `colors` package
+
+##v0.1.1
+-	quick fix for config path not being correct after user setting it
+
 ##v0.1.0
 -	multipe dual-level commands now complete, v0.1.0 api ready
 -	`config.templateDirectory` is now `config.templatesPath`

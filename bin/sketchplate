@@ -2,20 +2,19 @@
 
 //#Sketchplate
 //##by [Kyle Phillips](http://hapticdata.com)
+require('colors');
 
 var program = require('commander'),
 	async = require('async'),
 	path = require('path'),
+	wrench = require('wrench'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
 	spawn = require('win-spawn'),
-	configLocation = '../config.json',
+	configLocation,
 	version = require('../package').version,
-	config;
-
-config = require( configLocation );
-config.templatesPath = config.templatesPath;//path.normalize( __dirname +'/'+ config.templatesPath );
+	config = require('../lib/config').getUserConfig();
 
 
 //handle the `new` command
@@ -25,19 +24,19 @@ program
 
 program.on('--help', function(){
 	var l = console.log;
-	l('Sketchplate v', version );
-	l('  Commands:');
+	l();
+	l('  Sketchplate'.red+' commands ('.red+'v'+version+''+'):'.red );
 	l('');
-	l('    new [options] <location>');
+	l('    new'.cyan+' [options] <location>');
 	l('    create a new project at <location> with hooks for [options]');
 	l();
-	l('    fetch [options] [names…]');
+	l('    fetch'.cyan+' [options] [names…]');
 	l('    perform resource fetches on your templates');
 	l();
-	l('    template [options] [command]');
+	l('    template'.cyan+' [options] [command]');
 	l('    perform commands on your sketchplate templates');
 	l();
-	l('    config [options] [command]');
+	l('    config'.cyan+' [options] [command]');
 	l('    perform  hooks on existing projects');
 	l();
 	process.exit();
@@ -52,9 +51,9 @@ var args = process.argv.slice(3);
 var cmd = program.args[0];
 // display help
 if (!cmd) {
-  process.stdout.write(program.helpInformation());
-  program.emit('--help');
-  process.exit();
+	process.stdout.write(program.helpInformation());
+	program.emit('--help');
+	process.exit();
 }
 
 var commands = {
