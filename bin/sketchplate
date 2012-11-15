@@ -37,7 +37,10 @@ program.on('--help', function(){
 	l('    perform commands on your sketchplate templates');
 	l();
 	l('    config'.cyan+' [options] [command]');
-	l('    perform  hooks on existing projects');
+	l('    alter your configurations for editor and templates');
+	l();
+	l('    hooks'.cyan+' [options] [command]');
+	l('    apply hooks to existing projects');
 	l();
 	process.exit();
 });
@@ -66,6 +69,9 @@ var commands = {
 		spwn( cmd );
 	},
 	config: function(){
+		spwn( cmd );
+	},
+	hooks: function(){
 		spwn( cmd );
 	}
 };

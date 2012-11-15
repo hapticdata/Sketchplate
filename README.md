@@ -5,8 +5,8 @@ Sketchplate is a system for quickly generating projects with the collections of 
 
 There are currently 3 main components to sketchplate:
 
-1.	[Templates](#templates) - create and manage your own templates
-1.	[Fetching](#fetching) - manage and automate retrieval of external resources
+1.	[Templates](#template) - create and manage your own templates
+1.	[Fetching](#fetch) - manage and automate retrieval of external resources
 1.	[Hooks](#hooks) - express execution of common tasks after project creation
 
 ##Installation
@@ -29,6 +29,7 @@ Commands:
 -	[new](#new) [options] <location> - create a new project at \<location\> with hooks for [options]
 -	[template](#template) [options] [command] - perform commands on your sketchplate templates
 -	[fetch](#fetch) [options] [names…] - perform resource fetches on your templates
+-	[hooks](#hooks) [options] [location] - perform any of the hooks on existing projects
 -	[config](#config) [options] [command] - edit your sketchplate configuration
 
 
@@ -119,6 +120,27 @@ _currently supports **file**,**zip**,**clone**:_
 		}
 	}
 
+##Hooks
+Once a new project has been created there are several things you may want to do immediately. Each of these are available as options on `sketchplate new [options] <location>`
+
+	Usage: sketchplate hooks [options]
+
+	Options:
+
+	-h, --help                   output usage information
+	-g, --git-init               Initialize repo after creation
+	-n, --npm-install            Run npm install on the new project
+	-c, --connect-server [port]  Start a static file server with connect on [port]
+	-s, --skip-editor            Skip opening project in editor
+	-b, --browse                 Open project in file browser
+
+run any combination of these hooks. These are also available for `sketchplate template add`, `sketchplate template edit` and
+for use with existing projects with `sketchplate hooks`
+
+For example, This will initialize a git repository, open the folder in Finder and start serving it on port 8080:
+
+	sketchplate hooks ./www -bgs -c 8080
+
 ##Config
 
 	Usage: sketchplate config [options] [command]
@@ -156,15 +178,6 @@ Set your editor to one of the following with:
 1.	change `"editor"` to `"coda"`
 
 You can also edit any of the editors to use additional flags. The token `%path` will be replaced with the project path.
-
-
-##Hooks
-Once a new project has been created there are several things you may want to do immediately. Each of these are available as options on `sketchplate new [options] <location>`
-
-1.	Open your editor to begin working (on by default `-s` to skip the editor)
-1.	`-b` Browse the newly created project
-1.	`-g` Initialize an empty git repository
-1.	`-n` run `npm install` to install node dependencies _(if the template has a `package.json`)_
 
 
 

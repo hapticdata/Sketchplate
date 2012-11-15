@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+
+require('colors');
+
+var program = require('commander'),
+	async = require('async'),
+	path = require('path'),
+	fs = require('fs'),
+	sketchplate = require('../lib/sketchplate'),
+	hooks = require('../lib/hooks'),
+	hooksCli = require('./hooks-cli'),
+	config = require('../lib/config').getUserConfig(),
+	plate;
+
+
+hooksCli.appendHelp( program );
+
+
+program.on('--help',function(){
+	var l = console.log;
+
+	l();
+	l('  ex:'.cyan+' sketchplate hooks -bgs -c 8080');
+	l('  run any combination of the options above on your current directory'.red);
+	l();
+});
+
+program.parse( process.argv );
+var waterfall = [
+	function( next ){
+		var pth = path.resolve( program.args.length === 1 ? program.args[0] : './');
+		next( null, pth );
+	}
+];
+hooksCli.addToWaterfall( program, waterfall );
+async.waterfall( waterfall, function( err ){
+	if( err ){
+		throw err;
+	}
+});

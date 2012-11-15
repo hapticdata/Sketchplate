@@ -1,5 +1,16 @@
 #Changes
 
+##v0.1.4
+-	added `sketchplate hooks` to allow for all of the creation hooks to be used on existing projects
+-	added `initServer` hook to start a node.js + connect static file server for a project'
+-	added all of the creation hooks to template creation and editing
+-	bugfix `sketchplate template add`
+-	merge pull request #1 to always provide options to wrench
+
+##v0.1.3
+-	added `lib/config.js` for managing configurations and easy-access to the users config file
+-	editor configurations for launching vim, webstorm
+
 ##v0.1.2
 -	`~/.sketchplate` folder for holding config and templates on a user-level
 -	`sketchplate config restore` for restoring user config to defaults

@@ -17,6 +17,7 @@ program
 	.option('-t, --template [template]', 'Create with [template] template', '')
 	.option('-g, --gitinit', 'Initialize repo after creation', '')
 	.option('-n, --npminstall', 'Run npm install on the new project', '')
+	.option('-c, --connect-server [port]', 'Start a static file server with connect on [port]', undefined)
 	.option('-s, --skipeditor', 'Skip opening project in editor', '')
 	.option('-b, --browse', 'Open project in file browser', '');
 
@@ -67,5 +68,14 @@ function newCmd( destination, options ){
 			});
 		}
 		if( options.browse )project.openInFileBrowser(function(){});
+		if( options.connectServer !== undefined ){
+			var port = options.connectServer;
+			if( port === true ){
+				port = 3000;
+			}
+			hooks.initServer( destination, {port: port}, function( err, app ){
+				console.log('Static server running at:'.red+' http://0.0.0.0:'+port);
+			});
+		}
 	});
 }

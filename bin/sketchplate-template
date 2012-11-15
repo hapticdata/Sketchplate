@@ -7,46 +7,57 @@ var program = require('commander'),
 	path = require('path'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
-	hooks = require('../lib/hooks'),
+	hooksCli = require('./hooks-cli'),
 	config = require('../lib/config').getUserConfig(),
 	plate;
 
 
-
 program.option('-l, --list', 'List all sketchplate templates');
 
-program
-	.command('add [name]')
-	.description('add a new template')
-	.action(function( name, options ){
-		//if a name wasnt provided, ask for it
-		if( name === undefined ){
-			program.prompt("Name: ", function( _name ){
-				name = _name;
-				setDescription();
-			});
-		} else {
-			setDescription();
-		}
 
-		function setDescription(){
-			program.prompt("Description: ", function( description ){
-				sketchplate.createTemplate( config, {
-					name: name,
-					description: description
-				}, function( err, directory ){
-					hooks.openInEditor( config.editorArgs, directory, function( err ){
-						process.exit();
+hooksCli.appendHelp(
+	program
+		.command('add [name]') 
+)	.description('add a new template')
+	.action(function( name, options ){
+
+		var waterfall = [
+			function collectName( next ){
+				//if a name wasnt provided, ask for it
+				if( name === undefined ){
+					program.prompt("Name: ", function( _name ){
+						name = _name;
+						next();
 					});
+				} else {
+					next();
+				}
+			},
+			function collectDescription( next ){
+				program.prompt("Description: ", function( description ){
+					sketchplate.createTemplate( config, {
+						name: name,
+						description: description
+					}, next);
 				});
-			});
-		}
+			}
+		];
+
+		hooksCli.addToWaterfall( options, waterfall );
+
+		async.waterfall( waterfall, function( err ){
+			if( err ){
+				throw err;
+			}
+		});
+
 	});
 
-program
-	.command('edit [name]')
-	.description('edit an existing template')
-	.option('-b, --browse', 'Open the templates directory', undefined)
+
+hooksCli.appendHelp(
+	program
+		.command('edit [name]')
+)	.description('edit an existing template')
 	.action(function( name, options ){
 		var tmplDir = config.templatesPath;
 		name = name || config.template;
@@ -54,12 +65,16 @@ program
 		if( !fs.existsSync(tmplDir) ){
 			throw Error("The template "+name+" does not exist");
 		}
-		hooks.openInEditor( config.editors[ config.editor ], tmplDir, function( err ){
-			process.exit();
+		
+		var waterfall = [function( next ){
+			next( null, tmplDir );
+		}];
+		hooksCli.addToWaterfall( options, waterfall );
+		async.waterfall( waterfall, function( err ){
+			if( err ){
+				throw err;
+			}
 		});
-		if( options.browse ){
-			hooks.openInFileBrowser( tmplDir );
-		}
 	});
 
 program
