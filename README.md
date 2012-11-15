@@ -1,7 +1,7 @@
 # Sketchplate
 ##pre-project tooling for getting started quick
 
-Sketchplate is a system for quickly generating projects with collections of libraries and processes that you use frequently. It provides tools to maintain various templates, retrieve and update your favorite libraries, quickly copy your template into a specified folder and launch it in your favorite editor. It will be packaged on [NPM](http://npmjs.org) for [Node.js](http://nodejs.org).
+Sketchplate is a system for quickly generating projects with the collections of libraries and processes that you use frequently. It provides tools to maintain various templates, retrieve and update your favorite libraries, quickly copy your template into a specified folder and launch it in your favorite editor. It is published on [NPM](http://npmjs.org) for [Node.js](http://nodejs.org). Sketchplate currently supports OSX. Support for Linux and Windows is in future plans.
 
 There are currently 3 main components to sketchplate:
 
