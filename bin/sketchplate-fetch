@@ -1,0 +1,91 @@
+#!/usr/bin/env node
+
+require('colors');
+
+var program = require('commander'),
+	async = require('async'),
+	path = require('path'),
+	fs = require('fs'),
+	sketchplate = require('../lib/sketchplate'),
+	hooks = require('../lib/hooks'),
+	hooksCli = require('./hooks-cli'),
+	config = require('../lib/config').getUserConfig(),
+	plate;
+
+
+
+program
+	.command('add')
+	.description('add fetched resources to your project')
+	.option('-i, --interactive', 'fetch libraries in interactive mode')
+	.action(function( options ){
+		console.log( arguments );
+		var fetches = require( require('../lib/config').defaultFetch );
+		var names = [];
+		Array.prototype.forEach.call( arguments, function( arg ){
+			if( arg === undefined ){
+				return ;
+			}
+			if( arg.options ){
+				options = arg;
+			} else {
+				names.push( arg );
+			}
+		});
+
+		console.log('names: ', names);
+
+		var waterfall = [];
+		if( options.interactive ){
+			waterfall.push(function initInteractive( next ){
+				console.log('interactive mode');
+				var i =0;
+				var prop = "";
+				for( prop in fetches ){
+					names.push( prop );
+				}
+				program.choose( names, function( i ){
+					var chosen = fetches[ names[i] ];
+					console.log('chosen ', chosen);
+					next( null, chosen );
+				});
+			});
+			waterfall.push( defineTargets );
+			async.waterfall( waterfall, exit );
+		} else {
+			async.forEach( names, function( name, next ){
+				var resource = fetches[ name ];	
+				defineTargets( resource, next );
+			}, exit);
+		}
+		function defineTargets( resource, next ){
+			console.log('resource: ', resource);
+			var targets = [];
+			if( typeof resource.target === 'object'){
+				names = [];
+				for( var prop in resource.target ){
+					names.push( prop );
+				}
+				console.log('names: ', names);
+				async.forEach( names, function( name, val, next ){
+					program.prompt("destination for \""+name+"\": ", function( destination ){
+						var to = path.resolve( destination );
+						console.log( "download it to: "+to );
+						targets.push( to );
+						next( null );
+					}, next);
+				});
+			}
+		}
+		
+		function exit( err ){
+			if( err ){
+				throw err;
+			}
+			process.exit();
+		}
+
+	});
+
+console.log( 'argv: ', process.argv );
+program.parse( process.argv );

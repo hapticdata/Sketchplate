@@ -1,0 +1,88 @@
+{
+	"async": {
+		"file": "https://raw.github.com/caolan/async/master/lib/async.js"
+	},
+	"jquery": {
+		"file": "http://code.jquery.com/jquery.min.js"
+	},
+	"processing.js 1.4.1.min": {
+		"file": "http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"
+	},
+	"requirejs-jade": {
+		"file": "https://raw.github.com/rocketlabsdev/require-jade/master/jade.js"
+	},
+	"rsvp": {
+		"file": "https://raw.github.com/tildeio/rsvp.js/master/browser/rsvp.js"
+	},
+	"three": {
+		"file":"https://raw.github.com/mrdoob/three.js/master/build/three.js"
+	},
+	"xrayquire": {
+		"file": "https://raw.github.com/requirejs/xrayquire/master/xrayquire.js"
+	},
+	"html5_boilerplate": {
+		"zip": "https://github.com/h5bp/html5-boilerplate/zipball/master",
+		"targets": {
+			"index.html" : "index.html",
+			"404.html": "404.html",
+			"robots.txt": "robots.txt",
+			"humans.txt": "humans.txt",
+			"js": "javascripts",
+			"css": "stylesheets"
+		}
+	},
+	"porthole": {
+		"zip": "https://github.com/ternarylabs/porthole/zipball/master"
+	},
+	"toxiclibsjs": {
+		"zip": "https://github.com/hapticdata/toxiclibsjs/zipball/master",
+		"target": {
+			"lib/toxi": "toxi"
+		}
+	},
+	"twitter_bootstrap": {
+		"zip": "http://twitter.github.com/bootstrap/assets/bootstrap.zip",
+		"target": {
+			"js/" : "javascripts/bootstrap",
+			"less/": "less/boostrap"
+		}
+	},
+	"modernizr": {
+		"file": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
+		"target": "modernizr.js"
+	},
+	"datgui": {
+		"clone": "https://code.google.com/p/dat-gui/",
+		"target": {
+			"src/dat": "dat"
+		}
+	},
+	"require": {
+		"file": "https://raw.github.com/jrburke/requirejs/master/require.js",
+		"target": "require.js"
+	},
+	"domReady": {
+		"file": "https://raw.github.com/requirejs/domReady/master/domReady.js",
+		"target": "domReady.js"
+	},
+	"text": {
+		"file": "https://raw.github.com/requirejs/text/master/text.js",
+		"target": "text.js"
+	},
+	"d3": {
+		"file": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
+		"target": "d3.js"
+	},
+	"Stats": {
+		"file": "https://raw.github.com/mrdoob/stats.js/master/src/Stats.js",
+		"target": "Stats.js"
+	},
+	"Backbone": {
+		"file": "https://raw.github.com/documentcloud/backbone/master/backbone.js",
+		"target": "backbone.js"
+	},
+	"underscore": {
+		"file": "https://raw.github.com/documentcloud/underscore/master/underscore.js",
+		"target": "underscore.js"
+	}
+}
