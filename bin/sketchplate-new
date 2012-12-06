@@ -29,7 +29,7 @@ newCmd( location, program );
 function newCmd( destination, options ){
 	if( typeof destination !== 'string' ){
 		//if its really the options object
-		if( destination.template !== undefined ){
+		if( destination && destination.template !== undefined ){
 			options = destination;
 		} else {
 			options = {};
