@@ -20,7 +20,7 @@ program
 	.option('-i, --interactive', 'fetch libraries in interactive mode')
 	.action(function( options ){
 		console.log( arguments );
-		var fetches = require( require('../lib/config').defaultFetch );
+		var fetches = require( require('../lib/config').userFetch );
 		var names = [];
 		Array.prototype.forEach.call( arguments, function( arg ){
 			if( arg === undefined ){
@@ -34,49 +34,103 @@ program
 		});
 
 		console.log('names: ', names);
-
 		var waterfall = [];
+		//if names were provided and no interactive mode
+		//pass them on to defineTargets
+		if( names.length > 0 && !options.interactive ){
+			waterfall.push(function( next ){
+				next( null, names );
+			});
+		}	
 		if( options.interactive ){
 			waterfall.push(function initInteractive( next ){
-				console.log('interactive mode');
-				var i =0;
-				var prop = "";
-				for( prop in fetches ){
-					names.push( prop );
-				}
-				program.choose( names, function( i ){
-					var chosen = fetches[ names[i] ];
-					console.log('chosen ', chosen);
-					next( null, chosen );
+				var list = Object.keys( fetches ).sort();
+				program.choose( list, function( i ){
+					names.push( list[i] );
+					next( null, names );
 				});
 			});
-			waterfall.push( defineTargets );
-			async.waterfall( waterfall, exit );
-		} else {
-			async.forEach( names, function( name, next ){
-				var resource = fetches[ name ];	
-				defineTargets( resource, next );
-			}, exit);
 		}
-		function defineTargets( resource, next ){
-			console.log('resource: ', resource);
-			var targets = [];
-			if( typeof resource.target === 'object'){
-				names = [];
-				for( var prop in resource.target ){
-					names.push( prop );
-				}
-				console.log('names: ', names);
-				async.forEach( names, function( name, val, next ){
-					program.prompt("destination for \""+name+"\": ", function( destination ){
-						var to = path.resolve( destination );
-						console.log( "download it to: "+to );
-						targets.push( to );
-						next( null );
-					}, next);
+
+		//now we have 1 or more names,
+		waterfall.push(function targetsForEach( names, next ){
+			// 1 by 1 ask for targets
+			var series = [];
+			names.forEach(function( name ){
+				series.push(function( next ){
+					//prompt for their targets
+					defineTargets( name, next);
 				});
+			});
+			async.series( series, next );
+		});
+		//now we have targets for every resource,
+		//fetch each one
+		waterfall.push(function fetchEach( resources, next){
+			var series = [];
+			resources.forEach(function( resource ){
+				series.push(function( next ){
+					sketchplate.fetch( resource, function( err ){
+						next( err );
+					});
+				});
+			});
+			async.series( series, next );
+		});
+
+
+		//KICK IT OFF
+		///////////////////////
+		async.waterfall( waterfall, exit );
+		//////////////////////
+
+		//once the resource has been chosen
+		//define where it should go
+		function defineTargets( name, callback ){
+			var resource = fetches[name];
+			var targets = {};
+			var series = [];
+			if( typeof resource.target === 'object'){
+				//for every name create a function to prompt for its destination
+				Object.keys( resource.target ).forEach(function( src ){
+					series.push(function( next ){
+						//prompt for destination for every target
+						program.prompt("destination for \""+src+"\": ", function( destination ){
+							var to = path.resolve( destination );
+							//add this destination to the target
+							targets[src] = to;
+							next( null );
+						});
+					});
+				});
+				async.series( series, function( err ){
+					//return a complete fetch object by adding targets to it
+					resource.target = targets;
+					callback( err, resource);
+				});
+
+			} else {
+				//no target has been specified, act like its one file
+				if( typeof resource.target === 'undefined' || typeof resource.target === 'string' ){
+					var defaultDes = '';
+					if( resource.target ){
+						defaultDes = resource.target;
+					} else if ( resource.file ){
+						defaultDes = resource.file.substr( resource.file.lastIndexOf('/')+1, resource.file.length );
+					}
+
+					program.prompt("destination for \""+name+"\" ("+defaultDes+") : ", function( destination ){
+						if( destination.length === 0 && defaultDes !== '' ){
+							destination = defaultDes;
+						}
+						var to = path.resolve( destination );
+						resource.target = to;
+						callback( null, resource );
+					});
+				}
 			}
 		}
+
 		
 		function exit( err ){
 			if( err ){

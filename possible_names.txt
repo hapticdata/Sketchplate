@@ -1,0 +1,10 @@
+apprentice
+serf
+peon
+intern
+muse
+lackey
+aide
+rascal
+
+#Chili

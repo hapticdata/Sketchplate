@@ -61,9 +61,10 @@ if (!cmd) {
 
 var commands = {
 	fetch: function(){
-		cmd = 'template';
-		args.unshift('fetch');
 		spwn( cmd );
+		/*cmd = 'template';
+		args.unshift('fetch');
+		spwn( cmd );*/
 	},
 	template: function(){
 		spwn( cmd );

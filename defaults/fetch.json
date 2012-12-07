@@ -3,7 +3,7 @@
 		"file": "https://raw.github.com/caolan/async/master/lib/async.js"
 	},
 	"jquery": {
-		"file": "http://code.jquery.com/jquery.min.js"
+		"file": "http://code.jquery.com/jquery.js"
 	},
 	"processing.js 1.4.1.min": {
 		"file": "http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"
@@ -41,7 +41,7 @@
 		}
 	},
 	"twitter_bootstrap": {
-		"zip": "http://twitter.github.com/bootstrap/assets/bootstrap.zip",
+		"zip": "https://github.com/twitter/bootstrap/archive/master.zip",
 		"target": {
 			"js/" : "javascripts/bootstrap",
 			"less/": "less/boostrap"
