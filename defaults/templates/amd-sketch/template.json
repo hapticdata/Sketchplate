@@ -31,7 +31,7 @@
 			"target": "javascripts/vendor/text.js"
 		},
 		"d3": {
-			"file": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
+			"file": "https://raw.github.com/mbostock/d3/master/d3.js",
 			"target": "javascripts/vendor/d3.js"
 		},
 		"toxi": {

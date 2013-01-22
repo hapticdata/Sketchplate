@@ -2,58 +2,32 @@
 	"async": {
 		"file": "https://raw.github.com/caolan/async/master/lib/async.js"
 	},
+    "Backbone": {
+        "file": "https://raw.github.com/documentcloud/backbone/master/backbone.js",
+        "target": "backbone.js"
+    },
 	"jquery": {
 		"file": "http://code.jquery.com/jquery.js"
 	},
+    "domReady": {
+        "file": "https://raw.github.com/requirejs/domReady/master/domReady.js",
+        "target": "domReady.js"
+    },
 	"lodash": {
 		"file": "https://raw.github.com/bestiejs/lodash/v1.0.0-rc.3/lodash.underscore.js",
 		"target": "javascripts/vendor/lodash.js"
-	},
-	"rsvp": {
-		"file": "https://raw.github.com/tildeio/rsvp.js/master/browser/rsvp.js"
-	},
-	"three": {
-		"file":"https://raw.github.com/mrdoob/three.js/master/build/three.js"
-	},
-	"toxiclibsjs": {
-		"zip": "https://github.com/hapticdata/toxiclibsjs/zipball/master",
-		"target": {
-			"lib/toxi": "toxi"
-		}
 	},
 	"modernizr": {
 		"file": "http://modernizr.com/downloads/modernizr-latest.js",
 		"target": "modernizr.js"
 	},
-	"datgui": {
-		"clone": "https://code.google.com/p/dat-gui/",
-		"target": {
-			"src/dat": "dat"
-		}
-	},
 	"require": {
 		"file": "https://raw.github.com/jrburke/requirejs/master/require.js",
 		"target": "require.js"
 	},
-	"domReady": {
-		"file": "https://raw.github.com/requirejs/domReady/master/domReady.js",
-		"target": "domReady.js"
-	},
 	"text": {
 		"file": "https://raw.github.com/requirejs/text/master/text.js",
 		"target": "text.js"
-	},
-	"d3": {
-		"file": "https://raw.github.com/mbostock/d3/master/d3.v2.js",
-		"target": "d3.js"
-	},
-	"Stats": {
-		"file": "https://raw.github.com/mrdoob/stats.js/master/src/Stats.js",
-		"target": "Stats.js"
-	},
-	"Backbone": {
-		"file": "https://raw.github.com/documentcloud/backbone/master/backbone.js",
-		"target": "backbone.js"
 	},
 	"underscore": {
 		"file": "https://raw.github.com/documentcloud/underscore/master/underscore.js",

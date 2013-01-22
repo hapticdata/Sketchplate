@@ -40,12 +40,13 @@ hooksCli.appendHelp(
 			}
 		];
 
-		hooksCli.addToWaterfall( options, waterfall );
+		hooksCli.createWaterfall( options, waterfall );
 
 		async.waterfall( waterfall, function( err ){
 			if( err ){
 				throw err;
 			}
+            process.exit();
 		});
 
 	});
@@ -56,6 +57,7 @@ hooksCli.appendHelp(
 		.command('edit [name]')
 )	.description('edit an existing template')
 	.action(function( name, options ){
+        options.editor = true;
 		var tmplDir = config.templatesPath;
 		name = name || config.template;
 		tmplDir += '/'+name;
@@ -66,7 +68,7 @@ hooksCli.appendHelp(
 		var waterfall = [function( next ){
 			next( null, tmplDir );
 		}];
-		hooksCli.addToWaterfall( options, waterfall );
+		hooksCli.createWaterfall( options, waterfall );
 		async.waterfall( waterfall, function( err ){
 			if( err ){
 				throw err;
