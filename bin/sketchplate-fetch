@@ -19,7 +19,7 @@ program
 	.description('add fetched resources to your project')
 	.option('-i, --interactive', 'fetch libraries in interactive mode')
 	.action(function( options ){
-		console.log( arguments );
+		//console.log( arguments );
 		var fetches = require( require('../lib/config').userFetch );
 		var names = [];
 		Array.prototype.forEach.call( arguments, function( arg ){
@@ -33,7 +33,7 @@ program
 			}
 		});
 
-		console.log('names: ', names);
+		//console.log('names: ', names);
 		var waterfall = [];
 		//if names were provided and no interactive mode
 		//pass them on to defineTargets
@@ -141,5 +141,12 @@ program
 
 	});
 
-console.log( 'argv: ', process.argv );
+//console.log( 'argv: ', process.argv );
+program.option('-e, --edit', 'Edit fetch.json in your editor');
 program.parse( process.argv );
+
+if( program.edit || program.args.length === 0 ){
+    hooks.openInEditor( config.editors[ config.editor ], require('../lib/config').userFetch, function( err ){
+
+    });
+}

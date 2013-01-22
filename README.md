@@ -28,7 +28,7 @@ Commands:
 
 -	[new](#new) [options] <location> - create a new project at \<location\> with hooks for [options]
 -	[template](#template) [options] [command] - perform commands on your sketchplate templates
--	[fetch](#fetch) [options] [names…] - perform resource fetches on your templates
+-	[fetch](#fetch) [options] [names…] - perform resource fetches on your projects and templates
 -	[hooks](#hooks) [options] [location] - perform any of the hooks on existing projects
 -	[config](#config) [options] [command] - edit your sketchplate configuration
 
@@ -36,59 +36,65 @@ Commands:
 ##new
 Specify the location for the new project and any combinations of [hooks](#hooks) to perform upon completion
 
-	Usage: sketchplate new [options] <location>
+  Usage: sketchplate-new [options] <location>
 
-	Options:
+  Options:
 
-	-h, --help                 output usage information
-	-t, --template [template]  Create with [template] template
-	-g, --gitinit              Initialize repo after creation
-	-n, --npminstall           Run npm install on the new project
-	-s, --skipeditor           Skip opening project in editor
-	-b, --browse               Open project in file browser
+    -h, --help                 output usage information
+    -b, --browse               Open project in file browser
+    -e, --editor               Launch project in editor "Sublime Text 2 (osx)"
+    -g, --git-init             Initialize a git repository
+    -n, --npm-install          Run npm install
+    -s, --server [port]        Start a static file server with connect on [port]
+    -t, --template [template]  Create with [template] template
 
 
 ##template
 
-	Usage: sketchplate template [options] [command]
+  Usage: sketchplate template [options] [command]
 
-Sketchplate encourages creating your own project templates and comes bundled with one called [amd-sketch](#default-template-amd-sketch).
+  Commands:
 
-	Commands:
+    new [options] [name]
+    create a new template
 
-	add [name]
-	add a new template
-	
-	edit [options] [name]
-	edit an existing template
-	
-	fetch [options] [names…]
-	fetch resources for a template
-	
-	remove <name>
-	remove an existing template
-	
-	set <name>
-	set the default template, currently `amd-sketch`
+    edit [options] [name]
+    edit an existing template
 
-	Options:
+    fetch [options] [names…]
+    fetch resources for a template
 
-	-h, --help  output usage information
-	-l, --list  List all sketchplate templates
+    list
+    list all of the installed templates
+
+    remove <name>
+    remove an existing template
+
+    set <name>
+    set the default template, currently `node-server`
+
+  Options:
+
+    -h, --help  output usage information
 
 ##fetch
 
-	Usage: sketchplate fetch [options] [names…]
+	Usage: sketchplate fetch <command> [names…]
 
-To assist in maintaining templates, a [template.json](./templates/amd-sketch/template.json) is used to describe resources, the retrieval and updating of those resources is automated and **doesn't use any package manager** _([Volo](http://github.com/jrburke/volojs), [Bower](http://github.com/twitter/bower))_.
+To assist in maintaining the dependencies of your templates, a [template.json](./templates/amd-sketch/template.json) is used. There is also a global `fetch.json` which you can use to add resources to any existing project. the retrieval and updating of those resources is automated and **doesn't use any package manager** _([Volo](http://github.com/jrburke/volojs), [Bower](http://github.com/twitter/bower))_.
+Use in an existing project with: `sketchplate fetch add [id1] [id2]` or `-i` for interactive mode.
 
-	Options:
+  Usage: sketchplate fetch [options] [command]
 
-	-h, --help                 output usage information
-	-a, --all                  Fetch new copies of all resources for template
-	-i, --interactive          Fetch resources individually in interactive mode
-	-l, --list                 List the template's fetch resources
-	-t, --template [template]  Fetch resources for [template]
+  Commands:
+
+    add [options]
+    add fetched resources to your project
+
+  Options:
+
+    -h, --help  output usage information
+    -e, --edit  Edit fetch.json in your editor
 
 
 To use, you simply describe where it is, and where you want its contents to go.
