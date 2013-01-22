@@ -67,7 +67,7 @@ describe('fetch', function(){
 		it('should download bootstrap as a zipball', function( done ){
 			this.timeout( 100000 );
 			fetch({
-				"zip": "https://github.com/twitter/bootstrap/zipball/master",
+				"zip": "https://github.com/twitter/bootstrap/archive/master.zip",
 				"excludes": [ "js/tests/", "less/tests/" ],
 				"target": {
 					"js/": tmp + "from-zip/bootstrap/javascripts",
@@ -105,4 +105,17 @@ describe('fetch', function(){
 			});
 		});
 	});
+
+    /*describe("download tweenlite", function(){
+        it('should download tweenlites zip file', function(){
+            fetch({
+                "zip": "http://www.greensock.com/dl/greensock-v12-js.zip",
+                "target": {
+                    "src/" : "javascripts/vendor/tweenlite"
+                }
+            }, function( err ){
+                done( err );
+            });
+        });
+    });*/
 });

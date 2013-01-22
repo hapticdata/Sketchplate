@@ -9,8 +9,7 @@ var program = require('commander'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
 	hooksCli = require('./hooks-cli'),
-	config = require('../lib/config').getUserConfig(),
-	plate;
+	config = require('../lib/config').getUserConfig();
 
 
 hooksCli.appendHelp( program );
@@ -20,7 +19,7 @@ program.on('--help',function(){
 	var l = console.log;
 
 	l();
-	l('  ex:'.cyan+' sketchplate hooks -bgs -c 8080');
+	l('  ex:'.cyan+' sketchplate hooks -ebg -c 8080');
 	l('  run any combination of the options above on current or specified directory'.red);
 	l();
 });
@@ -32,9 +31,9 @@ var waterfall = [
 		next( null, pth );
 	}
 ];
-hooksCli.addToWaterfall( program, waterfall );
+hooksCli.createWaterfall( program, waterfall );
 async.waterfall( waterfall, function( err ){
 	if( err ){
-		throw err;
+		throw err.message;
 	}
 });

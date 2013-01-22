@@ -12,13 +12,10 @@ var program = require('commander'),
 	plate;
 
 
-program.option('-l, --list', 'List all sketchplate templates');
-
-
 hooksCli.appendHelp(
 	program
-		.command('add [name]') 
-)	.description('add a new template')
+		.command('new [name]') 
+)	.description('create a new template')
 	.action(function( name, options ){
 
 		var waterfall = [
@@ -148,11 +145,37 @@ program
 		//fetch only missing
 		plate.fetchMissing( report );
 	});
-/*
+
 program
 	.command('list')
-	.description('list all of the existing templates')
-	.action(function(){});*/
+	.description('list all of the installed templates')
+	.action(function(){
+		console.log("Sketchplate has the following templates installed:");
+		getTemplateListing(function( err, templates ){
+			templates.forEach(function( name, i ){
+				console.log(((i+1)+') ').red+name);
+			});
+		});
+		function getTemplateListing( next ){
+			var dirs = [];
+			//read the templatesPath
+			fs.readdir( config.templatesPath, function( err, files ){
+				//for every file get a stats, collect directories
+				//pass down waterfall once directories are collected
+				async.forEach( files, function( file, cb ){
+					fs.stat( config.templatesPath+'/'+file, function( err, stats){
+						if( !err && stats.isDirectory() ){
+							dirs.push( file );
+						}
+						cb( err );
+					});
+				}, function( err ){
+					//pass directories to next waterfall item
+					next( err, dirs );
+				});
+			});
+		}
+	});
 
 program
 	.command('remove <name>')
@@ -170,7 +193,7 @@ program
 program
 	.command('set <name>')
 	.usage('<name>')
-	.description('set the default template, currently `'+config.template.yellow+'`')
+	.description('set the default template, currently `'+config.template.red+'`')
 	.action(function( name ){
 		config.template = name;
 		config.writeUserConfig();
@@ -178,34 +201,3 @@ program
 
 
 program.parse( process.argv );
-
-//--list
-if( program.list ){
-	console.log("Sketchplate has the following templates installed:");
-	getTemplateListing(function( err, templates ){
-		templates.forEach(function( name, i ){
-			console.log((i+1)+') '+name);
-		});
-	});
-}
-
-
-function getTemplateListing( next ){
-	var dirs = [];
-	//read the templatesPath
-	fs.readdir( config.templatesPath, function( err, files ){
-		//for every file get a stats, collect directories
-		//pass down waterfall once directories are collected
-		async.forEach( files, function( file, cb ){
-			fs.stat( config.templatesPath+'/'+file, function( err, stats){
-				if( !err && stats.isDirectory() ){
-					dirs.push( file );
-				}
-				cb( err );
-			});
-		}, function( err ){
-			//pass directories to next waterfall item
-			next( err, dirs );
-		});
-	});
-}

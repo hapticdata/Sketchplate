@@ -6,20 +6,17 @@ var program = require('commander'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
+    hooksCli = require('./hooks-cli'),
 	config = require('../lib/config').getUserConfig();
 
 
 config.templatesPath = path.normalize( ((config.templatesPath.charAt(0)=='.') ? __dirname + '/' : '') + config.templatesPath );
 
+hooksCli.appendHelp( program );
 //handle the new
 program
 	.usage('[options] <location>')
-	.option('-t, --template [template]', 'Create with [template] template', '')
-	.option('-g, --git-init', 'Initialize repo after creation', '')
-	.option('-n, --npm-install', 'Run npm install on the new project', '')
-	.option('-i, --init-server [port]', 'Start a static file server with connect on [port]', undefined)
-	.option('-s, --skip-editor', 'Skip opening project in editor', '')
-	.option('-b, --browse', 'Open project in file browser', '');
+	.option('-t, --template [template]', 'Create with [template] template', '');
 
 program.parse( process.argv );
 
@@ -47,39 +44,26 @@ function newCmd( destination, options ){
 			console.log( err.message );
 			return;
 		}
-		if ( options.gitInit ) project.initRepo();
-		if( options.npmInstall ) project.npmInstall();
-		if ( !options.skipEditor ){
-			project.openInEditor(function ( err ){
-				if( err ){
-					program.confirm([
-						"Your project was created; ",
-						"but there was an error opening your editor.\n",
-						"Would you like to edit your config.js? ",
-						"(you can do this any time with \"sketchplate config\") "
-					].join(''), function( yes ){
-						if( yes ){
-							hooks.openInFileBrowser( configLocation, function( err ){
-								process.exit();
-							});
-						}
-					});
-				}
-			});
-		}
-		if( options.browse )project.openInFileBrowser(function(){});
-		if( options.changeDir ){
-			console.log("CHANGE DIR");
-			project.changeDirectory(function(){});
-		}
-		if( options.initServer !== undefined ){
-			var port = options.initServer;
-			if( port === true ){
-				port = 3000;
-			}
-			hooks.initServer( destination, {port: port}, function( err, app ){
-				console.log('Serving '.red+destination+' at:'.red+' http://0.0.0.0:'+port);
-			});
-		}
+        var waterfall = [function( cb ){
+            cb( null, destination );
+        }];
+        async.waterfall( hooksCli.createWaterfall( options, waterfall ), function( err, directory ){
+            if( err ){
+                if( err.id === 'editor' ){
+                    program.confirm([
+                        "Your project was created; ",
+                        "but there was an error opening your editor.\n",
+                        "Would you like to edit your config.js? ",
+                        "(you can do this any time with \"sketchplate config\") "
+                    ].join(''), function( yes ){
+                        if( yes ){
+                            hooks.openInFileBrowser( configLocation, function( err ){
+                                process.exit();
+                            });
+                        }
+                    });
+                }
+            }
+        });
 	});
 }
