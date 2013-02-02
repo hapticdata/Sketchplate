@@ -34,7 +34,8 @@ Commands:
 
 
 ##new
-Specify the location for the new project and any combinations of [hooks](#hooks) to perform upon completion
+Specify the location for the new project and any combinations of [hooks](#hooks) to perform upon completion.
+*In this example the user has their editor set up as Sublime Text 2, the current default editor*
 
   Usage: sketchplate-new [options] <location>
 
@@ -81,8 +82,8 @@ Specify the location for the new project and any combinations of [hooks](#hooks)
 
 	Usage: sketchplate fetch <command> [names…]
 
-To assist in maintaining the dependencies of your templates, a [template.json](./templates/amd-sketch/template.json) is used. There is also a global `fetch.json` which you can use to add resources to any existing project. the retrieval and updating of those resources is automated and **doesn't use any package manager** _([Volo](http://github.com/jrburke/volojs), [Bower](http://github.com/twitter/bower))_.
-Use in an existing project with: `sketchplate fetch add [id1] [id2]` or `-i` for interactive mode.
+There is a global `fetch.json` which you can use to add urls to resources you wish to keep track of and add to any project. The retrieval and updating of those resources is automated and **doesn't use any package manager** _([Volo](http://github.com/jrburke/volojs), [Bower](http://github.com/twitter/bower))_.
+Use in an existing project with: `sketchplate fetch add [id1] [id2]` or `-i` for interactive mode. To assist in maintaining the dependencies of your templates, a [template.json](./templates/amd-sketch/template.json) is used. The `sketchplate template fetch` command is used to update your templates resources.
 
   Usage: sketchplate fetch [options] [command]
 
@@ -127,25 +128,25 @@ _currently supports **file**,**zip**,**clone**:_
 	}
 
 ##Hooks
-Once a new project has been created there are several things you may want to do immediately. Each of these are available as options on `sketchplate new [options] <location>`
+Once a new project has been created there are several things you may want to do immediately or any future time you are working with that project, I call these Hooks. Each of these are available as options on `sketchplate new [options] <location>` 
+or can be used relative to your current directory with `sketchplate hooks [options]`
 
-	Usage: sketchplate hooks [options]
+    Usage: sketchplate hooks [options]
 
-	Options:
+    Options:
 
-	-h, --help                   output usage information
-	-g, --git-init               Initialize repo after creation
-	-n, --npm-install            Run npm install on the new project
-	-c, --connect-server [port]  Start a static file server with connect on [port]
-	-s, --skip-editor            Skip opening project in editor
-	-b, --browse                 Open project in file browser
+    -h, --help                 output usage information
+    -b, --browse               Open project in file browser
+    -e, --editor               Launch project in editor "Sublime Text 2 (osx)"
+    -g, --git-init             Initialize a git repository
+    -n, --npm-install          Run npm install
+    -s, --server [port]        Start a static file server with connect on [port]
+    -t, --template [template]  Create with [template] template
 
-run any combination of these hooks. These are also available for `sketchplate template add`, `sketchplate template edit` and
-for use with existing projects with `sketchplate hooks`
+run any combination of these hooks. These are also available for `sketchplate new` `sketchplate template add` and `sketchplate template edit`.
+For example, This will open `./www` in you configured editor, initialize a git repository, open the folder in Finder and start serving it on port 8080:
 
-For example, This will initialize a git repository, open the folder in Finder and start serving it on port 8080:
-
-	sketchplate hooks ./www -bgs -c 8080
+	sketchplate hooks ./www -egb -s 8080
 
 ##Config
 
