@@ -83,7 +83,7 @@ Specify the location for the new project and any combinations of [hooks](#hooks)
 	Usage: sketchplate fetch <command> [names…]
 
 There is a global `fetch.json` which you can use to add urls to resources you wish to keep track of and add to any project. The retrieval and updating of those resources is automated and **doesn't use any package manager** _([Volo](http://github.com/jrburke/volojs), [Bower](http://github.com/twitter/bower))_.
-Use in an existing project with: `sketchplate fetch add [id1] [id2]` or `-i` for interactive mode. To assist in maintaining the dependencies of your templates, a [template.json](./templates/amd-sketch/template.json) is used. The `sketchplate template fetch` command is used to update your templates resources.
+Use in an existing project with: `sketchplate fetch add [id1] [id2]` or `-i` for interactive mode. To assist in maintaining the dependencies of your templates, a [template.json](http://github.com/hapticdata/Sketchplate/tree/master/defaults/templates/amd-sketch/template.json) is used. The `sketchplate template fetch` command is used to update your templates resources.
 
   Usage: sketchplate fetch [options] [command]
 
@@ -99,7 +99,7 @@ Use in an existing project with: `sketchplate fetch add [id1] [id2]` or `-i` for
 
 
 To use, you simply describe where it is, and where you want its contents to go.
-_currently supports **file**,**zip**,**clone**:_
+_currently supports **file**, **zip**, **clone**:_
 
 ###Download a file, copy it to the target:
 
@@ -123,7 +123,7 @@ _currently supports **file**,**zip**,**clone**:_
 		"zip": "https://github.com/twitter/bootstrap/zipball/master",
 		"target": {
 			"js/": "js/vendor/bootstrap",
-			"less/": "less/bootstap"
+			"less/": "less/vendor/bootstap"
 		}
 	}
 
@@ -141,7 +141,6 @@ or can be used relative to your current directory with `sketchplate hooks [optio
     -g, --git-init             Initialize a git repository
     -n, --npm-install          Run npm install
     -s, --server [port]        Start a static file server with connect on [port]
-    -t, --template [template]  Create with [template] template
 
 run any combination of these hooks. These are also available for `sketchplate new` `sketchplate template add` and `sketchplate template edit`.
 For example, This will open `./www` in you configured editor, initialize a git repository, open the folder in Finder and start serving it on port 8080:
