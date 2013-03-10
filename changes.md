@@ -1,5 +1,19 @@
 #Changes
 
+##v0.1.7
+-	bugfix `--server` hook now correctly responds with `404` status code when requesting
+nonexistent resources.
+-	minor corrections and improvements in readme
+
+##v0.1.6
+-	added `defaults/fetch.json` installation routine for new users and pre v0.1.6 users
+-	bugfix `hooks` on `sketchplate template` not calling `process.exit()`
+
+##v0.1.5
+-	bugfix [default editor string](https://github.com/hapticdata/Sketchplate/pull/2)
+-	added `sketchplate fetch` for automating resource retrieval in existing projects
+-	made `hooks` consistent in all contexts ( such as between `sketchplate new`, `sketchplate template add`, `sketchplate hooks`)
+
 ##v0.1.4
 -	added `sketchplate hooks` to allow for all of the creation hooks to be used on existing projects
 -	added `initServer` hook to start a node.js + connect static file server for a project'
