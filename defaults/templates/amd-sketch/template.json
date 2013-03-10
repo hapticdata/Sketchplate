@@ -5,7 +5,7 @@
 	"description": "Front-end web-template with an AMD boilerplate and a collection of libraries for computational design.",
 	"fetch": {
 		"modernizr": {
-			"file": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
+			"file": "http://modernizr.com/downloads/modernizr-latest.js",
 			"target": "javascripts/vendor/modernizr.js"
 		},
 		"jquery": {
