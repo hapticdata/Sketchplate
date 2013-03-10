@@ -37,7 +37,7 @@ Commands:
 Specify the location for the new project and any combinations of [hooks](#hooks) to perform upon completion.
 *In this example the user has their editor set up as Sublime Text 2, the current default editor*
 
-  Usage: sketchplate-new [options] <location>
+  Usage: sketchplate new [options] <location>
 
   Options:
 
@@ -143,6 +143,8 @@ or can be used relative to your current directory with `sketchplate hooks [optio
     -s, --server [port]        Start a static file server with connect on [port]
 
 run any combination of these hooks. These are also available for `sketchplate new` `sketchplate template add` and `sketchplate template edit`.
+for use with existing projects with `sketchplate hooks`
+
 For example, This will open `./www` in you configured editor, initialize a git repository, open the folder in Finder and start serving it on port 8080:
 
 	sketchplate hooks ./www -egb -s 8080
@@ -201,6 +203,20 @@ The default template is of minimal structure and is oriented towards web-based c
 * [d3](http://github.com/mbostock/d3)
 * [modernizr](http://modernizr.com)
 
-All of these libraries will be fetched the first time automatically, they are placed in a `javascripts/vendor` folder with a matching [configuration file](https://github.com/hapticdata/Sketchplate/blob/master/templates/amd-sketch/template/javascripts/config.js) ([ more about require.js shim config](http://requirejs.org/docs/api.html#config-shim) ). Only resources that you reference in your project will ever be loaded or included in a built project. The output directory structure is setup to easily be moved into a [node.js](http://nodejs.org) + [express.js](http://expressjs.com) file structure
+All of these libraries will be fetched the first time automatically, they are placed in a `javascripts/vendor` folder with a matching [configuration file](https://github.com/hapticdata/Sketchplate/blob/master/defaults/templates/amd-sketch/template/javascripts/config.js) ([ more about require.js shim config](http://requirejs.org/docs/api.html#config-shim) ). Only resources that you reference in your project will ever be loaded or included in a built project. The output directory structure is setup to easily be moved into a [node.js](http://nodejs.org) + [express.js](http://expressjs.com) file structure
 
-Created by [Kyle Phillips](http://haptic-data.com) on April 8th, 2012
+## Rules of Sketchplate
+
+1. **New projects, fast.** Creating a new project quickly is more important than filling in details. There should be no questions asked when creating a new project. (_Unless you care to use a hook that involves confirmations_)
+1. **Withold opinions.** The root of sketchplate is that you know how you like to work and its likely different than others prescribe. Sketchplate won't tell you how to structure your project or what tools to use and will always emphasize personalization.
+1. **Never leave a mark on a project.** Sketchplate will never place any meta or configuration details into a project (i.e. component.json, Gruntfile.js)
+1. **All projects are equal.** It doesn't matter if you created your project with sketchplate or not, any project / folder will interface the same with sketchplate.
+
+## Roadmap / Contributions
+Contributions are welcome and much-appreciated, here are a list of some of the features anticipated for Sketchplate:
+
+* _Installation of templates via repositories / archives with `fetch`._ I would like to begin being able to share templates between users and have easy installation.
+* _User-contributed hooks_. Currently the hooks system is part of the core library. I anticipate that in the future there will be an installed 'hooks' folder next to the 'templates' folder and there can be user-defined hooks available within sketchplate's options.
+
+
+Sketchplate was initiated by [Kyle Phillips](http://haptic-data.com) on April 8th, 2012
