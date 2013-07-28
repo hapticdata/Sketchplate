@@ -149,6 +149,19 @@ program
 	});
 
 program
+    .command('install <package> [folder]')
+    .description('install a new template')
+    .action(function( pkg, folder ){
+        sketchplate.installTemplate( config, pkg, folder, function(err,status){
+            if( err ){
+                console.log('Sketchplate encountered an error with ' + pkg.red +':\n' + err );
+            } else {
+                console.log('Sketchplate installed ' + pkg.red + ' as template ' + status.target.slice(status.target.lastIndexOf('/')+1,status.target.length).red );
+            }
+        });
+    });
+
+program
 	.command('list')
 	.description('list all of the installed templates')
 	.action(function(){
