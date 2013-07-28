@@ -1,27 +1,37 @@
 {
 	"editor": "Sublime Text 2 (osx)",
 	"editors": {
+		"BBEdit (osx)": [
+			"bbedit",
+			"%path"
+		],
+        "Sublime Text 3 (osx)": [
+			"/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl",
+			"%path"
+        ],
 		"Sublime Text 2 (osx)": [
 			"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl",
+			"%path"
+		],
+		"Sublime Text - in $PATH (run `subl` process)": [
+			"subl",
 			"%path"
 		],
 		"Textmate (osx)": [
 			"mate",
 			"%path"
 		],
-		"BBEdit (osx)": [
-			"bbedit",
+		"Vim": [
+			"vim",
 			"%path"
 		],
-		"WebStorm (osx)": [
-			"/Applications/WebStorm.app/Contents/MacOS/webide",
-			"%path"
+		"Vim - in new terminal (osx)": [
+			"osascript",
+			"-e",
+			"tell application \"Terminal\" to do script \"vim %path\""
 		],
-		"Vim (osx)": [
-			"osascript", "-e","tell application \"Terminal\" to do script \"vim %path\""
-		],
-		"Sublime Text 2 $PATH (subl)": [
-			"subl",
+		"WebStorm": [
+			"wstorm",
 			"%path"
 		]
 	},

@@ -13,7 +13,8 @@ exports.appendHelp = function appendHooksHelp( command ){
         .option('-e, --editor', 'Launch project in editor '+ config.editor.red, '')
 		.option('-g, --git-init', 'Initialize a git repository', '')
 		.option('-n, --npm-install', 'Run npm install', '')
-		.option('-s, --server [port]', 'Start a static file server with connect on [port]', undefined);
+		.option('-s, --server [port]', 'Start a static file server with connect on [port]', undefined)
+        .option('-v, --verbose', 'Display details including server log');
 };
 
 /**
@@ -27,16 +28,6 @@ exports.appendHelp = function appendHooksHelp( command ){
 exports.createWaterfall = function addHooks( options, waterfall ){
     var errors = {};
     var waterfall = waterfall || [];
-	if( options.editor ){
-		waterfall.push(function openInEditor( directory, next ){
-			hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
-                if( err ){
-                    err = { id: 'editor', message: 'failed to launch editor, please check your config' };
-                }
-				next( err, directory );
-			});
-		});
-	}
 	if( options.gitInit ){
 		waterfall.push(function( directory, next ){
 			hooks.initRepo( directory, function( err ){
@@ -74,12 +65,22 @@ exports.createWaterfall = function addHooks( options, waterfall ){
 		}
 		waterfall.push(function( directory, next ){
             try {
-                hooks.initServer( directory, { port: port } );
+                hooks.initServer( directory, { port: port, verbose: options.verbose } );
                 console.log('Serving '.red+directory+' at:'.red+' http://0.0.0.0:'+port);
             } catch( e ){
                 next( {id: 'server', message: 'server failed, port '+ port + ' likely arleady taken'});
             }
 			next( null, directory );
+		});
+	}
+	if( options.editor ){
+		waterfall.push(function openInEditor( directory, next ){
+			hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
+                if( err ){
+                    err = { id: 'editor', message: 'failed to launch editor, please check your config' };
+                }
+				next( err, directory );
+			});
 		});
 	}
     return waterfall;

@@ -22,9 +22,6 @@ describe('fetch', function(){
 					"build": dir+"dat/build"
 				}
 			},{
-				"file": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
-				"target": dir+"modernizr.js"
-			},{
 				"file": "http://code.jquery.com/jquery.js",
 				"target": dir+"jquery.js"
 			},{
@@ -67,7 +64,7 @@ describe('fetch', function(){
 		it('should download bootstrap as a zipball', function( done ){
 			this.timeout( 100000 );
 			fetch({
-				"zip": "https://github.com/twitter/bootstrap/archive/master.zip",
+				"zip": "https://github.com/twbs/bootstrap/archive/master.zip",
 				"excludes": [ "js/tests/", "less/tests/" ],
 				"target": {
 					"js/": tmp + "from-zip/bootstrap/javascripts",
@@ -86,7 +83,7 @@ describe('fetch', function(){
 				if( err ){
 					//this is what we want
 					err = null;
-					
+
 				}
 				done( err );
 			});

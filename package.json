@@ -1,7 +1,7 @@
 {
   "name": "sketchplate",
   "description": "Sketchplate is pre-project tooling for starting projects quickly.",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "author": "Kyle Phillips <kyle@haptic-data.com>",
   "contributors": [
     {
