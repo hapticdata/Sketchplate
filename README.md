@@ -81,6 +81,7 @@ Specify the location for the new project and any combinations of [hooks](#hooks)
 
     -h, --help  output usage information
 
+###template install
 The `sketchplate template` commands help you manage your collection of templates; its 'install` sub-command allows you to install
 any repository or zip archive as a new template, below are several ways to make a template from [html5-boilerplate](http://github.com/h5bp/html5-boilerplate): 
 
