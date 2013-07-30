@@ -68,6 +68,9 @@ Specify the location for the new project and any combinations of [hooks](#hooks)
     list
     list all of the installed templates
 
+    install <package> [folder]
+    install a new template
+
     remove <name>
     remove an existing template
 
@@ -77,6 +80,21 @@ Specify the location for the new project and any combinations of [hooks](#hooks)
   Options:
 
     -h, --help  output usage information
+
+The `sketchplate template` commands help you manage your collection of templates; its 'install` sub-command allows you to install
+any repository or zip archive as a new template, below are several ways to make a template from [html5-boilerplate](http://github.com/h5bp/html5-boilerplate): 
+
+    # fetch by github <user>/<repo>:
+    sketchplate template install h5bp/html5-boilerplate
+
+    # use a specific tag:
+    sketchplate template install h5bp/html5-boilerplate#v4.2.0
+
+    # use a url to a git repository:
+    sketchplate template install https://github.com/h5bp/html5-boilerplate.git
+
+    # use a zip archive, any provide what to name the folder (otherwise this would be named _v4.2.0_):
+    sketchplate template install https://github.com/h5bp/html5-boilerplate/archive/v4.2.0.zip html5-boilerplate
 
 ##fetch
 
