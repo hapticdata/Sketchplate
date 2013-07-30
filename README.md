@@ -234,6 +234,6 @@ All of these libraries will be fetched the first time automatically, they are pl
 Contributions are welcome and much-appreciated, here are a list of some of the features anticipated for Sketchplate:
 
 * _User-contributed hooks_. Currently the hooks system is part of the core library. I anticipate that in the future there will be an installed 'hooks' folder next to the 'templates' folder and there can be user-defined hooks available within sketchplate's options.
-
+* _Template-specific hooks_ sitting along side the `template` folder in a template, there will be a `hooks` folder with template-specific hooks to be called everytime a project is generated with that template. These will be specified in a `hooks` property in the template.json
 
 Sketchplate was initiated by [Kyle Phillips](http://haptic-data.com) on April 8th, 2012
