@@ -101,14 +101,14 @@ Use in an existing project with: `sketchplate fetch add [id1] [id2]` or `-i` for
 To use, you simply describe where it is, and where you want its contents to go.
 _currently supports **file**, **zip**, **clone**:_
 
-###Download a file, copy it to the target:
+####Download a file, copy it to the target:
 
 	{
-		"file": "https://raw.github.com/Modernizr/Modernizr/master/modernizr.js",
-		"target": "js/vendor/modernizr.js"
+		"file": "https://raw.github.com/caolan/async/master/lib/async.js",
+		"target": "js/vendor/async.js"
 	}
 
-###_git clone_ a repository and copy its `src/dat` folder into `js/vendor/dat`:
+####_git clone_ a repository and copy its `src/dat` folder into `js/vendor/dat`:
 
 	{
 		"clone": "https://code.google.com/p/dat-gui/",
@@ -117,7 +117,25 @@ _currently supports **file**, **zip**, **clone**:_
 		}
 	}
 
-###Download a zip, extract it, copy its targets:
+#####_git clone_ a repository, checkout a `tag` and copy its entire contents:
+
+    {
+        "clone": "https://github.com/hapticdata/toxiclibsjs.git",
+        "tag": "v0.1.3",
+        "target": "toxiclibs-v0.1.3"
+    }
+
+#####_git clone_ a repository, checkout a `branch` and copy its targets:
+
+    {
+        "clone": "https://github.com/hapticdata/toxiclibsjs.git",
+        "branch": "feature-color",
+        "target": {
+            "lib/toxi": "js/vendor/toxi"
+        }
+    }
+
+####Download a zip, extract it, copy its targets:
 
 	{
 		"zip": "https://github.com/twitter/bootstrap/zipball/master",
@@ -215,7 +233,6 @@ All of these libraries will be fetched the first time automatically, they are pl
 ## Roadmap / Contributions
 Contributions are welcome and much-appreciated, here are a list of some of the features anticipated for Sketchplate:
 
-* _Installation of templates via repositories / archives with `fetch`._ I would like to begin being able to share templates between users and have easy installation.
 * _User-contributed hooks_. Currently the hooks system is part of the core library. I anticipate that in the future there will be an installed 'hooks' folder next to the 'templates' folder and there can be user-defined hooks available within sketchplate's options.
 
 

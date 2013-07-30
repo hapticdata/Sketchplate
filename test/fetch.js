@@ -74,9 +74,7 @@ describe('fetch', function(){
             fetch({
                 "clone": "https://github.com/hapticdata/toxiclibsjs.git",
                 "branch": "feature-color",
-                "target": {
-                    "lib/toxi": tmp + "from-git/toxi-branch"
-                }
+                "target":  tmp + "from-git/toxi-branch"
             }, done );
         });
 	});
