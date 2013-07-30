@@ -58,6 +58,25 @@ describe('fetch', function(){
 				done( err );
 			});
 		});
+        it('should clone toxiclibsjs and checkout the v0.1.3 tag', function( done ){
+            this.timeout( 100000 );
+            fetch({
+                "clone": "https://github.com/hapticdata/toxiclibsjs.git",
+                "tag": "v0.1.3",
+                "target": {
+                    "lib/toxi": tmp + "from-git/toxi-tag"
+                }
+            }, done );
+        });
+
+        it('should clone toxiclibsjs and checkout the `feature-color` branch', function( done ){
+            this.timeout( 100000 );
+            fetch({
+                "clone": "https://github.com/hapticdata/toxiclibsjs.git",
+                "branch": "feature-color",
+                "target":  tmp + "from-git/toxi-branch"
+            }, done );
+        });
 	});
 
 	describe("#fromZip()", function(){
