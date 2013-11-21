@@ -16,6 +16,7 @@ hooksCli.appendHelp( program );
 //handle the new
 program
 	.usage('[options] <location>')
+    .option('-f, --fetch', 'Update all fetched assets before creating project','')
 	.option('-t, --template [template]', 'Create with [template] template', '');
 
 program.parse( process.argv );
@@ -39,31 +40,45 @@ function newCmd( destination, options ){
 	}
 	//create a sketchplate project
 	var plate = sketchplate.create( config );
-	plate.copyTemplate( destination, function (err, project){
-		if( err ){
-			console.log( err.message );
-			return;
-		}
-        var waterfall = [function( cb ){
-            cb( null, destination );
-        }];
-        async.waterfall( hooksCli.createWaterfall( options, waterfall ), function( err, directory ){
-            if( err ){
-                if( err.id === 'editor' ){
-                    program.confirm([
-                        "Your project was created; ",
-                        "but there was an error opening your editor.\n",
-                        "Would you like to edit your config.js? ",
-                        "(you can do this any time with \"sketchplate config\") "
-                    ].join(''), function( yes ){
-                        if( yes ){
-                            hooks.openInFileBrowser( configLocation, function( err ){
-                                process.exit();
-                            });
-                        }
-                    });
-                }
+
+    async.series([
+        function(callback){
+            if( options.fetch ){
+                plate.fetchAll( callback );
+            } else {
+                callback();
             }
-        });
-	});
+        },
+        function(callback){
+            plate.copyTemplate( destination, callback );
+        },
+        function(callback){
+            var waterfall = [function( cb ){
+                cb( null, destination );
+            }];
+            async.waterfall( hooksCli.createWaterfall( options, waterfall ), function( err, directory ){
+                if( err ){
+                    if( err.id === 'editor' ){
+                        program.confirm([
+                            "Your project was created; ",
+                            "but there was an error opening your editor.\n",
+                            "Would you like to edit your config.js? ",
+                            "(you can do this any time with \"sketchplate config\") "
+                        ].join(''), function( yes ){
+                            if( yes ){
+                                hooks.openInFileBrowser( configLocation, callback );
+                            }
+                        });
+                    }
+                } else {
+                    callback();
+                }
+            });
+        }
+    ], function( err, results ){
+        if( err ){
+            console.log( err );
+        }
+        process.exit(0);
+    });
 }
