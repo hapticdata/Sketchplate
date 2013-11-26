@@ -101,7 +101,7 @@ program
 		}
 		var plate = sketchplate.create( config );
 		if( options.list ){
-			console.log("Template `"+plate.config.template+"` lists the following resources:");
+			console.log("Template `"+plate.config.template.red+"` lists the following resources:");
 			plate.resources.forEach(function( resource, i ){
 				console.log((i+1)+') '+resource.id );
 			});
