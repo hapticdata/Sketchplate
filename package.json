@@ -13,12 +13,13 @@
     "commander": "1.0",
     "wrench": "1.4.0",
     "request": ">=2.9.203",
-    "mkdirp": "~0.3.4",
-    "async": "~0.1.22",
+    "mkdirp": "0.3.5",
+    "async": "0.2.9",
     "adm-zip": "~0.4.2",
     "win-spawn": "1.1.2",
-    "colors": "~0.6.0-1",
-    "connect": "~2.7.0"
+    "colors": "0.6.2",
+    "connect": "2.11.x",
+    "underscore": "~1.5.2"
   },
   "devDependencies": {},
   "keywords": [

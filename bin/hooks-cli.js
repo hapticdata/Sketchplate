@@ -64,13 +64,18 @@ exports.createWaterfall = function addHooks( options, waterfall ){
 			port = 3000;
 		}
 		waterfall.push(function( directory, next ){
-            try {
-                hooks.initServer( directory, { port: port, verbose: options.verbose } );
+            hooks.initServer( directory, {
+                port: port,
+                incrementPortOnError: options.server === true, //if no port was specified keep trying to find an open one
+                verbose: options.verbose
+            }, function( err, app, port ){
+                if( err ){
+                    next( {id: 'server', message: 'server failed on port '.red + port +', with: ' + err.message });
+                    return;
+                }
                 console.log('Serving '.red+directory+' at:'.red+' http://0.0.0.0:'+port);
-            } catch( e ){
-                next( {id: 'server', message: 'server failed, port '+ port + ' likely arleady taken'});
-            }
-			next( null, directory );
+                next( null, directory );
+            });
 		});
 	}
 	if( options.editor ){
@@ -85,3 +90,9 @@ exports.createWaterfall = function addHooks( options, waterfall ){
 	}
     return waterfall;
 };
+
+
+
+var initServer = function( waterfall, opts ){
+
+}

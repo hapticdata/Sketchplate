@@ -140,8 +140,9 @@ _currently supports **file**, **zip**, **clone**:_
 
     {
         "clone": "https://github.com/hapticdata/toxiclibsjs.git",
-        "tag": "v0.1.3",
-        "target": "toxiclibs-v0.1.3"
+        "tag": "v0.2.0",
+        "target": {
+            "lib/toxi": "js/vendor/toxi-v0.2.0"
     }
 
 #####_git clone_ a repository, checkout a `branch` and copy its targets:
