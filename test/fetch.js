@@ -7,7 +7,7 @@ describe('fetch', function(){
 
 	describe('batch', function(){
 		var dir = tmp + 'batch/';
-		it.only('should download all files, including a zip, clone, and file', function( done ){
+		it('should download all files, including a zip, clone, and file', function( done ){
 			this.timeout(0);
 			fetch([{
 				"zip": "https://github.com/hapticdata/toxiclibsjs/zipball/master",
