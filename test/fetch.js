@@ -7,8 +7,8 @@ describe('fetch', function(){
 
 	describe('batch', function(){
 		var dir = tmp + 'batch/';
-		it('should download all files, including a zip, clone, and file', function( done ){
-			this.timeout(100000);
+		it.only('should download all files, including a zip, clone, and file', function( done ){
+			this.timeout(0);
 			fetch([{
 				"zip": "https://github.com/hapticdata/toxiclibsjs/zipball/master",
 				"target": {
@@ -18,7 +18,8 @@ describe('fetch', function(){
 			},{
 				"clone": "https://github.com/Modernizr/Modernizr.git",
 				"target": {
-					"src": dir+"modernizr/"
+					"src": dir+"modernizr/",
+                    "readme.md": dir+"modernizr/"
 				}
 			},{
 				"file": "http://code.jquery.com/jquery.js",
