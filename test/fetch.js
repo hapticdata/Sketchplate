@@ -5,7 +5,7 @@ var fetch = require('../lib/fetch');
 describe('fetch', function(){
 	var tmp = 'test_downloads/';
 
-	describe('batch', function(){
+	describe.skip('batch', function(){
 		var dir = tmp + 'batch/';
 		it('should download all files, including a zip, clone, and file', function( done ){
 			this.timeout(0);
