@@ -58,7 +58,7 @@ describe('fetch', function(){
 				done( err );
 			});
 		});
-        it('should clone toxiclibsjs and checkout the v0.1.3 tag', function( done ){
+        it.only('should clone toxiclibsjs and checkout the v0.1.3 tag', function( done ){
             this.timeout( 100000 );
             fetch({
                 "clone": "https://github.com/hapticdata/toxiclibsjs.git",
