@@ -46,7 +46,7 @@ describe('sketchplate.installTemplate()', function(){
             });
         };
     };
-    describe.only('<pkg>', function(){
+    describe('<pkg>', function(){
         describe('from github <user>/<repo>', function(){
            it('should install from github', makeTest('hapticdata/template-static-grunt'));
         });

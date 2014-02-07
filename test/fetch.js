@@ -5,7 +5,7 @@ var fetch = require('../lib/fetch');
 describe('fetch', function(){
 	var tmp = 'test_downloads/';
 
-	describe.skip('batch', function(){
+	describe('batch', function(){
 		var dir = tmp + 'batch/';
 		it('should download all files, including a zip, clone, and file', function( done ){
 			this.timeout(0);
@@ -58,7 +58,7 @@ describe('fetch', function(){
 				done( err );
 			});
 		});
-        it.only('should clone toxiclibsjs and checkout the v0.1.3 tag', function( done ){
+        it('should clone toxiclibsjs and checkout the v0.1.3 tag', function( done ){
             this.timeout( 100000 );
             fetch({
                 "clone": "https://github.com/hapticdata/toxiclibsjs.git",
