@@ -78,13 +78,14 @@ describe('fetch', function(){
             }, done );
         });
 
-        it.only('should use globs to copy targets of directories and individual files', function(done){
+        it('should use globs to copy targets of directories and individual files', function(done){
             this.timeout( 0 );
             fetch({
                 "clone": "https://github.com/hapticdata/toxiclibsjs.git",
                 "exclude": [
-                    "lib/toxi/geom.js",
-                    "lib/toxi/internals/"
+                    "lib/toxi/geom/Ray2D.js",
+                    "lib/toxi/internals/",
+                    "lib/toxi/geom/**/*",
                 ],
                 "target": {
                     "lib/toxi/**/*": tmp + "from-git/toxi-individual-target",
