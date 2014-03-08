@@ -82,6 +82,10 @@ describe('fetch', function(){
             this.timeout( 0 );
             fetch({
                 "clone": "https://github.com/hapticdata/toxiclibsjs.git",
+                "exclude": [
+                    "lib/toxi/geom.js",
+                    "lib/toxi/internals/"
+                ],
                 "target": {
                     "lib/toxi/**/*": tmp + "from-git/toxi-individual-target",
                     "*.md": tmp + "from-git/toxi-individual-target",
