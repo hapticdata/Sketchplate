@@ -1,5 +1,11 @@
 #Changes
 
+##v0.3.0
+-  added support for file globbing patterns in fetch
+-  added support for `exclude` Array of exclusion globbing patterns in fetch
+-  made all fetch operations at the file-level enabling folder merges, many additional
+patterns and ensuring no accidental deletion of an entire folder.
+
 ##v0.2.1
 -  added `incrementPortOnError` option in `--server` hook, i.e. if port 3000 is in use, try 3001
 -  add `--fetch` to `sketchplate new` command to re-fetch assets
