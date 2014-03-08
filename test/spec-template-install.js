@@ -35,7 +35,7 @@ describe('sketchplate.installTemplate()', function(){
 
     var makeTest = function( str, rename ){
         return function( done ){
-            this.timeout( 100000 );
+            this.timeout( 0 );
             sketchplate.installTemplate(settings, str, rename, function( err, info ){
                 if( err ){
                     console.log( err );
@@ -46,7 +46,7 @@ describe('sketchplate.installTemplate()', function(){
             });
         };
     };
-    describe.only('<pkg>', function(){
+    describe('<pkg>', function(){
         describe('from github <user>/<repo>', function(){
            it('should install from github', makeTest('hapticdata/template-static-grunt'));
         });

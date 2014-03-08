@@ -20,13 +20,17 @@ describe('sketchplate.hooks.initServer()', function(){
             incrementPortOnError: true,
             maxAttempts: 5
         };
+        var attempt = 0;
         async.times( options.maxAttempts, function( n, next ){
             sketchplate.hooks.initServer('./', options, next);
+            attempt++;
         }, function( err, results ){
             assert.equal( err, null );
             assert.equal( results.length, options.maxAttempts );
 
             sketchplate.hooks.initServer('./', options, function( err, app, port ){
+                attempt++;
+                assert.equal( attempt, 6 );
                 assert.notEqual( err, null );
                 done();
             });

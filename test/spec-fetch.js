@@ -8,7 +8,7 @@ describe('fetch', function(){
 	describe('batch', function(){
 		var dir = tmp + 'batch/';
 		it('should download all files, including a zip, clone, and file', function( done ){
-			this.timeout(100000);
+			this.timeout(0);
 			fetch([{
 				"zip": "https://github.com/hapticdata/toxiclibsjs/zipball/master",
 				"target": {
@@ -16,10 +16,10 @@ describe('fetch', function(){
 					"examples/": dir+"toxiclibsjs/examples/"
 				}
 			},{
-				"clone": "https://code.google.com/p/dat-gui/",
+				"clone": "https://github.com/Modernizr/Modernizr.git",
 				"target": {
-					"src/dat": dir+"dat/",
-					"build": dir+"dat/build"
+					"src": dir+"modernizr/",
+                    "readme.md": dir+"modernizr/"
 				}
 			},{
 				"file": "http://code.jquery.com/jquery.js",
@@ -77,7 +77,26 @@ describe('fetch', function(){
                 "target":  tmp + "from-git/toxi-branch"
             }, done );
         });
+
+        it('should use globs to copy targets of directories and individual files', function(done){
+            this.timeout( 0 );
+            fetch({
+                "clone": "https://github.com/hapticdata/toxiclibsjs.git",
+                "exclude": [
+                    "lib/toxi/geom/Ray2D.js",
+                    "lib/toxi/internals/",
+                    "lib/toxi/geom/**/*",
+                ],
+                "target": {
+                    "lib/toxi/**/*": tmp + "from-git/toxi-individual-target",
+                    "*.md": tmp + "from-git/toxi-individual-target",
+                    "package.json": tmp + "from-git/toxi-individual-target/package.json" //<- the destination package.json is optional
+                }
+            }, done);
+
+        });
 	});
+
 
 	describe("#fromZip()", function(){
 		it('should download bootstrap as a zipball', function( done ){

@@ -5,10 +5,10 @@ var sketchplate = require('../lib/sketchplate'),
 
 describe('Creates a new default project', function (){
 
-	var projectLocation = '../test-project';
+	var projectLocation = './test_downloads/test-project';
 	var plate = sketchplate.create(_.defaults({ template: 'amd-sketch' }, config.getUserConfig()));
 
-    describe.only('plate#fetchAll', function(){
+    describe('plate#fetchAll', function(){
         it('should download all fetch-resources', function( done ){
             this.timeout( 120000 );
             var i = 0;
