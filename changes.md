@@ -1,5 +1,21 @@
 #Changes
 
+##v0.2.1
+-  added `incrementPortOnError` option in `--server` hook, i.e. if port 3000 is in use, try 3001
+-  add `--fetch` to `sketchplate new` command to re-fetch assets
+-  bugfix `plate#fetchAll` calling callback for each library
+
+##v0.2.0
+-  added `sketchplate template install` command
+
+##v0.1.9
+-  updated dependencies and tighter version restriction
+-  locked commander.js at v1.0 since v2.0 removed prompts
+
+##v0.1.8
+-  editor processes now inherting `stdin`, works better for Vim
+-  server hook now silent unless `--verbose` option is also used
+
 ##v0.1.7
 -	bugfix `--server` hook now correctly responds with `404` status code when requesting
 nonexistent resources.
