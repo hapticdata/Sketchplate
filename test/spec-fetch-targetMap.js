@@ -1,4 +1,4 @@
-var targetMap = require('../../lib/fetch/createOperationCollection'),
+var targetMap = require('../lib/fetch/createOperationCollection'),
     _ = require('underscore'),
     assert = require('assert');
 

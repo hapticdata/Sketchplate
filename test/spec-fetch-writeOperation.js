@@ -1,9 +1,11 @@
-var targetMap = require('../../lib/fetch/createOperationCollection'),
-    writeOperation = require('../../lib/fetch/writeOperation'),
+var targetMap = require('../lib/fetch/createOperationCollection'),
+    writeOperation = require('../lib/fetch/writeOperation'),
     assert = require('assert'),
+    fs = require('fs'),
     tmp = 'test_target_map/';
 
 
+fs.mkdirSync(tmp);
 
 var origin = './',
     resource;
