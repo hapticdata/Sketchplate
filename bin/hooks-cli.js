@@ -30,9 +30,11 @@ exports.createWaterfall = function addHooks( options, waterfall ){
     var waterfall = waterfall || [];
 	if( options.gitInit ){
 		waterfall.push(function( directory, next ){
-			hooks.initRepo( directory, function( err ){
+			hooks.initRepo( directory, function( err, message ){
                 if( err ){
                     err = { id: 'gitInit', message: 'failed to initialzie repo' };
+                } else {
+                    console.log( message );
                 }
 				next( err, directory);
 			});
