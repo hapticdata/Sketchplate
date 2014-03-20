@@ -101,16 +101,16 @@ program
 		}
 		var plate = sketchplate.create( config );
 		if( options.list ){
-			console.log("Template `"+plate.config.template.red+"` lists the following resources:");
+			console.log("Template `".cyan +plate.config.template+"` lists the following resources:".cyan);
 			plate.resources.forEach(function( resource, i ){
-				console.log((i+1)+') '+resource.id );
+				console.log(((i+1)+') ').cyan+resource.id );
 			});
 		}
 		var report = function( err ){
 			if( err ){
-				console.log( err.message );
+				console.error( err.message.red );
 			} else {
-				console.log("Fetched resources completed");
+				console.log("Fetched resources completed".green);
 			}
 			process.exit();
 		};
@@ -154,9 +154,9 @@ program
     .action(function( pkg, folder ){
         sketchplate.installTemplate( config, pkg, folder, function(err,status){
             if( err ){
-                console.log('Sketchplate encountered an error with ' + pkg.red +':\n' + err );
+                console.error('Sketchplate encountered an error with '.red + pkg +':\n' + err );
             } else {
-                console.log('Sketchplate installed ' + pkg.red + ' as template ' + status.target.slice(status.target.lastIndexOf('/')+1,status.target.length).red );
+                console.log('Sketchplate installed '.green + pkg + ' as template '.green + status.target.slice(status.target.lastIndexOf('/')+1,status.target.length) );
             }
         });
     });
@@ -165,10 +165,10 @@ program
 	.command('list')
 	.description('list all of the installed templates')
 	.action(function(){
-		console.log("Sketchplate has the following templates installed:");
+		console.log("Sketchplate has the following templates installed:".cyan);
 		getTemplateListing(function( err, templates ){
 			templates.forEach(function( name, i ){
-				console.log(((i+1)+') ').red+name);
+				console.log(((i+1)+') ').cyan+name);
 			});
 		});
 		function getTemplateListing( next ){
@@ -208,7 +208,7 @@ program
 program
 	.command('set <name>')
 	.usage('<name>')
-	.description('set the default template, currently `'+config.template.red+'`')
+	.description('set the default template, currently `'+config.template.cyan+'`')
 	.action(function( name ){
 		config.template = name;
 		config.writeUserConfig();

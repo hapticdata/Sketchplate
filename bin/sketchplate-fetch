@@ -3,6 +3,7 @@
 require('colors');
 
 var program = require('commander'),
+    _ = require('underscore'),
 	async = require('async'),
 	path = require('path'),
 	fs = require('fs'),
@@ -140,6 +141,20 @@ program
 		}
 
 	});
+
+
+
+program
+	.command('list')
+	.description('list resources in your fetch.json')
+	.action(function( options ){
+		var fetches = require( require('../lib/config').userFetch );
+        console.log('Sketchplate hast the following fetch processes in `fetch.json`:'.cyan);
+        _.each( fetches, function( ftch, id ){
+            var via = ftch.file ? '(file)  ' : ftch.zip ? '(zip)   ' : ftch.clone ? '(clone) ' : '(invalid)';
+            console.log( via.cyan+ id );
+        });
+    });
 
 //console.log( 'argv: ', process.argv );
 program.option('-e, --edit', 'Edit fetch.json in your editor');

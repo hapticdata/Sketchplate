@@ -41,16 +41,37 @@ function newCmd( destination, options ){
 	//create a sketchplate project
 	var plate = sketchplate.create( config );
 
+    /**
+    * creates a handler for reporting the status of a fetch
+    * @api private
+    */
+    var onFetchProgress = function( err, lib ){ 
+		if( err ){
+            console.error( err.red );
+            return;
+		}
+		console.log( '+\tfetched '.green, lib.id );
+	};
+
     async.series([
         function(callback){
             if( options.fetch ){
-                plate.fetchAll( callback );
+                plate.fetchAll( callback, onFetchProgress );
             } else {
                 callback();
             }
         },
         function(callback){
-            plate.copyTemplate( destination, callback );
+            var onComplete = function( err, project ){
+                if( err ){
+                    callback(err);
+                    return;
+                }
+                console.log('Project created at '.green + project.location);
+                callback( err, project );
+            };
+
+            plate.copyTemplate( destination, onComplete, onFetchProgress);
         },
         function(callback){
             var waterfall = [function( cb ){
