@@ -75,19 +75,24 @@ exports.createWaterfall = function addHooks( options, waterfall ){
                     next( {id: 'server', message: 'server failed on port '.red + port +', with: ' + err.message });
                     return;
                 }
-                console.log('Serving '.red+directory+' at:'.red+' http://0.0.0.0:'+port);
+                console.log('Serving '.cyan+directory+' at:'.cyan+' http://0.0.0.0:'+port);
                 next( null, directory );
             });
 		});
 	}
 	if( options.editor ){
 		waterfall.push(function openInEditor( directory, next ){
-			hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
-                if( err ){
-                    err = { id: 'editor', message: 'failed to launch editor, please check your config' };
-                }
-				next( err, directory );
-			});
+            if( config.editor === 'orion' ){
+                hooks.orion( directory, {} );
+                console.log( 'Orion editor launched, '+'Ctrl+c to stop'.cyan );
+            } else {
+                hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
+                    if( err ){
+                        err = { id: 'editor', message: 'failed to launch editor, please check your config' };
+                    }
+                    next( err, directory );
+                });
+            }
 		});
 	}
     return waterfall;

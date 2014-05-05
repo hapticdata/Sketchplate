@@ -21,7 +21,8 @@
     "connect": "2.11.x",
     "underscore": "~1.5.2",
     "glob": "~3.2.8",
-    "graceful-fs": "~2.0.2"
+    "graceful-fs": "~2.0.2",
+    "orion": "0.0.30"
   },
   "devDependencies": {},
   "keywords": [
