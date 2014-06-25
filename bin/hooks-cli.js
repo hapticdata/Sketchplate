@@ -82,17 +82,12 @@ exports.createWaterfall = function addHooks( options, waterfall ){
 	}
 	if( options.editor ){
 		waterfall.push(function openInEditor( directory, next ){
-            if( config.editor === 'orion' ){
-                hooks.orion( directory, {} );
-                console.log( 'Orion editor launched, '+'Ctrl+c to stop'.cyan );
-            } else {
-                hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
-                    if( err ){
-                        err = { id: 'editor', message: 'failed to launch editor, please check your config' };
-                    }
-                    next( err, directory );
-                });
-            }
+            hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
+                if( err ){
+                    err = { id: 'editor', message: 'failed to launch editor, please check your config' };
+                }
+                next( err, directory );
+            });
 		});
 	}
     return waterfall;
