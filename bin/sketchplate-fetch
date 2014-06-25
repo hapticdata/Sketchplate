@@ -42,7 +42,7 @@ program
 			waterfall.push(function( next ){
 				next( null, names );
 			});
-		}	
+		}
 		if( options.interactive ){
 			waterfall.push(function initInteractive( next ){
 				var list = Object.keys( fetches ).sort();
@@ -91,6 +91,12 @@ program
 			var resource = fetches[name];
 			var targets = {};
 			var series = [];
+            if( !resource ){
+                var err = new Error("Resource \"" + name + "\" does not exist");
+                err.type = "ENOENT";
+                callback( err );
+                return;
+            }
 			if( typeof resource.target === 'object'){
 				//for every name create a function to prompt for its destination
 				Object.keys( resource.target ).forEach(function( src ){
@@ -132,9 +138,12 @@ program
 			}
 		}
 
-		
+
 		function exit( err ){
 			if( err ){
+                if( err.type === 'ENOENT' ){
+                    console.log( err.message.red );
+                }
 				throw err;
 			}
 			process.exit();
