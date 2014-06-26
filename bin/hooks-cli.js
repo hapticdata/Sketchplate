@@ -1,6 +1,7 @@
 
 var hooks = require('../lib/sketchplate').hooks,
-	config = require('../lib/config').getUserConfig();
+	config = require('../lib/config').getUserConfig(),
+    _ = require('underscore');
 
 /**
  * append the hooks-related help to this CLI menu
@@ -11,7 +12,7 @@ exports.appendHelp = function appendHooksHelp( command ){
 	return command
         .option('-b, --browse', 'Open project in file browser', '')
         .option('-e, --editor', 'Launch project in editor '+ config.editor.cyan, '')
-		.option('-g, --git-init', 'Initialize a git repository', '')
+		.option('-g, --git-init [remote]', 'Initialize a git repository with template committed, optionally provide a remote URL', true)
 		.option('-n, --npm-install', 'Run npm install', '')
 		.option('-s, --server [port]', 'Start a static file server with connect on [port]', undefined)
         .option('-v, --verbose', 'Display details including server log');
@@ -27,14 +28,16 @@ exports.appendHelp = function appendHooksHelp( command ){
  */
 exports.createWaterfall = function addHooks( options, waterfall ){
     var errors = {};
-    var waterfall = waterfall || [];
+    waterfall = waterfall || [];
 	if( options.gitInit ){
+        var gitConfig = config.gitInit;
+        var gitInitOptions = _.extend(gitConfig, { remoteAdd: options.gitInit.length > 2, remoteURL: options.gitInit });
 		waterfall.push(function( directory, next ){
-			hooks.initRepo( directory, function( err, message ){
+			hooks.initRepo( directory, gitInitOptions, function( err, actionsPerformed ){
                 if( err ){
                     err = { id: 'gitInit', message: 'failed to initialzie repo' };
                 } else {
-                    console.log( message );
+                    console.log( 'Git performed: '.green + actionsPerformed.join(', ') );
                 }
 				next( err, directory);
 			});
@@ -93,8 +96,3 @@ exports.createWaterfall = function addHooks( options, waterfall ){
     return waterfall;
 };
 
-
-
-var initServer = function( waterfall, opts ){
-
-}
