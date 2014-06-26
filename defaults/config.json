@@ -1,38 +1,46 @@
 {
-	"editor": "Sublime Text 2 (osx)",
+	"editor": "orion",
 	"editors": {
+		"atom": [
+			"atom",
+			"%path%"
+		],
+		"orion": [
+			"node",
+			"%sketchplate%orion.js"
+		],
 		"BBEdit (osx)": [
 			"bbedit",
-			"%path"
+			"%path%"
 		],
-        "Sublime Text 3 (osx)": [
+		"Sublime Text 3 (osx)": [
 			"/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl",
-			"%path"
-        ],
+			"%path%"
+		],
 		"Sublime Text 2 (osx)": [
 			"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl",
-			"%path"
+			"%path%"
 		],
 		"Sublime Text - in $PATH (run `subl` process)": [
 			"subl",
-			"%path"
+			"%path%"
 		],
 		"Textmate (osx)": [
 			"mate",
-			"%path"
+			"%path%"
 		],
 		"Vim": [
 			"vim",
-			"%path"
+			"%path%"
 		],
 		"Vim - in new terminal (osx)": [
 			"osascript",
 			"-e",
-			"tell application \"Terminal\" to do script \"vim %path\""
+			"tell application \"Terminal\" to do script \"vim %path%\""
 		],
 		"WebStorm": [
 			"wstorm",
-			"%path"
+			"%path%"
 		]
 	},
 	"template": "amd-sketch",
