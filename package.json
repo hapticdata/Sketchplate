@@ -1,7 +1,7 @@
 {
   "name": "sketchplate",
   "description": "Sketchplate is pre-project tooling for starting projects quickly.",
-  "version": "0.3.0",
+  "version": "0.3.0b",
   "author": "Kyle Phillips <kyle@haptic-data.com>",
   "contributors": [
     {
@@ -20,7 +20,9 @@
     "colors": "0.6.2",
     "connect": "2.11.x",
     "underscore": "~1.5.2",
-    "glob": "~3.2.8"
+    "glob": "~3.2.8",
+    "graceful-fs": "~2.0.2",
+    "orion": "0.0.30"
   },
   "devDependencies": {},
   "keywords": [

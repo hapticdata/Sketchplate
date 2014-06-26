@@ -10,7 +10,7 @@ var hooks = require('../lib/sketchplate').hooks,
 exports.appendHelp = function appendHooksHelp( command ){
 	return command
         .option('-b, --browse', 'Open project in file browser', '')
-        .option('-e, --editor', 'Launch project in editor '+ config.editor.red, '')
+        .option('-e, --editor', 'Launch project in editor '+ config.editor.cyan, '')
 		.option('-g, --git-init', 'Initialize a git repository', '')
 		.option('-n, --npm-install', 'Run npm install', '')
 		.option('-s, --server [port]', 'Start a static file server with connect on [port]', undefined)
@@ -30,9 +30,11 @@ exports.createWaterfall = function addHooks( options, waterfall ){
     var waterfall = waterfall || [];
 	if( options.gitInit ){
 		waterfall.push(function( directory, next ){
-			hooks.initRepo( directory, function( err ){
+			hooks.initRepo( directory, function( err, message ){
                 if( err ){
                     err = { id: 'gitInit', message: 'failed to initialzie repo' };
+                } else {
+                    console.log( message );
                 }
 				next( err, directory);
 			});
@@ -73,19 +75,19 @@ exports.createWaterfall = function addHooks( options, waterfall ){
                     next( {id: 'server', message: 'server failed on port '.red + port +', with: ' + err.message });
                     return;
                 }
-                console.log('Serving '.red+directory+' at:'.red+' http://0.0.0.0:'+port);
+                console.log('Serving '.cyan+directory+' at:'.cyan+' http://0.0.0.0:'+port);
                 next( null, directory );
             });
 		});
 	}
 	if( options.editor ){
 		waterfall.push(function openInEditor( directory, next ){
-			hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
+            hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
                 if( err ){
                     err = { id: 'editor', message: 'failed to launch editor, please check your config' };
                 }
-				next( err, directory );
-			});
+                next( err, directory );
+            });
 		});
 	}
     return waterfall;

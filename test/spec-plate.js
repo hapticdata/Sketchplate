@@ -1,12 +1,20 @@
 /*global describe, it*/
 var sketchplate = require('../lib/sketchplate'),
     _ = require('underscore'),
-    config = require('../lib/config');
+    config = require('../lib/config'),
+    assert = require('assert');
 
 describe('Creates a new default project', function (){
 
 	var projectLocation = './test_downloads/test-project';
 	var plate = sketchplate.create(_.defaults({ template: 'amd-sketch' }, config.getUserConfig()));
+
+    describe.only('sketchplate.create', function(){
+        it('should be a plate for `amd-sketch` template', function(){
+            assert.equal( typeof plate.copyTemplate, 'function' );
+            assert.equal( typeof plate.templatesPath, 'string' );
+        });
+    });
 
     describe('plate#fetchAll', function(){
         it('should download all fetch-resources', function( done ){

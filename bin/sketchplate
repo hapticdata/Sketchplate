@@ -25,7 +25,7 @@ program
 program.on('--help', function(){
 	var l = console.log;
 	l();
-	l('  Sketchplate'.red+' commands ('.red+'v'+version+''+'):'.red );
+	l('  Sketchplate'.blue+' commands ('.blue+'v'+version+''+'):'.blue );
 	l();
 	l('    config'.cyan+' [options] [command]');
 	l('    alter your configurations for editor and templates');
