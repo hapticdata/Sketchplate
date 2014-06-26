@@ -43,6 +43,14 @@
 			"%path%"
 		]
 	},
+	"gitInit": {
+		"addAll": true,
+		"commit": true,
+		"push": true,
+		"commitMessage": "Initial Import",
+		"remoteName": "origin",
+		"branch": "develop"
+	},
 	"template": "amd-sketch",
 	"templatesPath": "~/.sketchplate/templates"
 }

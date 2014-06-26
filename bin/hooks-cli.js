@@ -33,7 +33,7 @@ exports.createWaterfall = function addHooks( options, waterfall ){
         var gitConfig = config.gitInit;
         var gitInitOptions = _.extend(gitConfig, { remoteAdd: options.gitInit.length > 2, remoteURL: options.gitInit });
 		waterfall.push(function( directory, next ){
-			hooks.initRepo( directory, gitInitOptions, function( err, actionsPerformed ){
+			hooks.gitInit( directory, gitInitOptions, function( err, actionsPerformed ){
                 if( err ){
                     err = { id: 'gitInit', message: 'failed to initialzie repo' };
                 } else {
@@ -85,7 +85,7 @@ exports.createWaterfall = function addHooks( options, waterfall ){
 	}
 	if( options.editor ){
 		waterfall.push(function openInEditor( directory, next ){
-            hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
+            hooks.openInEditor( directory, config.editors[ config.editor ], function( err ){
                 if( err ){
                     err = { id: 'editor', message: 'failed to launch editor, please check your config' };
                 }
