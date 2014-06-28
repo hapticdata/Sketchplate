@@ -18,6 +18,30 @@ exports.appendHelp = function appendHooksHelp( command ){
         .option('-v, --verbose', 'Display details including server log');
 };
 
+
+var hasGitInit = function( options ){
+    if( options.gitInit.length && options.gitInit.length > 1 ){
+        return true;
+    }
+
+    var included = false;
+    if( options.gitInit === ''){
+        options.rawArgs.forEach(function(arg, i){
+            if( arg.indexOf('-') === 0 && arg.indexOf('--') === -1 ){
+                if( arg.indexOf('g') > 0 ){
+                    included = true;
+                }
+            }
+        });
+
+        if (options.rawArgs.indexOf('-g') > -1 || options.rawArgs.indexOf('--git-init') > -1 ){
+            included = true;
+        }
+        return included;
+    }
+    return included;
+};
+
 /**
  * create an array suitable for an async.waterfall
  * @example
@@ -28,15 +52,12 @@ exports.appendHelp = function appendHooksHelp( command ){
  */
 exports.createWaterfall = function addHooks( options, waterfall ){
     //since --git-init could be used without specifying a remote we must look at rawArgs
-    if( options.gitInit === '' && (options.rawArgs.indexOf('-g') > -1 || options.rawArgs.indexOf('--git-init') > -1 ) ){
-        options.gitInit = true;
-    }
     waterfall = waterfall || [];
 
-	if( options.gitInit ){
+	if( hasGitInit(options) ){
         var gitConfig = config.gitInit;
         //remoteURL may end up === true, in which case it will be ignored cause remoteAdd will be false
-        var gitInitOptions = _.extend(gitConfig, { remoteAdd: options.gitInit !== true, remoteURL: options.gitInit });
+        var gitInitOptions = _.extend(gitConfig, { remoteAdd: options.gitInit !== '', remoteURL: options.gitInit });
 		waterfall.push(function( directory, next ){
             var onMessage = function( message ){
                 if( options.verbose ){

@@ -45,7 +45,7 @@ function newCmd( destination, options ){
     * creates a handler for reporting the status of a fetch
     * @api private
     */
-    var onFetchProgress = function( err, lib ){ 
+    var onFetchProgress = function( err, lib ){
 		if( err ){
             console.error( err.red );
             return;
@@ -90,6 +90,8 @@ function newCmd( destination, options ){
                                 hooks.openInFileBrowser( configLocation, callback );
                             }
                         });
+                    } else {
+                        console.log( err.id.red + ": " + err.message.red );
                     }
                 } else {
                     callback();
