@@ -12,7 +12,7 @@ exports.appendHelp = function appendHooksHelp( command ){
 	return command
         .option('-b, --browse', 'Open project in file browser', '')
         .option('-e, --editor', 'Launch project in editor '+ config.editor.cyan, '')
-		.option('-g, --git-init [remote]', 'Initialize a git repository with template committed, optionally provide a remote URL', null)
+		.option('-g, --git-init [remote]', 'Initialize a git repository with template committed, optionally provide a remote URL', '')
 		.option('-n, --npm-install', 'Run npm install', '')
 		.option('-s, --server [port]', 'Start a static file server with connect on [port]', undefined)
         .option('-v, --verbose', 'Display details including server log');
@@ -27,10 +27,15 @@ exports.appendHelp = function appendHooksHelp( command ){
  * @type {Array} array of watefall functions
  */
 exports.createWaterfall = function addHooks( options, waterfall ){
-    var errors = {};
+    //since --git-init could be used without specifying a remote we must look at rawArgs
+    if( options.gitInit === '' && (options.rawArgs.indexOf('-g') > -1 || options.rawArgs.indexOf('--git-init') > -1 ) ){
+        options.gitInit = true;
+    }
     waterfall = waterfall || [];
+
 	if( options.gitInit ){
         var gitConfig = config.gitInit;
+        //remoteURL may end up === true, in which case it will be ignored cause remoteAdd will be false
         var gitInitOptions = _.extend(gitConfig, { remoteAdd: options.gitInit !== true, remoteURL: options.gitInit });
 		waterfall.push(function( directory, next ){
             var onMessage = function( message ){
