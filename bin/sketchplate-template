@@ -169,9 +169,10 @@ program
             if( err ){
                 console.error('Sketchplate encountered an error with '.red + pkg +':\n' + err );
             } else {
-                console.log('Sketchplate installed '.green + pkg + ' as template '.green + status.target.slice(status.target.lastIndexOf('/')+1,status.target.length) );
+                console.log('installed '.green + pkg + ' as template '.green + status.target.slice(status.target.lastIndexOf('/')+1,status.target.length) );
             }
         });
+        console.log( 'fetching '.cyan + pkg );
     });
 
 program
