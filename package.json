@@ -10,7 +10,7 @@
     }
   ],
   "scripts": {
-    "postinstall": "node ./bin/install-first-template.js"
+    "postinstall": "node ./bin/postinstall.js"
   },
   "dependencies": {
     "commander": "1.0",
