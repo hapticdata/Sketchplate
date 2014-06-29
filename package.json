@@ -9,6 +9,9 @@
       "email": "kyle@haptic-data.com"
     }
   ],
+  "scripts": {
+    "postinstall": "node ./bin/install-first-template.js"
+  },
   "dependencies": {
     "commander": "1.0",
     "wrench": "1.4.0",
