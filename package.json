@@ -27,7 +27,9 @@
     "graceful-fs": "~2.0.2",
     "orion": "0.0.30"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^1.20.1"
+  },
   "keywords": [
     "sketchplate",
     "boilerplate",
