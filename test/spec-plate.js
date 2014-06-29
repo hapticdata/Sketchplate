@@ -1,13 +1,18 @@
-/*global describe, it*/
+/*global describe, it, after*/
 var sketchplate = require('../lib/sketchplate'),
     _ = require('underscore'),
     config = require('../lib/config'),
-    assert = require('assert');
+    assert = require('assert'),
+    wrench = require('wrench');
 
 describe('Creates a new default project', function (){
 
-	var projectLocation = './test_downloads/test-project';
+	var projectLocation = './test_plate';
 	var plate = sketchplate.create(_.defaults({ template: 'amd-sketch' }, config.getUserConfig()));
+
+    after(function(){
+        wrench.rmdirSyncRecursive(projectLocation);
+    });
 
     describe('sketchplate.create', function(){
         it('should be a plate for `amd-sketch` template', function(){

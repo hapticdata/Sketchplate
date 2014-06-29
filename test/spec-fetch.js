@@ -1,9 +1,16 @@
-/*global describe, it*/
-var fetch = require('../lib/fetch');
+/*global describe, it, after*/
+var fetch = require('../lib/fetch'),
+    wrench = require('wrench');
 
 
 describe('fetch', function(){
-	var tmp = 'test_downloads/';
+	var tmp = 'test_fetch/';
+
+    //delete all the files created at the end
+    after(function(){
+        wrench.rmdirSyncRecursive(tmp);
+    });
+
 
 	describe('batch', function(){
 		var dir = tmp + 'batch/';
