@@ -3,6 +3,7 @@
 require('colors');
 
 var program = require('commander'),
+    _ = require('underscore'),
 	async = require('async'),
 	path = require('path'),
 	fs = require('fs'),
@@ -41,7 +42,7 @@ program
 			waterfall.push(function( next ){
 				next( null, names );
 			});
-		}	
+		}
 		if( options.interactive ){
 			waterfall.push(function initInteractive( next ){
 				var list = Object.keys( fetches ).sort();
@@ -90,6 +91,12 @@ program
 			var resource = fetches[name];
 			var targets = {};
 			var series = [];
+            if( !resource ){
+                var err = new Error("Resource \"" + name + "\" does not exist");
+                err.type = "ENOENT";
+                callback( err );
+                return;
+            }
 			if( typeof resource.target === 'object'){
 				//for every name create a function to prompt for its destination
 				Object.keys( resource.target ).forEach(function( src ){
@@ -131,15 +138,32 @@ program
 			}
 		}
 
-		
+
 		function exit( err ){
 			if( err ){
+                if( err.type === 'ENOENT' ){
+                    console.log( err.message.red );
+                }
 				throw err;
 			}
 			process.exit();
 		}
 
 	});
+
+
+
+program
+	.command('list')
+	.description('list resources in your fetch.json')
+	.action(function( options ){
+		var fetches = require( require('../lib/config').userFetch );
+        console.log('Sketchplate hast the following fetch processes in `fetch.json`:'.cyan);
+        _.each( fetches, function( ftch, id ){
+            var via = ftch.file ? '(file)  ' : ftch.zip ? '(zip)   ' : ftch.clone ? '(clone) ' : '(invalid)';
+            console.log( via.cyan+ id );
+        });
+    });
 
 //console.log( 'argv: ', process.argv );
 program.option('-e, --edit', 'Edit fetch.json in your editor');

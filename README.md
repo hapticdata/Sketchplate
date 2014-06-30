@@ -37,22 +37,24 @@ Commands:
 Specify the location for the new project and any combinations of [hooks](#hooks) to perform upon completion.
 *In this example the user has their editor set up as Sublime Text 2, the current default editor*
 
-  Usage: sketchplate new [options] <location>
+  **Usage:** sketchplate new [options] <location>
 
   Options:
 
     -h, --help                 output usage information
     -b, --browse               Open project in file browser
-    -e, --editor               Launch project in editor "Sublime Text 2 (osx)"
-    -g, --git-init             Initialize a git repository
+    -e, --editor               Launch project in editor orion
+    -g, --git-init [remote]    Initialize a git repository with template committed, optionally provide a remote URL
     -n, --npm-install          Run npm install
     -s, --server [port]        Start a static file server with connect on [port]
+    -v, --verbose              Display details including server log
+    -f, --fetch                Update all fetched assets before creating project
     -t, --template [template]  Create with [template] template
 
 
 ##template
 
-  Usage: sketchplate template [options] [command]
+  **Usage:** sketchplate template [options] [command]
 
   Commands:
 
@@ -79,7 +81,7 @@ Specify the location for the new project and any combinations of [hooks](#hooks)
 
   Options:
 
-    -h, --help  output usage information
+    -h, --help  output usage information    
 
 ###template install
 The `sketchplate template` commands help you manage your collection of templates; its 'install` sub-command allows you to install
@@ -104,7 +106,7 @@ any repository or zip archive as a new template, below are several ways to make 
 There is a global `fetch.json` which you can use to add urls to resources you wish to keep track of and add to any project. The retrieval and updating of those resources is automated and **doesn't use any package manager** _([Volo](http://github.com/jrburke/volojs), [Bower](http://github.com/twitter/bower))_.
 Use in an existing project with: `sketchplate fetch add [id1] [id2]` or `-i` for interactive mode. To assist in maintaining the dependencies of your templates, a [template.json](http://github.com/hapticdata/Sketchplate/tree/master/defaults/templates/amd-sketch/template.json) is used. The `sketchplate template fetch` command is used to update your templates resources.
 
-  Usage: sketchplate fetch [options] [command]
+  **Usage:** sketchplate fetch [options] [command]
 
   Commands:
 
@@ -169,7 +171,7 @@ _currently supports **file**, **zip**, **clone**:_
 Once a new project has been created there are several things you may want to do immediately or any future time you are working with that project, I call these Hooks. Each of these are available as options on `sketchplate new [options] <location>` 
 or can be used relative to your current directory with `sketchplate hooks [options]`
 
-    Usage: sketchplate hooks [options]
+**Usage:** sketchplate hooks [options]
 
     Options:
 
@@ -189,7 +191,7 @@ For example, This will open `./www` in you configured editor, initialize a git r
 
 ##Config
 
-	Usage: sketchplate config [options] [command]
+**Usage:** sketchplate config [options] [command]
 
 	Commands:
 
@@ -210,38 +212,44 @@ Set your editor to one of the following with:
 
 	sketchplate config editor
 
-1. Sublime Text 2 (osx)
-1. Textmate (osx) ([install shell support](http://blog.macromates.com/2011/mate-and-rmate/))
+1. $EDITOR
+1. atom
 1. BBEdit (osx) (select install command-line support on welcome screen)
-1. WebStorm (osx)
-1. Vim (osx)
-1. Sublime Text 2 $PATH (subl) - launch ST2 on a computer where `subl` has been added to $PATH
+1. orion _(bundled with sketchplate)_
+1. Sublime Text 2 (osx)
+1. Sublime Text 3 (osx)
+1. Sublime Text - in $PATH (run `subl` process)
+1. Textmate (osx) ([install shell support](http://blog.macromates.com/2011/mate-and-rmate/))
+1. Vim
+1. Vim - in new terminal (osx)
+1. WebStorm
 
 **Add many other editors easily.** Say you have [coda-cli](http://justinhileman.info/coda-cli/) (or [Command-Line-Coda](https://github.com/egonSchiele/Command-Line-Coda)) installed and want to use Coda as your editor:
 
-1.	launch your config.json in your editor with `sketchplate config`
-1.	add `"coda": ["coda", "%path"]` to the `"editors"`
+1.	launch your config.json in your editor with `sketchplate config -e`
+1.	add `"coda": { "cmd": "coda", "args": ["<%=workspace%>"] }` to the `"editors"`
 1.	change `"editor"` to `"coda"`
 
-You can also edit any of the editors to use additional flags. The token `%path` will be replaced with the project path.
+You can also edit any of the editors to use additional flags. The token `<%= workspace %>` will be replaced with the project path.
+
+Your editors launch configuration has 3 properties:
+
+* `cmd` the command to launch the editor, such as `vim`
+* `args` an array of arguments to send the editor
+* `cwd` the "current working directory" in which the editor should be launched from
+
+Any of these variables can contain underscore `_.template()` variables, it will be provided an object such as:
+
+```
+{
+    workspace: location, //the location of the project
+    sketchplatePath: sketchplatePath, //the location of `sketchplate`
+    process: process //process object, env variables in process.env
+}
+```
 
 
 
-##Default template [amd-sketch](https://github.com/hapticdata/Sketchplate/blob/master/templates/)
-The default template is of minimal structure and is oriented towards web-based computational design sketches. These libraries are assembled together to work with the [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) workflow I prefer. 
-### The default libraries in the template are:
-* [Require.js](http://requirejs.org) - with [domReady](https://github.com/requirejs/domReady) and [text](https://github.com/requirejs/text) plugins bundled
-* [jquery](http://jquery.com)
-* [dat-gui](http://code.google.com/p/dat-gui/)
-* [toxiclibsjs](http://haptic-data.com/toxiclibsjs)
-* [underscore.js](http://documentcloud.github.com/underscore/)
-* [backbone.js](http://documentcloud.github.com/backbone/)
-* [three.js](http://mrdoob.github.com/three.js/)
-* [Stats.js](http://github.com/mrdoob/stats.js/)
-* [d3](http://github.com/mbostock/d3)
-* [modernizr](http://modernizr.com)
-
-All of these libraries will be fetched the first time automatically, they are placed in a `javascripts/vendor` folder with a matching [configuration file](https://github.com/hapticdata/Sketchplate/blob/master/defaults/templates/amd-sketch/template/javascripts/config.js) ([ more about require.js shim config](http://requirejs.org/docs/api.html#config-shim) ). Only resources that you reference in your project will ever be loaded or included in a built project. The output directory structure is setup to easily be moved into a [node.js](http://nodejs.org) + [express.js](http://expressjs.com) file structure
 
 ## Rules of Sketchplate
 

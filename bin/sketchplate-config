@@ -6,23 +6,24 @@ var program = require('commander'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
-	config = require('../lib/config').getUserConfig();
+    config = require('../lib/config'),
+	userConfig = config.getUserConfig();
 
 
 
 
 program
 	.command('editor')
-	.description('setup your editor, currently `'+config.editor.red+'`')
+	.description('setup your editor, currently `'+userConfig.editor.cyan+'`')
 	.option('-i, --interactive','Set up your editor in interactive mode')
 	.action(function( options ){
 		var list = [];
-		for( var prop in config.editors ){
+		for( var prop in userConfig.editors ){
 			list.push( prop );
 		}
 		program.choose( list, function( choice ){
-			config.editor = list[choice];
-			config.writeUserConfig(function( err ){
+			userConfig.editor = list[choice];
+			userConfig.writeUserConfig(function( err ){
 				if( err ) throw err;
 				process.exit();
 			});
@@ -31,10 +32,10 @@ program
 
 program
 	.command('templates <path>')
-	.description('change the directory of your templates, currently `'+config.templatesPath.red+'`')
+	.description('change the directory of your templates, currently `'+userConfig.templatesPath.cyan+'`')
 	.action(function( pth ){
-		config.templatesPath = path.resolve( pth );
-		config.writeUserConfig(function( err ){
+		userConfig.templatesPath = path.resolve( pth );
+		userConfig.writeUserConfig(function( err ){
 			if( err ) throw err;
 			process.exit();
 		});
@@ -44,7 +45,7 @@ program
 	.command('restore')
 	.description('restore your config.json to the default settings')
 	.action(function(){
-		require('../lib/config').restoreUserConfig(function( err ){
+		userConfig.restoreUserConfig(function( err ){
 			if ( err ){
 				throw err;
 			}
@@ -57,7 +58,7 @@ program.option('-e, --edit', 'Edit config.json in your editor');
 program.parse( process.argv );
 
 if( program.edit || program.args.length === 0 ){
-	hooks.openInEditor( config.editors[ config.editor ], require('../lib/config').userConfig, function( err ){
+	hooks.openInEditor( config.userDirectory, userConfig.editors[ userConfig.editor ],  function( err ){
 
 	});
 }

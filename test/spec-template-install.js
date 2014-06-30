@@ -1,7 +1,8 @@
-/*global describe,it*/
+/*global describe,it, after*/
 var assert = require('assert'),
     fs = require('fs'),
-    sketchplate = require('../lib/sketchplate');
+    sketchplate = require('../lib/sketchplate'),
+    wrench = require('wrench');
 
 
 /**
@@ -22,7 +23,7 @@ var assert = require('assert'),
  *
  */
 
-var settings = { templatesPath: './test_downloads' },
+var settings = { templatesPath: './test_template-install' },
     eS;
 
 
@@ -32,6 +33,10 @@ eS = function(tmp){
 
 
 describe('sketchplate.installTemplate()', function(){
+
+    after(function(){
+        wrench.rmdirSyncRecursive(settings.templatesPath);
+    });
 
     var makeTest = function( str, rename ){
         return function( done ){

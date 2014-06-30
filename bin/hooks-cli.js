@@ -1,6 +1,7 @@
 
 var hooks = require('../lib/sketchplate').hooks,
-	config = require('../lib/config').getUserConfig();
+	config = require('../lib/config').getUserConfig(),
+    _ = require('underscore');
 
 /**
  * append the hooks-related help to this CLI menu
@@ -10,11 +11,35 @@ var hooks = require('../lib/sketchplate').hooks,
 exports.appendHelp = function appendHooksHelp( command ){
 	return command
         .option('-b, --browse', 'Open project in file browser', '')
-        .option('-e, --editor', 'Launch project in editor '+ config.editor.red, '')
-		.option('-g, --git-init', 'Initialize a git repository', '')
+        .option('-e, --editor', 'Launch project in editor '+ config.editor.cyan, '')
+		.option('-g, --git-init [remote]', 'Initialize a git repository with template committed, optionally provide a remote URL', '')
 		.option('-n, --npm-install', 'Run npm install', '')
 		.option('-s, --server [port]', 'Start a static file server with connect on [port]', undefined)
         .option('-v, --verbose', 'Display details including server log');
+};
+
+
+var hasGitInit = function( options ){
+    if( options.gitInit.length && options.gitInit.length > 1 ){
+        return true;
+    }
+
+    var included = false;
+    if( options.gitInit === ''){
+        options.rawArgs.forEach(function(arg, i){
+            if( arg.indexOf('-') === 0 && arg.indexOf('--') === -1 ){
+                if( arg.indexOf('g') > 0 ){
+                    included = true;
+                }
+            }
+        });
+
+        if (options.rawArgs.indexOf('-g') > -1 || options.rawArgs.indexOf('--git-init') > -1 ){
+            included = true;
+        }
+        return included;
+    }
+    return included;
 };
 
 /**
@@ -26,16 +51,30 @@ exports.appendHelp = function appendHooksHelp( command ){
  * @type {Array} array of watefall functions
  */
 exports.createWaterfall = function addHooks( options, waterfall ){
-    var errors = {};
-    var waterfall = waterfall || [];
-	if( options.gitInit ){
+    //since --git-init could be used without specifying a remote we must look at rawArgs
+    waterfall = waterfall || [];
+
+	if( hasGitInit(options) ){
+        var gitConfig = config.gitInit;
+        //remoteURL may end up === true, in which case it will be ignored cause remoteAdd will be false
+        var gitInitOptions = _.extend(gitConfig, { remoteAdd: options.gitInit !== '', remoteURL: options.gitInit });
 		waterfall.push(function( directory, next ){
-			hooks.initRepo( directory, function( err ){
+            var onMessage = function( message ){
+                if( options.verbose ){
+                    console.log( message.underline );
+                }
+            };
+
+            var onComplete = function( err, actionsPerformed ){
                 if( err ){
-                    err = { id: 'gitInit', message: 'failed to initialzie repo' };
+                    err = { id: 'gitInit', message: err.red };
+                } else {
+                    console.log( 'Git performed: '.green + actionsPerformed.join(', ') );
                 }
 				next( err, directory);
-			});
+			};
+
+			hooks.gitInit( directory, gitInitOptions, onComplete, onMessage );
 		});
 	}
 	if( options.npmInstall ){
@@ -73,26 +112,21 @@ exports.createWaterfall = function addHooks( options, waterfall ){
                     next( {id: 'server', message: 'server failed on port '.red + port +', with: ' + err.message });
                     return;
                 }
-                console.log('Serving '.red+directory+' at:'.red+' http://0.0.0.0:'+port);
+                console.log('Serving '.cyan+directory+' at:'.cyan+' http://0.0.0.0:'+port);
                 next( null, directory );
             });
 		});
 	}
 	if( options.editor ){
 		waterfall.push(function openInEditor( directory, next ){
-			hooks.openInEditor( config.editors[ config.editor ], directory, function( err ){
+            hooks.openInEditor( directory, config.editors[ config.editor ], function( err ){
                 if( err ){
                     err = { id: 'editor', message: 'failed to launch editor, please check your config' };
                 }
-				next( err, directory );
-			});
+                next( err, directory );
+            });
 		});
 	}
     return waterfall;
 };
 
-
-
-var initServer = function( waterfall, opts ){
-
-}

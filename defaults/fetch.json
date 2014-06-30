@@ -1,13 +1,15 @@
 {
     "async": {
-        "file": "https://raw.github.com/caolan/async/master/lib/async.js"
+        "file": "https://raw.github.com/caolan/async/master/lib/async.js",
+        "target": "async.js"
     },
     "Backbone": {
         "file": "https://raw.github.com/documentcloud/backbone/master/backbone.js",
         "target": "backbone.js"
     },
     "jquery": {
-        "file": "http://code.jquery.com/jquery.js"
+        "file": "http://code.jquery.com/jquery.js",
+        "target": "jquery.js"
     },
     "domReady": {
         "file": "https://raw.github.com/requirejs/domReady/master/domReady.js",

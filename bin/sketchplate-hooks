@@ -19,8 +19,8 @@ program.on('--help',function(){
 	var l = console.log;
 
 	l();
-	l('  ex:'.cyan+' sketchplate hooks -ebg -c 8080');
-	l('  run any combination of the options above on current or specified directory'.red);
+	l('  ex:'.cyan+' sketchplate hooks -ebg -s 8080');
+	l('  run any combination of the options above on current or specified directory'.cyan);
 	l();
 });
 

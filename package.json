@@ -1,7 +1,7 @@
 {
   "name": "sketchplate",
   "description": "Sketchplate is pre-project tooling for starting projects quickly.",
-  "version": "0.3.0b",
+  "version": "0.4.0",
   "author": "Kyle Phillips <kyle@haptic-data.com>",
   "contributors": [
     {
@@ -9,6 +9,9 @@
       "email": "kyle@haptic-data.com"
     }
   ],
+  "scripts": {
+    "postinstall": "node ./bin/postinstall.js"
+  },
   "dependencies": {
     "commander": "1.0",
     "wrench": "1.4.0",
@@ -21,9 +24,12 @@
     "connect": "2.11.x",
     "underscore": "~1.5.2",
     "glob": "~3.2.8",
-    "graceful-fs": "~2.0.2"
+    "graceful-fs": "~2.0.2",
+    "orion": "0.0.30"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^1.20.1"
+  },
   "keywords": [
     "sketchplate",
     "boilerplate",
