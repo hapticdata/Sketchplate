@@ -58,7 +58,7 @@ program.option('-e, --edit', 'Edit config.json in your editor');
 program.parse( process.argv );
 
 if( program.edit || program.args.length === 0 ){
-	hooks.openInEditor( config.userConfig, userConfig.editors[ userConfig.editor ],  function( err ){
+	hooks.openInEditor( config.userDirectory, userConfig.editors[ userConfig.editor ],  function( err ){
 
 	});
 }
