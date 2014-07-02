@@ -107,7 +107,7 @@ exports.createWaterfall = function addHooks( options, waterfall ){
                 port: port,
                 incrementPortOnError: options.server === true, //if no port was specified keep trying to find an open one
                 verbose: options.verbose
-            }, function( err, app, port ){
+            }, function( err, server, app, port ){
                 if( err ){
                     next( {id: 'server', message: 'server failed on port '.red + port +', with: ' + err.message });
                     return;
