@@ -4,160 +4,165 @@ require('colors');
 
 var program = require('commander'),
     _ = require('underscore'),
-	async = require('async'),
-	path = require('path'),
-	fs = require('fs'),
-	sketchplate = require('../lib/sketchplate'),
-	hooks = require('../lib/hooks'),
-	hooksCli = require('./hooks-cli'),
-	config = require('../lib/config').getUserConfig(),
-	plate;
+    async = require('async'),
+    path = require('path'),
+    fs = require('fs'),
+    sketchplate = require('../lib/sketchplate'),
+    hooks = require('../lib/hooks'),
+    hooksCli = require('./hooks-cli'),
+    config = require('../lib/config').getUserConfig(),
+    plate;
 
 
 
 program
-	.command('add')
-	.description('add fetched resources to your project')
-	.option('-i, --interactive', 'fetch libraries in interactive mode')
-	.action(function( options ){
-		//console.log( arguments );
-		var fetches = require( require('../lib/config').userFetch );
-		var names = [];
-		Array.prototype.forEach.call( arguments, function( arg ){
-			if( arg === undefined ){
-				return ;
-			}
-			if( arg.options ){
-				options = arg;
-			} else {
-				names.push( arg );
-			}
-		});
+    .command('get')
+    .description('get fetch resources for your project')
+    .option('-i, --interactive', 'fetch libraries in interactive mode')
+    .action(function( options ){
+        var fetches = require( require('../lib/config').userFetch );
+        //make duplicates of all lowercase for matching
+        for( var id in fetches ){
+            fetches[id].id = id;
+            fetches[id.toLowerCase()] = fetches[id];
+        }
+        var names = [];
+        Array.prototype.forEach.call( arguments, function( arg ){
+            if( arg === undefined ){
+                return ;
+            }
+            if( arg.options ){
+                options = arg;
+            } else {
+                names.push( arg.toLowerCase() );
+            }
+        });
 
-		//console.log('names: ', names);
-		var waterfall = [];
-		//if names were provided and no interactive mode
-		//pass them on to defineTargets
-		if( names.length > 0 && !options.interactive ){
-			waterfall.push(function( next ){
-				next( null, names );
-			});
-		}
-		if( options.interactive ){
-			waterfall.push(function initInteractive( next ){
-				var list = Object.keys( fetches ).sort();
-				program.choose( list, function( i ){
-					names.push( list[i] );
-					next( null, names );
-				});
-			});
-		}
+        //console.log('names: ', names);
+        var waterfall = [];
+        //if names were provided and no interactive mode
+        //pass them on to defineTargets
+        if( names.length > 0 && !options.interactive ){
+            waterfall.push(function( next ){
+                next( null, names );
+            });
+        }
+        if( options.interactive ){
+            waterfall.push(function initInteractive( next ){
+                var list = Object.keys( fetches ).sort();
+                program.choose( list, function( i ){
+                    names.push( list[i] );
+                    next( null, names );
+                });
+            });
+        }
 
-		//now we have 1 or more names,
-		waterfall.push(function targetsForEach( names, next ){
-			// 1 by 1 ask for targets
-			var series = [];
-			names.forEach(function( name ){
-				series.push(function( next ){
-					//prompt for their targets
-					defineTargets( name, next);
-				});
-			});
-			async.series( series, next );
-		});
-		//now we have targets for every resource,
-		//fetch each one
-		waterfall.push(function fetchEach( resources, next){
-			var series = [];
-			resources.forEach(function( resource ){
-				series.push(function( next ){
-					sketchplate.fetch( resource, function( err ){
-						next( err );
-					});
-				});
-			});
-			async.series( series, next );
-		});
+        //now we have 1 or more names,
+        waterfall.push(function targetsForEach( names, next ){
+            // 1 by 1 ask for targets
+            var series = [];
+            names.forEach(function( name ){
+                series.push(function( next ){
+                    //prompt for their targets
+                    defineTargets( name, next);
+                });
+            });
+            async.series( series, next );
+        });
+        //now we have targets for every resource,
+        //fetch each one
+        waterfall.push(function fetchEach( resources, next){
+            var series = [];
+            resources.forEach(function( resource ){
+                series.push(function( next ){
+                    sketchplate.fetch( resource, function( err ){
+                        console.log( '+\tfetched '.green, resource.id );
+                        next( err );
+                    });
+                });
+            });
+            async.series( series, next );
+        });
 
 
-		//KICK IT OFF
-		///////////////////////
-		async.waterfall( waterfall, exit );
-		//////////////////////
+        //KICK IT OFF
+        ///////////////////////
+        async.waterfall( waterfall, exit );
+        //////////////////////
 
-		//once the resource has been chosen
-		//define where it should go
-		function defineTargets( name, callback ){
-			var resource = fetches[name];
-			var targets = {};
-			var series = [];
+        //once the resource has been chosen
+        //define where it should go
+        function defineTargets( name, callback ){
+            var resource = fetches[name];
+            var targets = {};
+            var series = [];
             if( !resource ){
                 var err = new Error("Resource \"" + name + "\" does not exist");
                 err.type = "ENOENT";
                 callback( err );
                 return;
             }
-			if( typeof resource.target === 'object'){
-				//for every name create a function to prompt for its destination
-				Object.keys( resource.target ).forEach(function( src ){
-					series.push(function( next ){
-						//prompt for destination for every target
-						program.prompt("destination for \""+src+"\": ", function( destination ){
-							var to = path.resolve( destination );
-							//add this destination to the target
-							targets[src] = to;
-							next( null );
-						});
-					});
-				});
-				async.series( series, function( err ){
-					//return a complete fetch object by adding targets to it
-					resource.target = targets;
-					callback( err, resource);
-				});
+            if( typeof resource.target === 'object'){
+                //for every name create a function to prompt for its destination
+                Object.keys( resource.target ).forEach(function( src ){
+                    series.push(function( next ){
+                        //prompt for destination for every target
+                        program.prompt("destination for \""+src+"\": ", function( destination ){
+                            var to = path.resolve( destination );
+                            //add this destination to the target
+                            targets[src] = to;
+                            next( null );
+                        });
+                    });
+                });
+                async.series( series, function( err ){
+                    //return a complete fetch object by adding targets to it
+                    resource.target = targets;
+                    callback( err, resource);
+                });
 
-			} else {
-				//no target has been specified, act like its one file
-				if( typeof resource.target === 'undefined' || typeof resource.target === 'string' ){
-					var defaultDes = '';
-					if( resource.target ){
-						defaultDes = resource.target;
-					} else if ( resource.file ){
-						defaultDes = resource.file.substr( resource.file.lastIndexOf('/')+1, resource.file.length );
-					}
+            } else {
+                //no target has been specified, act like its one file
+                if( typeof resource.target === 'undefined' || typeof resource.target === 'string' ){
+                    var defaultDes = '';
+                    if( resource.target ){
+                        defaultDes = resource.target;
+                    } else if ( resource.file ){
+                        defaultDes = resource.file.substr( resource.file.lastIndexOf('/')+1, resource.file.length );
+                    }
 
-					program.prompt("destination for \""+name+"\" ("+defaultDes+") : ", function( destination ){
-						if( destination.length === 0 && defaultDes !== '' ){
-							destination = defaultDes;
-						}
-						var to = path.resolve( destination );
-						resource.target = to;
-						callback( null, resource );
-					});
-				}
-			}
-		}
+                    program.prompt("destination for \""+name+"\" ("+defaultDes+") : ", function( destination ){
+                        if( destination.length === 0 && defaultDes !== '' ){
+                            destination = defaultDes;
+                        }
+                        var to = path.resolve( destination );
+                        resource.target = to;
+                        callback( null, resource );
+                    });
+                }
+            }
+        }
 
 
-		function exit( err ){
-			if( err ){
+        function exit( err ){
+            if( err ){
                 if( err.type === 'ENOENT' ){
                     console.log( err.message.red );
                 }
-				throw err;
-			}
-			process.exit();
-		}
+                throw err;
+            }
+            process.exit();
+        }
 
-	});
+    });
 
 
 
 program
-	.command('list')
-	.description('list resources in your fetch.json')
-	.action(function( options ){
-		var fetches = require( require('../lib/config').userFetch );
+    .command('list')
+    .description('list resources in your fetch.json')
+    .action(function( options ){
+        var fetches = require( require('../lib/config').userFetch );
         console.log('Sketchplate hast the following fetch processes in `fetch.json`:'.cyan);
         _.each( fetches, function( ftch, id ){
             var via = ftch.file ? '(file)  ' : ftch.zip ? '(zip)   ' : ftch.clone ? '(clone) ' : '(invalid)';
