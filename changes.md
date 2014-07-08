@@ -1,5 +1,11 @@
 #Changes
 
+##v0.4.2
+- fix `hooks.npmInstall` not invoking callback if only provided 2 params
+
+##v0.4.1
+- fix port string not appearing correctly in terminal for `sketchplate hooks --server`
+
 ##v0.4.0
 - added [orion](http://eclipse.org/orion/) as a bundled editor, set to default editor
 - changed `hooks.initRepo` to `hooks.gitInit`
