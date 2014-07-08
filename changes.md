@@ -1,5 +1,22 @@
 #Changes
 
+##v0.4.2
+- fix `hooks.npmInstall` not invoking callback if only provided 2 params
+
+##v0.4.1
+- fix port string not appearing correctly in terminal for `sketchplate hooks --server`
+
+##v0.4.0
+- added [orion](http://eclipse.org/orion/) as a bundled editor, set to default editor
+- changed `hooks.initRepo` to `hooks.gitInit`
+- `hooks.gitInit` can now: _initialize a repo, add all files, commit, push to remote_
+- added `sketchplate hooks --git-init git@remote.com/user/repo.git` for doing all `git-init` options
+in one command
+- ability to set `cwd` (current working directory) of editor spawning
+- extended capabilities for composing editor configurations with underscore templates
+- new editor configurations, including [atom](https://atom.io/), and `$EDITOR`
+- using graceful-fs for avoiding `EMFILE` errors
+
 ##v0.3.0
 -  added support for file globbing patterns in fetch
 -  added support for `exclude` Array of exclusion globbing patterns in fetch
