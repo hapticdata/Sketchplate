@@ -1,83 +1,86 @@
 {
-	"editor": "orion",
-	"editors": {
-		"$EDITOR": {
-			"cwd": "<%= workspace %>",
-			"cmd": "<%= process.env.EDITOR %>",
-			"args": [
-				"<%= workspace %>"
-			]
-		},
-		"atom": {
-			"cmd": "atom",
-			"args": [
-				"<%= workspace %>"
-			]
-		},
-		"BBEdit (osx)": {
-			"cmd": "bbedit",
-			"args": [
-				"<%= workspace %>"
-			]
-		},
-		"orion": {
-			"cmd": "node",
-			"args": [
-				"<%= sketchplatePath %>orion.js",
-				"<%= workspace %>"
-			]
-		},
-		"Sublime Text 2 (osx)": {
-			"cmd": "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl",
-			"args": [
-				"<%= workspace %>"
-			]
-		},
-		"Sublime Text 3 (osx)": {
-			"cmd": "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl",
-			"args": [
-				"<%= workspace %>"
-			]
-		},
-		"Sublime Text - in $PATH (run `subl` process)": {
-			"cmd": "subl",
-			"args": [
-				"<%= workspace %>"
-			]
-		},
-		"Textmate (osx)": {
-			"cmd": "mate",
-			"args": [
-				"<%= workspace %>"
-			]
-		},
-		"Vim": {
-			"cwd": "<%= workspace %>",
-			"cmd": "vim"
-		},
-		"Vim - in new terminal (osx)": {
-			"cmd": "osascript",
-			"args": [
-				"-e",
-				"tell application \"Terminal\" to do script \"vim <%= workspace %>\""
-			]
-		},
-		"WebStorm": {
-			"cmd": "wstorm",
-			"args": [
-				"<%= workspace %>"
-			]
-		}
-	},
-	"gitInit": {
-		"addAll": true,
-		"commit": true,
-		"push": true,
-		"commitMessage": "Initial Import",
-		"remoteName": "origin",
-		"branch": "develop"
-	},
-	"template": "amd-sketch",
-	"templatesPath": "~/.sketchplate/templates"
+    "editor": "orion",
+    "editors": {
+        "$EDITOR": {
+            "cwd": "<%= workspaceDir %>",
+            "cmd": "<%= process.env.EDITOR %>",
+            "args": [
+                "<%= workspace %>"
+            ]
+        },
+        "atom": {
+            "cmd": "atom",
+            "args": [
+                "<%= workspace %>"
+            ]
+        },
+        "BBEdit (osx)": {
+            "cmd": "bbedit",
+            "args": [
+                "<%= workspace %>"
+            ]
+        },
+        "orion": {
+            "cmd": "node",
+            "args": [
+                "<%= sketchplatePath %>orion.js",
+                "<%= workspace %>"
+            ]
+        },
+        "Sublime Text 2 (osx)": {
+            "cmd": "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl",
+            "args": [
+                "<%= workspace %>"
+            ]
+        },
+        "Sublime Text 3 (osx)": {
+            "cmd": "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl",
+            "args": [
+                "<%= workspace %>"
+            ]
+        },
+        "Sublime Text - in $PATH (run `subl` process)": {
+            "cmd": "subl",
+            "args": [
+                "<%= workspace %>"
+            ]
+        },
+        "Textmate (osx)": {
+            "cmd": "mate",
+            "args": [
+                "<%= workspace %>"
+            ]
+        },
+        "Vim": {
+            "cwd": "<%= workspaceDir %>",
+            "cmd": "vim",
+            "args": [
+                "<%= workspace %>"
+            ]
+        },
+        "Vim - in new terminal (osx)": {
+            "cmd": "osascript",
+            "args": [
+                "-e",
+                "tell application \"Terminal\" to do script \"vim <%= workspace %>\""
+            ]
+        },
+        "WebStorm": {
+            "cmd": "wstorm",
+            "args": [
+                "<%= workspace %>"
+            ]
+        }
+    },
+    "gitInit": {
+        "addAll": true,
+        "commit": true,
+        "push": true,
+        "commitMessage": "Initial Import",
+        "remoteName": "origin",
+        "branch": "develop"
+    },
+    "template": "amd-sketch",
+    "templatesPath": "~/.sketchplate/templates"
 }
 
