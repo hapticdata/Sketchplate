@@ -4,6 +4,7 @@ require('colors');
 
 var program = require('commander'),
     _ = require('underscore'),
+    userFetch = require('../lib/config').userFetch,
     async = require('async'),
     path = require('path'),
     fs = require('fs'),
@@ -38,7 +39,6 @@ program
             }
         });
 
-        //console.log('names: ', names);
         var waterfall = [];
         //if names were provided and no interactive mode
         //pass them on to defineTargets
@@ -170,12 +170,11 @@ program
         });
     });
 
-//console.log( 'argv: ', process.argv );
 program.option('-e, --edit', 'Edit fetch.json in your editor');
 program.parse( process.argv );
 
 if( program.edit || program.args.length === 0 ){
-    hooks.openInEditor( config.editors[ config.editor ], require('../lib/config').userFetch, function( err ){
+    hooks.openInEditor( userFetch, config.editors[ config.editor ], function( err ){
 
     });
 }
