@@ -1,25 +1,31 @@
 {
     "async": {
+        "www": "https://github.com/caolan/async",
         "file": "https://raw.github.com/caolan/async/master/lib/async.js",
         "target": "async.js"
     },
     "Backbone": {
+        "www": "http://backbonejs.org",
         "file": "https://raw.github.com/documentcloud/backbone/master/backbone.js",
         "target": "backbone.js"
     },
     "jquery": {
+        "www": "http://jquery.org",
         "file": "http://code.jquery.com/jquery.js",
         "target": "jquery.js"
     },
     "domReady": {
+        "www": "https://github.com/requirejs/domReady",
         "file": "https://raw.github.com/requirejs/domReady/master/domReady.js",
         "target": "domReady.js"
     },
     "lodash": {
+        "www": "http://lodash.com",
         "file": "https://raw.github.com/lodash/lodash/master/dist/lodash.underscore.js",
         "target": "javascripts/vendor/lodash.js"
     },
     "lodash-amd": {
+        "www": "http://lodash.com",
         "zip": "https://github.com/lodash/lodash-amd/archive/master.zip",
         "target": {
             "compat": "javascripts/vendor/lodash/compat",
@@ -29,19 +35,24 @@
         }
     },
     "modernizr": {
+        "www": "http://modernizr.com",
         "file": "http://modernizr.com/downloads/modernizr-latest.js",
         "target": "modernizr.js"
     },
-    "require": {
+    "requirejs": {
+        "www": "http://requirejs.org",
         "file": "https://raw.github.com/jrburke/requirejs/master/require.js",
         "target": "require.js"
     },
     "text": {
+        "www": "https://github.com/requirejs/text",
         "file": "https://raw.github.com/requirejs/text/master/text.js",
         "target": "text.js"
     },
     "underscore": {
+        "www": "http://underscorejs.org",
         "file": "https://raw.github.com/documentcloud/underscore/master/underscore.js",
         "target": "underscore.js"
     }
 }
+

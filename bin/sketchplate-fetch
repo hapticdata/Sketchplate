@@ -12,33 +12,52 @@ var program = require('commander'),
     hooks = require('../lib/hooks'),
     hooksCli = require('./hooks-cli'),
     config = require('../lib/config').getUserConfig(),
+    fetches = require( require('../lib/config').userFetch ),
     plate;
 
 
+var normalizeFetches = function(){
+    //make duplicates of all lowercase for matching
+    for( var id in fetches ){
+        fetches[id].id = id;
+        fetches[id.toLowerCase()] = fetches[id];
+    }
+};
+
+
+//parse arguments for names of libs
+var getNormalizedNames = function( args ){
+    var names = [];
+    Array.prototype.forEach.call( args, function( arg ){
+        if( arg === undefined ){
+            return ;
+        }
+        if( !arg.options ){
+            names.push( arg.toLowerCase() );
+        }
+    });
+    return names;
+};
+
+//parse arguments to make sure you have the options object
+var getOptions = function( options, args ){
+    Array.prototype.forEach.call( args, function( arg ){
+        if( arg.options ){
+            options = arg;
+        }
+    });
+    return options;
+};
+    
 
 program
     .command('get')
     .description('get fetch resources for your project')
     .option('-i, --interactive', 'fetch libraries in interactive mode')
     .action(function( options ){
-        var fetches = require( require('../lib/config').userFetch );
-        //make duplicates of all lowercase for matching
-        for( var id in fetches ){
-            fetches[id].id = id;
-            fetches[id.toLowerCase()] = fetches[id];
-        }
-        var names = [];
-        Array.prototype.forEach.call( arguments, function( arg ){
-            if( arg === undefined ){
-                return ;
-            }
-            if( arg.options ){
-                options = arg;
-            } else {
-                names.push( arg.toLowerCase() );
-            }
-        });
-
+        normalizeFetches();
+        names = getNames( arguments );
+        options = getOptions( options, arguments );
         var waterfall = [];
         //if names were provided and no interactive mode
         //pass them on to defineTargets
@@ -160,14 +179,41 @@ program
 
 program
     .command('list')
+    .option('-v, --verbose', 'Verbose logging of configurations')
     .description('list resources in your fetch.json')
     .action(function( options ){
         var fetches = require( require('../lib/config').userFetch );
         console.log('Sketchplate hast the following fetch processes in `fetch.json`:'.cyan);
         _.each( fetches, function( ftch, id ){
-            var via = ftch.file ? '(file)  ' : ftch.zip ? '(zip)   ' : ftch.clone ? '(clone) ' : '(invalid)';
-            console.log( via.cyan+ id );
+            var via = '';
+            via += ftch.www ? '(www)'.blue : '     ';
+            via += (ftch.file ? '(file)  ' : ftch.zip ? '(zip)   ' : ftch.clone ? '(clone) ' : '(invalid)').cyan;
+            console.log( via + id );
+            if( options.verbose ){
+                console.log( JSON.stringify(ftch, null, '  ') );
+            }
         });
+    });
+
+program
+    .command('www <name>')
+    .option('-b, --browse', 'Open this URL in browser')
+    .description('A website url associated with your fetch resource')
+    .action(function( name, options ){
+        normalizeFetches();
+        name = name.toLowerCase();
+        var resource = fetches[name];
+
+        if( !resource ){
+            console.log( ('no "www" found for ' + name).red );
+        } else {
+            console.log( resource.www );
+            if( options.browse ){
+                hooks.openInFileBrowser( resource.www, function( err ){
+                });
+            }
+        }
+
     });
 
 program.option('-e, --edit', 'Edit fetch.json in your editor');
