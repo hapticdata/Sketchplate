@@ -52,7 +52,7 @@ var getOptions = function( options, args ){
 
 program
     .command('get')
-    .description('get fetch resources for your project')
+    .description('fetch resources for your project')
     .option('-i, --interactive', 'fetch libraries in interactive mode')
     .action(function( options ){
         normalizeFetches();
@@ -198,7 +198,7 @@ program
 program
     .command('www <name>')
     .option('-b, --browse', 'Open this URL in browser')
-    .description('A website url associated with your fetch resource')
+    .description('Print and/or browse your fetch resources website url')
     .action(function( name, options ){
         normalizeFetches();
         name = name.toLowerCase();
