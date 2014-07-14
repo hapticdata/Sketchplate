@@ -12,6 +12,7 @@ exports.appendHelp = function appendHooksHelp( command ){
 	return command
         .option('-b, --browse', 'Open project in file browser', '')
         .option('-e, --editor', 'Launch project in editor '+ config.editor.cyan, '')
+        .option('-E, --use-editor [editor]', 'Edit using [editor]')
 		.option('-g, --git-init [remote]', 'Initialize a git repository with template committed, optionally provide a remote URL', '')
 		.option('-n, --npm-install', 'Run npm install', '')
 		.option('-s, --server [port]', 'Start a static file server with connect on [port]', undefined)
@@ -119,7 +120,17 @@ exports.createWaterfall = function addHooks( options, waterfall ){
 	}
 	if( options.editor ){
 		waterfall.push(function openInEditor( directory, next ){
-            hooks.openInEditor( directory, config.editors[ config.editor ], function( err ){
+            var editor = config.editors[ config.editor ];
+            //allow useEditor to override the editor
+            if( options.useEditor ){
+                if( config.editors[options.useEditor] ){
+                    editor = config.editors[ options.useEditor ];
+                } else {
+                    console.log( ('no editor configuration foudn for: ' + options.useEditor ).red );
+                    return;
+                }
+            }
+            hooks.openInEditor( directory, editor, function( err ){
                 if( err ){
                     err = { id: 'editor', message: 'failed to launch editor, please check your config' };
                 }
