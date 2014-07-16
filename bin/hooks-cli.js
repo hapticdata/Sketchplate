@@ -118,10 +118,19 @@ exports.createWaterfall = function addHooks( options, waterfall ){
 		});
 	}
 	if( options.editor ){
+        //dupe all editors with lowercase versions
+        _.each(config.editors, function( val, key ){
+            key = key.toLowerCase();
+            if( !config.editors[key] ) {
+                config.editors[key] = val;
+            }
+        });
+
 		waterfall.push(function openInEditor( directory, next ){
             var editor = config.editors[ config.editor ];
             // if options.editor is a string, use it to override the editor
             if( options.editor !== true ){
+                options.editor = options.editor.toLowerCase();
                 if( config.editors[options.editor] ){
                     editor = config.editors[ options.editor ];
                 } else {
