@@ -11,7 +11,7 @@ var hooks = require('../lib/sketchplate').hooks,
 exports.appendHelp = function appendHooksHelp( command ){
 	return command
         .option('-b, --browse', 'Open project in file browser', '')
-        .option('-e, --editor [editor]', 'Launch project in editor '+ config.editor.cyan, undefined)
+        .option('-e, --editor [editor]', 'Launch project in [editor] default editor set to '+ config.editor.cyan, undefined)
 		.option('-g, --git-init [remote]', 'Initialize a git repository with template committed, optionally provide a remote URL', '')
 		.option('-n, --npm-install', 'Run npm install', '')
 		.option('-s, --server [port]', 'Start a static file server with connect on [port]', undefined)
