@@ -1,5 +1,16 @@
 #Changes
 
+##v0.5.0
+- adds ability to include name of editor to launch one other than default
+- adds `sketchplate fetch www <name>` for launching a web URL for any resource
+- adds increment-port for multiple instances of orion
+- changes `sketchplate fetch add` to `sketchplate fetch get`
+- fix now overwrites existing template when installing with same name
+- adds `workspaceDir` (your projects directory) variable for editor configurations
+- fix `sketchplate.fetch` ignoring dotfiles
+- fix `sketchplate fetch --editor` param signature `0.4.0` changes
+- fix `sketchplate template edit <name>` param signature from `0.4.0` changes
+
 ##v0.4.2
 - fix `hooks.npmInstall` not invoking callback if only provided 2 params
 

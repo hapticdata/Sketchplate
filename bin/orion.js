@@ -24,5 +24,5 @@ function createOrion( path, opts, callback ){
         callback();
     };
 
-    serverHook.tryToMakeServer( editor, { port: 8000 }, onComplete );
+    serverHook.tryToMakeServer( editor, { incrementPortOnError: true, port: 8000 }, onComplete );
 }

@@ -242,7 +242,8 @@ Any of these variables can contain underscore `_.template()` variables, it will 
 
 ```
 {
-    workspace: location, //the location of the project
+    workspace: location, //the absolute path of the project created
+    workspaceDir: dir, //workspace but always a directory, never a file
     sketchplatePath: sketchplatePath, //the location of `sketchplate`
     process: process //process object, env variables in process.env
 }
