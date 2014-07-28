@@ -1,18 +1,28 @@
 var orion = require('orion'),
     browse = require('../lib/sketchplate').hooks.openInFileBrowser,
+    serverHook = require('../lib/hooks/server'),
     http = require('http');
 
-var address = 'http://0.0.0.0:8081';
+var address = 'http://0.0.0.0',
+    port = 8000;
 
 if( process.argv.length > 2 ){
-    createOrion( process.argv[2] );
-    console.log( 'Orion editor launched at ' + address +', '+'Ctrl+c to stop'.cyan );
+    createOrion( process.argv[2], {}, function(){
+        console.log( 'Orion editor launched at ' + address +', '+'Ctrl+c to stop'.cyan );
+    });
 }
 
 function createOrion( path, opts, callback ){
+    callback = callback || function(){};
     opts = opts || {};
 
     var editor = orion({ workspaceDir: path });
-    var server = http.createServer( editor ).listen( 8081 );
-    browse(address);
+
+    var onComplete = function( err, server, editor, port ){
+        address += ':' + port;
+        browse(address);
+        callback();
+    };
+
+    serverHook.tryToMakeServer( editor, { port: 8000 }, onComplete );
 }
