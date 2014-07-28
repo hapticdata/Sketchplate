@@ -51,13 +51,6 @@
                 "<%= workspace %>"
             ]
         },
-        "Unity": {
-            "cmd": "/Applications/Unity/Unity.app/Contents/MacOS/Unity",
-            "args": [
-                "-projectPath",
-                "<%= workspaceDir %>"
-            ]
-        },
         "Vim": {
             "cwd": "<%= workspaceDir %>",
             "cmd": "vim",
