@@ -86,10 +86,13 @@ if( commands[cmd] ){
 
 function spwn( cmd ){
 	// executable
-	var bin = 'sketchplate-' + cmd;
+	var bin = 'sketchplate-' + cmd + '.js';
 	// local
 	var local = path.join(__dirname, bin);
 	if (fs.existsSync(local)) bin = local;
+    //add the file to launch to the beginning of the args
+    //launch with "node sketchplate-{{cmd}}.js"
+    args.unshift(bin);
 	// spawn
-	var proc = spawn(bin, args, { stdio: 'inherit', customFds: [0,1,2] });
+	var proc = spawn('node', args, { stdio: 'inherit', customFds: [0,1,2] });
 }

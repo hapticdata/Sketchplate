@@ -3,7 +3,7 @@ var orion = require('orion'),
     serverHook = require('../lib/hooks/server'),
     http = require('http');
 
-var address = 'http://0.0.0.0',
+var address = 'http://localhost',
     port = 8000;
 
 if( process.argv.length > 2 ){

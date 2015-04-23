@@ -112,7 +112,7 @@ exports.createWaterfall = function addHooks( options, waterfall ){
                     next( {id: 'server', message: 'server failed on port '.red + port +', with: ' + err.message });
                     return;
                 }
-                console.log('Serving '.cyan+directory+' at:'.cyan+' http://0.0.0.0:'+port);
+                console.log('Serving '.cyan+directory+' at:'.cyan+' http://localhost:'+port);
                 next( null, directory );
             });
 		});

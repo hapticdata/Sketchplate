@@ -1,0 +1,104 @@
+var program = require('commander'),
+	async = require('async'),
+	path = require('path'),
+	fs = require('fs'),
+	sketchplate = require('../lib/sketchplate'),
+	hooks = require('../lib/hooks'),
+    hooksCli = require('./hooks-cli'),
+	config = require('../lib/config').getUserConfig();
+
+
+config.templatesPath = path.normalize( ((config.templatesPath.charAt(0)=='.') ? __dirname + '/' : '') + config.templatesPath );
+
+hooksCli.appendHelp( program );
+//handle the new
+program
+	.usage('[options] <location>')
+    .option('-f, --fetch', 'Update all fetched assets before creating project','')
+	.option('-t, --template [template]', 'Create with [template] template', '');
+
+program.parse( process.argv );
+
+var location = program.args.shift();
+newCmd( location, program );
+
+function newCmd( destination, options ){
+	if( typeof destination !== 'string' ){
+		//if its really the options object
+		if( destination && destination.template !== undefined ){
+			options = destination;
+		} else {
+			options = {};
+		}
+		destination = '.';
+	}
+	//destination = program.args.shift() || '.';
+	if( options.template ){
+		config.template = options.template;
+	}
+	//create a sketchplate project
+	var plate = sketchplate.create( config );
+
+    /**
+    * creates a handler for reporting the status of a fetch
+    * @api private
+    */
+    var onFetchProgress = function( err, lib ){
+		if( err ){
+            console.error( err.red );
+            return;
+		}
+		console.log( '+\tfetched '.green, lib.id );
+	};
+
+    async.series([
+        function(callback){
+            if( options.fetch ){
+                plate.fetchAll( callback, onFetchProgress );
+            } else {
+                callback();
+            }
+        },
+        function(callback){
+            var onComplete = function( err, project ){
+                if( err ){
+                    callback(err);
+                    return;
+                }
+                console.log('Project created at '.green + project.location);
+                callback( err, project );
+            };
+
+            plate.copyTemplate( destination, onComplete, onFetchProgress);
+        },
+        function(callback){
+            var waterfall = [function( cb ){
+                cb( null, destination );
+            }];
+            async.waterfall( hooksCli.createWaterfall( options, waterfall ), function( err, directory ){
+                if( err ){
+                    if( err.id === 'editor' ){
+                        program.confirm([
+                            "Your project was created; ",
+                            "but there was an error opening your editor.\n",
+                            "Would you like to edit your config.js? ",
+                            "(you can do this any time with \"sketchplate config\") "
+                        ].join(''), function( yes ){
+                            if( yes ){
+                                hooks.openInFileBrowser( configLocation, callback );
+                            }
+                        });
+                    } else {
+                        console.log( err.id.red + ": " + err.message.red );
+                    }
+                } else {
+                    callback();
+                }
+            });
+        }
+    ], function( err, results ){
+        if( err ){
+            console.log( err );
+        }
+    });
+}
