@@ -15,7 +15,7 @@ var sketchplate = require('../lib/sketchplate'),
 
 
 if(config.isSudo){
-    console.log("DO NOT INSTALL AS SUDO, skipping postinstall, run `sketchplate -h` without sudo".red);
+    console.log('DO NOT INSTALL AS SUDO, skipping postinstall, run `'.red + 'sketchplate -h'.white + '` without sudo'.red);
     return;
 }
 
