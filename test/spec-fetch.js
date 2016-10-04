@@ -31,9 +31,6 @@ describe('fetch', function(){
 			},{
 				"file": "http://code.jquery.com/jquery.js",
 				"target": dir+"jquery.js"
-			},{
-				"file": "https://raw.github.com/caolan/async/master/lib/async.js",
-				"target": dir+"async.js"
 			}], function( err ){
 				done(err);
 			});
@@ -41,11 +38,11 @@ describe('fetch', function(){
 	});
 
 	describe("#fromFile()", function(){
-		it('should download async.js from a file', function( done ){
+		it('should download jquery.js from a file', function( done ){
 			this.timeout(10000);
 			fetch({
-				"file": "https://raw.github.com/caolan/async/master/lib/async.js",
-				"target": tmp + "from-file/async.js"
+				"file": "http://code.jquery.com/jquery-1.10.2.js",
+				"target": tmp + "from-file/jquery.js"
 			},function( err ){
 				done( err );
 			});
@@ -56,7 +53,7 @@ describe('fetch', function(){
 		it('should clone dat-gui with git', function( done ){
 			this.timeout( 100000 );
 			fetch({
-				"clone": "https://code.google.com/p/dat-gui/",
+				"clone": "https://github.com/dataarts/dat.gui",
 				"target": {
 					"src/dat": tmp + "from-git/dat",
 					"build": tmp + "from-git/build"
