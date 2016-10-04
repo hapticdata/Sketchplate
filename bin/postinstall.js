@@ -14,6 +14,11 @@ var sketchplate = require('../lib/sketchplate'),
     onComplete;
 
 
+if(config.isSudo){
+    console.log("DO NOT INSTALL AS SUDO, skipping postinstall, run `sketchplate -h` without sudo".red);
+    return;
+}
+
 //repo data
 template = {
     repo : 'hapticdata/template-amd-sketch',
