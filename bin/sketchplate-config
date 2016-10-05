@@ -62,13 +62,3 @@ program.parse( process.argv );
 if( program.printpath ){
     console.log(config.userDirectory);
 }
-
-function hasNoArgs(){
-    return !program.printpath;
-}
-
-if( program.edit || hasNoArgs() ){
-	hooks.openInEditor( config.userDirectory, userConfig.editors[ userConfig.editor ],  function( err ){
-
-	});
-}
