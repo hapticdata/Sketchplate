@@ -1,7 +1,7 @@
 {
   "name": "sketchplate",
   "description": "Sketchplate is pre-project tooling for starting projects quickly.",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "author": "Kyle Phillips <kyle@haptic-data.com>",
   "contributors": [
     {
@@ -13,19 +13,18 @@
     "postinstall": "node ./bin/postinstall.js"
   },
   "dependencies": {
-    "commander": "1.0",
-    "wrench": "1.4.0",
-    "request": ">=2.9.203",
-    "mkdirp": "0.3.5",
-    "async": "0.2.10",
     "adm-zip": "~0.4.2",
-    "win-spawn": "1.1.2",
+    "async": "0.2.10",
     "colors": "0.6.2",
+    "commander": "1.0",
     "connect": "2.11.x",
-    "underscore": "~1.5.2",
+    "fs-extra": "^0.30.0",
     "glob": "~3.2.8",
-    "graceful-fs": "~2.0.2",
-    "orion": "0.0.30"
+    "mkdirp": "0.3.5",
+    "orion": "0.0.30",
+    "request": ">=2.9.203",
+    "underscore": "~1.5.2",
+    "win-spawn": "1.1.2"
   },
   "devDependencies": {
     "mocha": "^1.20.1"

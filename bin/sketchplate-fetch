@@ -12,7 +12,7 @@ var program = require('commander'),
     hooks = require('../lib/hooks'),
     hooksCli = require('./hooks-cli'),
     config = require('../lib/config').getUserConfig(),
-    fetches = require( require('../lib/config').userFetch ),
+    fetches = JSON.parse(fs.readFileSync(userFetch)),
     plate;
 
 
@@ -216,10 +216,19 @@ program
 
     });
 
-program.option('-e, --edit', 'Edit fetch.json in your editor');
+program
+    .option('-e, --edit', 'edit fetch.json in your editor')
+    .option('-p, --printpath', 'print the path to fetch.json');
+
 program.parse( process.argv );
 
-if( program.edit || program.args.length === 0 ){
+if( program.printpath ){
+    console.log(userFetch);
+    process.exit();
+    return;
+}
+
+if( program.edit ) {
     hooks.openInEditor( userFetch, config.editors[ config.editor ], function( err ){
 
     });

@@ -7,7 +7,6 @@ require('colors');
 var program = require('commander'),
 	async = require('async'),
 	path = require('path'),
-	wrench = require('wrench'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
