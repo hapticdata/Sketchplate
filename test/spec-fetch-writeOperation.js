@@ -2,9 +2,9 @@
 var targetMap = require('../lib/fetch/createOperationCollection'),
     writeOperation = require('../lib/fetch/writeOperation'),
     assert = require('assert'),
-    fs = require('fs'),
-    wrench = require('wrench'),
-    tmp = 'test_fetch-writeOperation/';
+    fs = require('fs-extra'),
+    path = require('path'),
+    tmp = path.resolve('test_fetch-writeOperation');
 
 
 var origin = './',
@@ -24,7 +24,7 @@ describe('fetch/writeOperation', function(){
     });
 
     after(function(){
-        wrench.rmdirSyncRecursive(tmp);
+        fs.removeSync(tmp);
     });
 
 
@@ -32,6 +32,8 @@ describe('fetch/writeOperation', function(){
         this.timeout(10000);
         targetMap( origin, resource, function( err, map ){
             assert.equal( err, null );
+            assert.ok(map.length > 20);
+            assert.ok(map[0].destination.indexOf(path.sep) >= 0);
             writeOperation( map, function( err, destinations ){
                 assert.equal( err, null );
                 assert.ok( Array.isArray(destinations) );
