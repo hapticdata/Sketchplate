@@ -10,7 +10,9 @@ var program = require('commander'),
     config = require('../lib/config').getUserConfig(),
     plate;
 
-
+program
+    .option('-p, --printpath', 'print templates path')
+    .option('-t, --template', 'print the name of the set template');
 /**
 * creates a handler for reporting the status of a fetch
 * @api private
@@ -209,6 +211,19 @@ program
     });
 
 program
+    .command('path [name]')
+    .description('print the path of a template')
+    .action(function( name ){
+        var dir = config.templatesPath + '/' + (name || config.template);
+
+        if( fs.existsSync(dir) ){
+            console.log(dir);
+        } else {
+            console.log(('Error: template ' + name + ' does not exist').red);
+        }
+    });
+
+program
     .command('remove <name>')
     .description('remove an existing template')
     .action(function( name ){
@@ -232,3 +247,10 @@ program
 
 
 program.parse( process.argv );
+
+if( program.printpath ){
+    console.log(config.templatesPath);
+}
+if( program.template ){
+    console.log(config.template);
+}

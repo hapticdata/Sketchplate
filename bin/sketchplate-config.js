@@ -52,12 +52,12 @@ program
 		});
 	});
 
-program.option('-e, --edit', 'Edit config.json in your editor');
+program
+    .option('-e, --edit', 'Edit config.json in your editor')
+    .option('-p, --printpath', 'print sketchplate directory path');
 
 program.parse( process.argv );
 
-if( program.edit || program.args.length === 0 ){
-	hooks.openInEditor( config.userDirectory, userConfig.editors[ userConfig.editor ],  function( err ){
-
-	});
+if( program.printpath ){
+    console.log(config.userDirectory);
 }
