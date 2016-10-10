@@ -1,9 +1,9 @@
 /*global describe, it, after*/
 var sketchplate = require('../lib/sketchplate'),
+    fs = require('fs-extra'),
     _ = require('underscore'),
     config = require('../lib/config'),
-    assert = require('assert'),
-    wrench = require('wrench');
+    assert = require('assert');
 
 describe('Creates a new default project', function (){
 
@@ -11,7 +11,7 @@ describe('Creates a new default project', function (){
 	var plate = sketchplate.create(_.defaults({ template: 'amd-sketch' }, config.getUserConfig()));
 
     after(function(){
-        wrench.rmdirSyncRecursive(projectLocation);
+        fs.removeSync(projectLocation);
     });
 
     describe('sketchplate.create', function(){
