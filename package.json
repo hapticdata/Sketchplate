@@ -45,6 +45,6 @@
     "sketchplate": "./bin/sketchplate"
   },
   "engines": {
-    "node": ">0.8.0"
+    "node": ">0.12.0"
   }
 }
