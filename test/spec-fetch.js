@@ -1,6 +1,6 @@
 /*global describe, it, after*/
 var fetch = require('../lib/fetch'),
-    wrench = require('wrench');
+    fs = require('fs-extra');
 
 
 describe('fetch', function(){
@@ -8,7 +8,7 @@ describe('fetch', function(){
 
     //delete all the files created at the end
     after(function(){
-        wrench.rmdirSyncRecursive(tmp);
+        fs.removeSync(tmp);
     });
 
 
@@ -63,7 +63,7 @@ describe('fetch', function(){
 			});
 		});
         it('should clone toxiclibsjs and checkout the v0.1.3 tag', function( done ){
-            this.timeout( 100000 );
+            this.timeout( 0 );
             fetch({
                 "clone": "https://github.com/hapticdata/toxiclibsjs.git",
                 "tag": "v0.1.3",
