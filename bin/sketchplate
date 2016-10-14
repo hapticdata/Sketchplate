@@ -10,7 +10,7 @@ var program = require('commander'),
 	fs = require('fs'),
 	sketchplate = require('../lib/sketchplate'),
 	hooks = require('../lib/hooks'),
-	spawn = require('win-spawn'),
+	spawn = require('child_process').spawn,
 	configLocation,
 	version = require('../package').version,
 	config = require('../lib/config').getUserConfig();
