@@ -1,8 +1,7 @@
 /*global describe,it, after*/
 var assert = require('assert'),
-    fs = require('fs'),
-    sketchplate = require('../lib/sketchplate'),
-    wrench = require('wrench');
+    fs = require('fs-extra'),
+    sketchplate = require('../lib/sketchplate');
 
 
 /**
@@ -35,10 +34,10 @@ eS = function(tmp){
 describe('sketchplate.installTemplate()', function(){
 
     after(function(){
-        wrench.rmdirSyncRecursive(settings.templatesPath);
+        fs.removeSync(settings.templatesPath);
     });
 
-    var makeTest = function( str, rename ){
+    var makeTest = function( str, rename, next ){
         return function( done ){
             this.timeout( 0 );
             sketchplate.installTemplate(settings, str, rename, function( err, info ){
@@ -47,7 +46,12 @@ describe('sketchplate.installTemplate()', function(){
                 }
                 assert.ok( !err );
                 assert.ok( typeof info === 'object' );
-                done();
+
+                if(next){
+                    next(done)
+                } else {
+                    done();
+                }
             });
         };
     };
@@ -59,6 +63,10 @@ describe('sketchplate.installTemplate()', function(){
             it('should install from git', makeTest('https://github.com/hapticdata/template-static-grunt.git','static-grunt'));
             it('should have created the folder "static-grunt"', function(){
                 assert.ok( eS('static-grunt') );
+            });
+            it('should have created the folder "static-grunt/sass"', function(){
+                assert.ok( eS('static-grunt/template/sass') );
+                assert.ok( eS('static-grunt/template/sass/style.scss') );
             });
 
         });

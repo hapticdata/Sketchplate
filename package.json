@@ -20,7 +20,7 @@
     "commander": "1.0",
     "connect": "2.11.x",
     "fs-extra": "^0.30.0",
-    "glob": "~3.2.8",
+    "glob": "^7.1.1",
     "mkdirp": "0.3.5",
     "orion": "0.0.30",
     "request": ">=2.9.203",
